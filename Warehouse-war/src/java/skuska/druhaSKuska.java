@@ -9,6 +9,6 @@ package skuska;
  *
  * @author kopytko
  */
-public class druhaSKuska {
+public class DruhaSKuska {
     
 }

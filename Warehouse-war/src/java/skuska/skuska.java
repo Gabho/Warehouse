@@ -8,6 +8,6 @@ package skuska;
  *
  * @author Gabo
  */
-public class skuska {
+public class Skuska {
     
 }
