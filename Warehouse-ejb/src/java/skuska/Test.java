@@ -6,8 +6,8 @@ package skuska;
 
 /**
  *
- * @author Gabo
+ * @author tatik
  */
-public class Skuska {
+public class Test {
     
 }
