@@ -3,3 +3,7 @@
 /Warehouse-war/build/
 /Warehouse-war/dist/
 /build/
+/nbproject/private/
+/Warehouse-ejb/nbproject/private/
+/Warehouse-war/nbproject/private/
+/dist/
