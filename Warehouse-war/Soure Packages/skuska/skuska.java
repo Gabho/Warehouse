@@ -7,6 +7,6 @@
  *
  * @author kopytko
  */
-public class Skuska {
+public class skuska {
     
 }
