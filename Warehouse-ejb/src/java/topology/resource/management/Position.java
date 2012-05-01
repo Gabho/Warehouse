@@ -1,7 +1,7 @@
 /*
  * Temporary reprezentation of a position holder.
  */
-package topology;
+package topology.resource.management;
 
 /**
  *

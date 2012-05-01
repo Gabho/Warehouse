@@ -1,44 +1,42 @@
 /*
- * Actual item implementation
+ * Implementation of a virtual proxy pattern.
  */
-package topology;
-
-import java.util.Date;
+package topology.resource.management;
 
 /**
  *
  * @author Martin Lofaj
- * TODO: entire Item impl.
+ * TODO: entire Proxy impl.
  */
-public class Item implements IItem {
+public class ProxyShelf implements IShelf{
 
     @Override
-    public int getAmount() {
+    public Item[] getItems() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public int getType() {
+    public int getCapacity() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public String getDescription() {
+    public int getItemCount() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Date getExpiration() {
+    public int getFreeSpace() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Date getStorageTime() {
+    public int getID() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Position getPosition() {
+    public void insertItem(Item item) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     

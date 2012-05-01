@@ -1,7 +1,7 @@
 /*
  * Item functionality
  */
-package topology;
+package topology.resource.management;
 
 import java.util.Date;
 

@@ -1,39 +1,44 @@
-package topology;
+/*
+ * Actual item implementation
+ */
+package topology.resource.management;
+
+import java.util.Date;
 
 /**
  *
  * @author Martin Lofaj
- * TODO: entire shelf impl.
+ * TODO: entire Item impl.
  */
-public class Shelf implements IShelf {
+public class Item implements IItem {
 
     @Override
-    public Item[] getItems() {
+    public int getAmount() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public int getCapacity() {
+    public int getType() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public int getItemCount() {
+    public String getDescription() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public int getFreeSpace() {
+    public Date getExpiration() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public int getID() {
+    public Date getStorageTime() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void insertItem(Item item) {
+    public Position getPosition() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     

@@ -1,14 +1,11 @@
-/*
- * Implementation of a virtual proxy pattern.
- */
-package topology;
+package topology.resource.management;
 
 /**
  *
  * @author Martin Lofaj
- * TODO: entire Proxy impl.
+ * TODO: entire shelf impl.
  */
-public class ProxyShelf implements IShelf{
+public class Shelf implements IShelf {
 
     @Override
     public Item[] getItems() {
