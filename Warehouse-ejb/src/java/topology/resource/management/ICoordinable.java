@@ -6,10 +6,14 @@ package topology.resource.management;
  */
 public interface ICoordinable {
     
-    /**
-     * Prepares all necessary 
+    /** Prepares all necessary stuff
+     *  @throws TaskFailureException if the task fails.
      */
-    public void prepare();
+    public void prepare() throws TaskFailureException;
+   
+    /** Commits prepared results */
     public void commit();
+    
+    /** Aborts */
     public void abort();
 }

@@ -18,7 +18,7 @@ public class Item implements IItem {
     }
 
     @Override
-    public int getType() {
+    public String getType() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -29,11 +29,6 @@ public class Item implements IItem {
 
     @Override
     public Date getExpiration() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Date getStorageTime() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

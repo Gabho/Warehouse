@@ -3,41 +3,75 @@
  */
 package topology.resource.management;
 
+import java.util.List;
+
 /**
- *
+ * 
  * @author Martin Lofaj
- * TODO: entire Proxy impl.
  */
 public class ProxyShelf implements IShelf{
+    
+    private IShelf shelf;
+    
+    //Id of the actual shelf.
+    private int id;
+
+    public ProxyShelf(int id) {
+        this.id = id;
+    }
 
     @Override
-    public Item[] getItems() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<IItem> getItems() {
+        if(shelf == null) {
+            shelf = new Shelf(id);
+        }
+        
+        return shelf.getItems();
     }
 
     @Override
     public int getCapacity() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(shelf == null) {
+            shelf = new Shelf(id);
+        }
+        return shelf.getCapacity();
     }
 
     @Override
-    public int getItemCount() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public int getItemCount(String type) {
+        if(shelf == null) {
+            shelf = new Shelf(id);
+        }
+        return shelf.getItemCount(type);
     }
 
     @Override
     public int getFreeSpace() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(shelf == null) {
+            shelf = new Shelf(id);
+        }
+        return shelf.getFreeSpace();
     }
 
     @Override
     public int getID() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return this.id;
     }
 
     @Override
     public void insertItem(Item item) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if(shelf == null) {
+            shelf = new Shelf(id);
+        }
+        shelf.insertItem(item);
+    }
+
+    @Override
+    public void removeItem(Item item) {
+        if(shelf == null) {
+            shelf = new Shelf(id);
+        }
+        shelf.insertItem(item);
     }
     
 }

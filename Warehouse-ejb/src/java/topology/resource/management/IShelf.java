@@ -1,5 +1,7 @@
 package topology.resource.management;
 
+import java.util.List;
+
 /**
  *
  * @author Martin Lofaj
@@ -7,16 +9,18 @@ package topology.resource.management;
 public interface IShelf {
     
     //Dohodnuty interface
-    public Item[] getItems();
+    public List<IItem> getItems();
     public int getCapacity();
-    public int getItemCount();
+    
+    //item sa bude odovdavat alebo typ itemu?
+    public int getItemCount(String type);
     public int getFreeSpace();
     public int getID();
     
     //Pravdepodobne potrebne metody
     public void insertItem(Item item);
-    //public void removeItem(Item item); //vymazanie daneho itemu ?
-    //public void findItem(int id); // ziskanie itemu podla id ? dohodli sme sa ze id je string ?
+    public void removeItem(Item item);
+    //public void findItem(int id); // ziskanie itemu podla id ?
     
     
 }
