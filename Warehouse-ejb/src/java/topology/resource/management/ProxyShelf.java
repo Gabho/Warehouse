@@ -8,6 +8,7 @@ import java.util.List;
 /**
  * 
  * @author Martin Lofaj
+ * TODO: shelf creation (that involves checking cache for existence)
  */
 public class ProxyShelf implements IShelf{
     

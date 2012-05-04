@@ -4,37 +4,67 @@
 package topology.resource.management;
 
 import java.util.Date;
-
 /**
  *
  * @author Martin Lofaj
- * TODO: entire Item impl.
  */
+
 public class Item implements IItem {
 
+    private int amount;
+    private String type;
+    private String decription;
+    private Date expirationDate;
+    private Position position;
+
+    /**
+     * Costructor for internal use of item. Object creation is 
+     * based on data from database.
+     */
+    public Item() {
+        //TODO: fetch data from database ?
+    }
+
+    /**
+     * Constructor for inserting item into storage.
+     * @param amount
+     * @param type
+     * @param decription
+     * @param expirationDate
+     * @param position 
+     */
+    public Item(int amount, String type, String decription, 
+            Date expirationDate, Position position) {
+        this.amount = amount;
+        this.type = type;
+        this.decription = decription;
+        this.expirationDate = expirationDate;
+        this.position = position;
+    }
+        
     @Override
     public int getAmount() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return amount;
     }
 
     @Override
     public String getType() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return type;
     }
 
     @Override
     public String getDescription() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return decription;
     }
 
     @Override
     public Date getExpiration() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return expirationDate;
     }
 
     @Override
     public Position getPosition() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return position;
     }
     
 }

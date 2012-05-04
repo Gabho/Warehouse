@@ -4,8 +4,8 @@
  */
 package topology.configuration;
 
-import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import topology.storage.Storage;
 
 /**

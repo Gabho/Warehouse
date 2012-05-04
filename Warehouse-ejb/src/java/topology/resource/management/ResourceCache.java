@@ -3,80 +3,90 @@
  */
 package topology.resource.management;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * @author Martin Lofaj
  */
 public class ResourceCache<T> {
 
-    private List<CachedResource<T>> cache;
+    private Map<Integer ,CachedResource<T>> cache;
     private int capacity;
 
     public ResourceCache(int capacity) {
         this.capacity = capacity;
-        cache = new ArrayList<CachedResource<T>>(capacity);
+        cache = new HashMap<Integer ,CachedResource<T>>(capacity);
     }
 
     //nie som si isty ci tam namiesto shlefu nedat priamo item
-    public void insert(T resource) {
+    public void insert(int key, T resource) {
         if (capacity < cache.size()) {
-            cache.add(new CachedResource<T>(resource, new Date()));
+            cache.put(key ,new CachedResource<T>(resource, new Date(), key));
         } else {
             cache.remove(findOldest());
-            cache.add(new CachedResource<T>(resource, new Date()));
+            cache.put(key, new CachedResource<T>(resource, new Date(), key));
         }
-    }
-
-    private CachedResource<T> findOldest() {
-        Date oldestTime = new Date();
-        CachedResource<T> oldest = null;
-        for (CachedResource res : cache) {
-            if (res.getTimeStamp().compareTo(oldestTime) <= 0) {
-                oldest = res;
-                oldestTime = oldest.getTimeStamp();
-            }
-        }
-        return oldest;
-    }
-
-    //nie som si isty ci tam namiesto shlefu nedat priamo item
-    public void remove(T resource) {
-        cache.remove(new CachedResource<T>(resource));
     }
     
-    //teoreticky by sa este dalo tak ze urobim notofy metodu
-    // a ta spravi to ze updatne cas ked sa zavola funkcionalita objektu
-    // tato metoda by bola volana v proxy itemu ..alebo cohokolvek
-    public void updateTimestamp(T resource) {
-        CachedResource<T> res = new CachedResource<T>(resource);
-        for(CachedResource cr : cache) {
-            if(cr.equals(res)) {
-                cr.setTimeStamp(new Date());
-                return;
+    public T getResource(int key) {
+        return cache.get(key).getResource();
+    }
+    
+    public boolean isCached(int key) {
+        return cache.containsKey(key);
+    }
+
+    //pri pouziti odstranovania najmenej pouzivaneho prvku je 
+    //zlozitost operacie vkladania dost velka.
+    private int findOldest() {
+        Date oldestTime = new Date();
+        int keyOldest = 0;
+        for (CachedResource res : cache.values()) {
+            if (res.getTimeStamp().compareTo(oldestTime) <= 0) {
+                keyOldest = res.getKey();
+                oldestTime = res.getTimeStamp();
             }
+        }
+        return keyOldest;
+    }
+
+    public void remove(int key) {
+        cache.remove(key);
+    }
+    
+    public void updateTimestamp(int key) {
+        CachedResource<T> resource = cache.get(key);
+        if(resource != null) {
+            resource.setTimeStamp(new Date());
         }
     }
 
     /**
      * Item stored in resource cache
-     *
      * @param <T>
      */
     private class CachedResource<T> {
 
         private T resource;
         private Date timestamp;
+        private int key;
 
-        public CachedResource(T resource, Date timeStamp) {
+        public CachedResource(T resource, Date timeStamp, int key) {
             this.resource = resource;
+            this.timestamp = timeStamp;
+            this.key = key;
         }
 
         private CachedResource(T resource) {
             this.resource = resource;
             this.timestamp = null;
+        }
+        
+        public int getKey() {
+            return key;
         }
 
         public Date getTimeStamp() {
@@ -105,7 +115,8 @@ public class ResourceCache<T> {
                 return false;
             }
             final CachedResource<T> other = (CachedResource<T>) obj;
-            if (this.resource != other.resource && (this.resource == null || !this.resource.equals(other.resource))) {
+            if (this.resource != other.resource && (this.resource == null ||
+                    !this.resource.equals(other.resource))) {
                 return false;
             }
             return true;
