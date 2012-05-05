@@ -4,18 +4,26 @@
  */
 package topology.storage;
 
+import java.util.ArrayList;
+import java.util.List;
 import topology.configuration.AbstractComponent;
-import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
 
 /**
  *
  * @author Martin Pakandl
  */
-@Stateless
-@LocalBean
-public class Aisle extends AbstractComponent {
 
+public class Aisle extends AbstractComponent {
+    private int code;
+    private int capacity;
+    private List<Rack> racks;
+    
+    public Aisle(int code, int capacity) {
+        this.code = code;
+        this.capacity = capacity;
+        racks = new ArrayList();
+    }
+   
     @Override
     public void init() {
         throw new UnsupportedOperationException("Not supported yet.");

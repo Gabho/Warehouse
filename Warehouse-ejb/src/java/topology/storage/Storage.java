@@ -4,7 +4,8 @@
  */
 package topology.storage;
 
-import java.util.ArrayList;
+
+import java.util.HashMap;
 import javax.ejb.Stateless;
 
 /**
@@ -12,33 +13,18 @@ import javax.ejb.Stateless;
  * @author Martin Pakandl
  */
 @Stateless
-public class Storage implements IObjectManager,IStorage {
+public class Storage implements IStorage {
     
-    private ArrayList storage;
-    
+    ObjectManager om;
+ 
     public Storage() {
-        storage = new ArrayList();
-    }
-        
-    @Override
-    public void delete() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        om = new ObjectManager();
+
     }
 
-    @Override
-    public void insert() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void find() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public ObjectManager getObjectManager() {
+        return om;
+    }    
 
     @Override
     public int addItem() {
@@ -60,6 +46,27 @@ public class Storage implements IObjectManager,IStorage {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    
+    private class ObjectManager implements IObjectManager {
+        private HashMap manager;
+        public ObjectManager() {
+            manager = new HashMap();
+        }
+
+        @Override
+        public void insert() {
+            manager.put(this, this);//to this je len zatial
+        }
+
+        @Override
+        public void remove() {
+            manager.remove(this);
+        }
+
+        @Override
+        public void find() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+        
+    }
     
 }

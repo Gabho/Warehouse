@@ -4,18 +4,22 @@
  */
 package topology.storage;
 
+import java.util.ArrayList;
+import java.util.List;
 import topology.configuration.AbstractComponent;
-import javax.ejb.Stateless;
-import javax.ejb.LocalBean;
+import topology.resource.management.Shelf;
 
 /**
  *
  * @author Mao
  */
-@Stateless
-@LocalBean
 public class Rack extends AbstractComponent {
+    private List<Shelf> shelfs; 
 
+    public Rack() {
+        shelfs = new ArrayList();
+    }
+    
     @Override
     public void init() {
         throw new UnsupportedOperationException("Not supported yet.");

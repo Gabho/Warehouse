@@ -11,7 +11,6 @@ import javax.ejb.Local;
  */
 @Local
 public interface IObjectManager {
-    public void delete();
     public void insert();
     public void remove();
     public void find();
