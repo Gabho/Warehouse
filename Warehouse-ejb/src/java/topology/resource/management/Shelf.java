@@ -18,6 +18,7 @@ public class Shelf implements IShelf {
     private List<IItem> items;
     private int id;
     private int capacity;
+    //TODO: add database connection or something
     
     private static final int DEFAULT_CAPACITY = 10;
 
@@ -27,14 +28,16 @@ public class Shelf implements IShelf {
         items = new ArrayList<IItem>(capacity);
         
         //TODO: check for existing items.
+        //getShelf from database
     }
     
-    public Shelf(int id, int capacity, List<IItem> items) {
+    public Shelf(int id, int capacity) {
         this.id = id;
         this.capacity = capacity;
-        this.items = new ArrayList<IItem>(items);
+        items = new ArrayList<IItem>(capacity);
         
         //TODO: check for existing items.
+        //getShelf from database
     }
             
     @Override

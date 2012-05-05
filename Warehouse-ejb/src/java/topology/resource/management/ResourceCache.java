@@ -21,18 +21,13 @@ public class ResourceCache<T> {
         cache = new HashMap<Integer ,CachedResource<T>>(capacity);
     }
 
-    //nie som si isty ci tam namiesto shlefu nedat priamo item
     public void insert(int key, T resource) {
         if (capacity < cache.size()) {
             cache.put(key ,new CachedResource<T>(resource, new Date(), key));
         } else {
-            cache.remove(findOldest());
+            cache.remove(findLeastUsed());
             cache.put(key, new CachedResource<T>(resource, new Date(), key));
         }
-    }
-    
-    public T getResource(int key) {
-        return cache.get(key).getResource();
     }
     
     public boolean isCached(int key) {
@@ -41,7 +36,7 @@ public class ResourceCache<T> {
 
     //pri pouziti odstranovania najmenej pouzivaneho prvku je 
     //zlozitost operacie vkladania dost velka.
-    private int findOldest() {
+    private int findLeastUsed() {
         Date oldestTime = new Date();
         int keyOldest = 0;
         for (CachedResource res : cache.values()) {
@@ -53,17 +48,10 @@ public class ResourceCache<T> {
         return keyOldest;
     }
 
-    public void remove(int key) {
-        cache.remove(key);
+    public T remove(int key) {
+        return cache.remove(key).getResource();
     }
     
-    public void updateTimestamp(int key) {
-        CachedResource<T> resource = cache.get(key);
-        if(resource != null) {
-            resource.setTimeStamp(new Date());
-        }
-    }
-
     /**
      * Item stored in resource cache
      * @param <T>

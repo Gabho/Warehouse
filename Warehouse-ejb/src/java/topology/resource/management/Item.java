@@ -9,7 +9,7 @@ import java.util.Date;
  * @author Martin Lofaj
  */
 
-public class Item implements IItem {
+public class Item implements IItem{
 
     private int amount;
     private String type;
@@ -66,5 +66,4 @@ public class Item implements IItem {
     public Position getPosition() {
         return position;
     }
-    
 }
