@@ -4,27 +4,36 @@
  */
 package topology.storage;
 
-
 import java.util.HashMap;
 import javax.ejb.Stateless;
 
 /**
- * 
+ *
  * @author Martin Pakandl
  */
 @Stateless
-public class Storage implements IStorage {
-    
-    ObjectManager om;
- 
-    public Storage() {
-        om = new ObjectManager();
+public class Storage implements IObjectManager, IStorage {
 
+    private HashMap manager;
+
+    public Storage() {
+        manager = new HashMap();
+    }
+   
+    @Override
+    public void insert(Object object) {
+        manager.put(object.hashCode(), object);
     }
 
-    public ObjectManager getObjectManager() {
-        return om;
-    }    
+    @Override
+    public void remove(Object object) {
+        manager.remove(object.hashCode());
+    }
+
+    @Override
+    public Object find(Object object) {
+        return manager.get(object.hashCode());
+    }
 
     @Override
     public int addItem() {
@@ -44,29 +53,6 @@ public class Storage implements IStorage {
     @Override
     public int getFreeSpace() {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    private class ObjectManager implements IObjectManager {
-        private HashMap manager;
-        public ObjectManager() {
-            manager = new HashMap();
-        }
-
-        @Override
-        public void insert() {
-            manager.put(this, this);//to this je len zatial
-        }
-
-        @Override
-        public void remove() {
-            manager.remove(this);
-        }
-
-        @Override
-        public void find() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-        
     }
     
 }
