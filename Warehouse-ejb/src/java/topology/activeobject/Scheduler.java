@@ -10,7 +10,7 @@ package topology.activeobject;
  */
 public class Scheduler {
 
-    private ActivationQueue<Runnable> activationQueue = new ActivationQueue<Runnable>();
+    private ActivationQueue<IMethodRequest> activationQueue = new ActivationQueue<IMethodRequest>();
 
     public Scheduler() {
         Thread thread = new Thread() {
@@ -18,7 +18,7 @@ public class Scheduler {
             @Override
             public void run() {
                 while (true) {
-                    activationQueue.dequeue().run();
+                    activationQueue.dequeue().call();
                 }
             }
         };
@@ -29,7 +29,7 @@ public class Scheduler {
         thread.start();
     }
 
-    public void enqueue(Runnable runnable) {
-        activationQueue.enqueue(runnable);
+    public void enqueue(IMethodRequest methodRequest) {
+        activationQueue.enqueue(methodRequest);
     }
 }

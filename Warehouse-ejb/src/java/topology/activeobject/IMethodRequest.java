@@ -8,6 +8,8 @@ package topology.activeobject;
  *
  * @author Gabo
  */
-public abstract class MethodRequest {
+public interface IMethodRequest {
+    
+    public void call();
     
 }

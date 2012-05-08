@@ -17,33 +17,34 @@ public class Proxy implements IFunctionality {
     private Scheduler scheduler = new Scheduler();
 
     @Override
-    public Future<Integer> search(String search) {
+    public synchronized Future<Integer> search(String search) {
         Future<Integer> result = new Future<Integer>();
+        scheduler.enqueue(new MethodRequestSearch(search, result));
         return result;
     }
 
     @Override
-    public void insertMasterData(MasterDataEntity masterData) {
+    public synchronized void insertMasterData(MasterDataEntity masterData) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void removeMasterData(MasterDataEntity masterData) {
+    public synchronized void removeMasterData(MasterDataEntity masterData) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void insertNewItem(Item item) {
+    public synchronized void insertNewItem(Item item) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void removeItem(Item item) {
+    public synchronized void removeItem(Item item) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public IFuture<List<Item>> makeOrder(List<Item> items) {
+    public synchronized IFuture<List<Item>> makeOrder(List<Item> items) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
