@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import persistence.Database;
+import topology.activeobject.IFuture;
+import topology.activeobject.IFunctionality;
 
 /**
  *
@@ -25,7 +27,10 @@ public class SearchServlet extends HttpServlet {
     
     @EJB
     private Database database;
+    @EJB 
+    private IFunctionality proxy;
     private int quantity;
+    private IFuture quantityFututre = null;
     private static final Logger LOGGER = Logger.getLogger(SearchServlet.class.getName());
 
     /**
@@ -72,6 +77,7 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        quantity = (Integer)quantityFututre.get();
         LOGGER.log(Level.INFO, "..............................Quantity: {0}..............................", quantity);
         request.setAttribute("quantity", Integer.toString(quantity));
         request.getRequestDispatcher("/search.jsp").forward(request, response);
@@ -90,7 +96,13 @@ public class SearchServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String search = request.getParameter("searchString");
-        quantity = database.search(search);
+        if(proxy != null){
+            LOGGER.log(Level.INFO, "..............................Search:Proxy succesfully initialized..............................");
+        }
+        quantityFututre = proxy.search(search);
+        if(quantityFututre != null){
+            LOGGER.log(Level.INFO, "..............................Search:Future succesfully returned..............................");
+        }
         doGet(request, response);
     }
 

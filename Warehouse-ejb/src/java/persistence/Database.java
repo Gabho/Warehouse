@@ -17,23 +17,27 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 @LocalBean
-public class Database extends DatabaseMonitorObject{
-    
-    @PersistenceContext private EntityManager em;
+public class Database extends DatabaseMonitorObject {
+
+    @PersistenceContext
+    private EntityManager em;
     private static final Logger LOGGER = Logger.getLogger(Database.class.getName());
 
     @Override
     int synchronizedSearch(String searchString) {
         int quantity;
         MasterDataEntity search = em.find(MasterDataEntity.class, searchString);
-        quantity = search.getQuantity();
-        LOGGER.log(Level.INFO, "..............................Searched string {0}..............................", searchString);
-        LOGGER.log(Level.INFO, "..............................Searched quantity {0}..............................", Integer.toString(quantity));
-        
-        return quantity;
+        if (search == null) {
+            LOGGER.log(Level.INFO, "..............................Searched not found..............................");
+            return 0;
+        } else {
+            quantity = search.getQuantity();
+            LOGGER.log(Level.INFO, "..............................Searched string {0}..............................", searchString);
+            LOGGER.log(Level.INFO, "..............................Searched quantity {0}..............................", Integer.toString(quantity));
+
+            return quantity;
+        }
+
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
-    
 }

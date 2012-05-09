@@ -11,15 +11,15 @@ import java.util.Deque;
  *
  * @author Gabo
  */
-public class ActivationQueue<T> {
-    private Deque<T> queue = new ArrayDeque<T>();
+public class ActivationQueue {
+    private Deque<IMethodRequest> queue = new ArrayDeque<IMethodRequest>();
     
-    public synchronized void enqueue(T command) {
-		queue.addLast(command);
+    public synchronized void enqueue(IMethodRequest request) {
+		queue.addLast(request);
 		notifyAll();
 	}
 	
-	public synchronized T dequeue() {
+	public synchronized IMethodRequest dequeue() {
 		while (queue.isEmpty()) {
 			waitForNotification();
 		}

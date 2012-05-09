@@ -4,7 +4,7 @@
  */
 package topology.activeobject;
 
-import javax.ejb.EJB;
+import java.util.logging.Logger;
 import persistence.Database;
 
 /**
@@ -13,14 +13,15 @@ import persistence.Database;
  */
 public class MethodRequestSearch implements IMethodRequest {
 
-    String search;
-    Future<Integer> result;
-    @EJB
-    Database database;
+    private static final Logger LOGGER = Logger.getLogger(MethodRequestSearch.class.getName());
+    private String search;
+    private Future<Integer> result;
+    private Database database;
 
-    public MethodRequestSearch(String search, Future<Integer> result) {
+    public MethodRequestSearch(String search, Future<Integer> result, Database database) {
         this.search = search;
         this.result = result;
+        this.database = database;
     }
 
     @Override
@@ -28,4 +29,5 @@ public class MethodRequestSearch implements IMethodRequest {
         int quantity = database.search(search);
         result.addResult(quantity);
     }
+    
 }

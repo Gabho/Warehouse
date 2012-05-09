@@ -4,13 +4,17 @@
  */
 package topology.activeobject;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Gabo
  */
 public class Scheduler {
 
-    private ActivationQueue<IMethodRequest> activationQueue = new ActivationQueue<IMethodRequest>();
+    private static final Logger LOGGER = Logger.getLogger(Scheduler.class.getName());
+    private ActivationQueue activationQueue = new ActivationQueue();
 
     public Scheduler() {
         Thread thread = new Thread() {
@@ -18,7 +22,13 @@ public class Scheduler {
             @Override
             public void run() {
                 while (true) {
-                    activationQueue.dequeue().call();
+                    IMethodRequest request = activationQueue.dequeue();
+                    if(request != null){
+                        LOGGER.log(Level.INFO, "..............................Scheduler:Request najdeny....................");
+                        request.call();
+                    }
+                    else
+                        LOGGER.log(Level.INFO, "..............................Scheduler:Request nenajdeny....................");
                 }
             }
         };
@@ -31,5 +41,7 @@ public class Scheduler {
 
     public void enqueue(IMethodRequest methodRequest) {
         activationQueue.enqueue(methodRequest);
+        if(methodRequest != null)
+            LOGGER.log(Level.INFO, "..............................Scheduler:Request zaradeny do radu....................");
     }
 }

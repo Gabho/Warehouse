@@ -5,6 +5,7 @@
 package topology.activeobject;
 
 import java.util.List;
+import javax.ejb.Local;
 import persistence.MasterDataEntity;
 import topology.resource.management.Item;
 
@@ -12,9 +13,9 @@ import topology.resource.management.Item;
  *
  * @author Gabo
  */
+@Local
 public interface IFunctionality {
     
-    //vráti počet nájdených itemov vyhovujúcich hľadanému reťazcu
     IFuture<Integer> search(String search);
     
     void insertMasterData(MasterDataEntity masterData);

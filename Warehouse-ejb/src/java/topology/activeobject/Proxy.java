@@ -5,6 +5,11 @@
 package topology.activeobject;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import persistence.Database;
 import persistence.MasterDataEntity;
 import topology.resource.management.Item;
 
@@ -12,39 +17,48 @@ import topology.resource.management.Item;
  *
  * @author Gabo
  */
+@Stateless
 public class Proxy implements IFunctionality {
-    
+
+    private static final Logger LOGGER = Logger.getLogger(Proxy.class.getName());
     private Scheduler scheduler = new Scheduler();
+    @EJB
+    private Database database;
 
     @Override
-    public synchronized Future<Integer> search(String search) {
+    public IFuture<Integer> search(String search) {
+        if(scheduler != null){
+            LOGGER.log(Level.INFO, "..............................Proxy: scheduler nie je null....................");
+        }
+        else
+            LOGGER.log(Level.INFO, "..............................Proxy: scheduler je null !!!!!!....................");
         Future<Integer> result = new Future<Integer>();
-        scheduler.enqueue(new MethodRequestSearch(search, result));
+        scheduler.enqueue(new MethodRequestSearch(search, result, database));
         return result;
     }
 
     @Override
-    public synchronized void insertMasterData(MasterDataEntity masterData) {
+    public void insertMasterData(MasterDataEntity masterData) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public synchronized void removeMasterData(MasterDataEntity masterData) {
+    public void removeMasterData(MasterDataEntity masterData) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public synchronized void insertNewItem(Item item) {
+    public void insertNewItem(Item item) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public synchronized void removeItem(Item item) {
+    public void removeItem(Item item) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public synchronized IFuture<List<Item>> makeOrder(List<Item> items) {
+    public IFuture<List<Item>> makeOrder(List<Item> items) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     

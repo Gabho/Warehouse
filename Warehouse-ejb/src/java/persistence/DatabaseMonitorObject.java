@@ -40,9 +40,9 @@ public abstract class DatabaseMonitorObject {
     //vrati pocet najdenych itemov (hladanie podla master entity)
     public int search(String string) {
         int quantity;
-        //lock.lock();
+        lock.lock();
         quantity = synchronizedSearch(string);
-        //lock.unlock();
+        lock.unlock();
         return quantity;
     }
     
