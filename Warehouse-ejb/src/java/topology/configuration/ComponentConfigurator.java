@@ -13,7 +13,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import topology.storage.Aisle;
 import topology.storage.Rack;
-import topology.storage.StorageLocal;
+import topology.storage.IObjectManager;
 
 /**
  *
@@ -23,8 +23,7 @@ import topology.storage.StorageLocal;
 public class ComponentConfigurator {
 
     File config;
-    @EJB
-    StorageLocal storage;
+    @EJB IObjectManager storage;
 
     public ComponentConfigurator() {
         config = new File("C:/Documents and Settings/Mao/My Documents/NetBeansProjects/WJ2EE/WJ2EE-ejb/src/java/topology/configuration/load.txt");

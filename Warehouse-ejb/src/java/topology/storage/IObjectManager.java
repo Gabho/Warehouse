@@ -12,7 +12,7 @@ import topology.configuration.AbstractComponent;
  * @author Mao
  */
 @Local
-public interface StorageLocal {
+public interface IObjectManager {
     public void insert(Object object);
     public void remove(Object object);
     public Object find(String hashKey);

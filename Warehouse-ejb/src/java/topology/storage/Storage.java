@@ -14,7 +14,7 @@ import topology.configuration.AbstractComponent;
  * @author Mao
  */
 @Stateful
-public class Storage implements StorageLocal {
+public class Storage implements IObjectManager {
 
    private HashMap manager;
 
