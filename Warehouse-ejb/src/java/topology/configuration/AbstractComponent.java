@@ -1,18 +1,17 @@
 /*
- * Abstract Component for Component Configurator pattern. Configurable component must implemet 
- * Configurable component must implemet this methods.
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package topology.configuration;
 
 /**
  *
- * @author Martin Pakandl
+ * @author Mao
  */
 public abstract class AbstractComponent {
-    
-    public abstract void init();
+    public abstract void init(String code, int capacity);
     public abstract void suspend();
     public abstract void resume();
     public abstract String info();
-    
+    public abstract String getCode();
 }

@@ -1,6 +1,6 @@
 /*
- * Rack implementation.
- * 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package topology.storage;
 
@@ -14,13 +14,15 @@ import topology.resource.management.Shelf;
  * @author Mao
  */
 public class Rack extends AbstractComponent {
-
-    private int code;
+    private String code;
     private int capacity;
     private List<Shelf> shelfs;
     private Boolean isReady;
 
-    public Rack(int code, int capacity) {
+    public Rack() {
+    }
+    
+    public Rack(String code, int capacity) {
         this.code = code;
         this.capacity = capacity;
         shelfs = new ArrayList();
@@ -31,7 +33,8 @@ public class Rack extends AbstractComponent {
         return capacity;
     }
 
-    public int getCode() {
+    @Override
+    public String getCode() {
         return code;
     }
 
@@ -44,7 +47,10 @@ public class Rack extends AbstractComponent {
     }
 
     @Override
-    public void init() {
+    public void init(String code, int capacity) {
+        this.code = code;
+        this.capacity = capacity;
+        shelfs = new ArrayList();
         isReady = true;
     }
 

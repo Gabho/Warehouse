@@ -1,25 +1,27 @@
 /*
- * Aisle implementation.
- * 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package topology.storage;
 
+import topology.configuration.AbstractComponent;
 import java.util.ArrayList;
 import java.util.List;
-import topology.configuration.AbstractComponent;
 
 /**
  *
- * @author Martin Pakandl
+ * @author Mao
  */
-
 public class Aisle extends AbstractComponent {
-    private int code;
+     private String code;
     private int capacity;
     private List<Rack> racks;
     private Boolean isReady;
+   
+    public Aisle() {
+    }
     
-    public Aisle(int code, int capacity) {
+    public Aisle(String code, int capacity) {
         this.code = code;
         this.capacity = capacity;
         racks = new ArrayList();
@@ -30,7 +32,8 @@ public class Aisle extends AbstractComponent {
         return capacity;
     }
 
-    public int getCode() {
+    @Override
+    public String getCode() {
         return code;
     }
 
@@ -43,7 +46,10 @@ public class Aisle extends AbstractComponent {
     }
     
     @Override
-    public void init() {
+    public void init(String code, int capacity) {
+        this.code = code;
+        this.capacity = capacity;
+        racks = new ArrayList();
         isReady = true;
     }
 
@@ -61,5 +67,4 @@ public class Aisle extends AbstractComponent {
     public String info() {
         return "This is an Aisle for Racks.\nCode: " + code + "\n" + "Capacity: " + capacity;
     }
-
 }
