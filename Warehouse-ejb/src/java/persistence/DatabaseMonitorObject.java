@@ -36,6 +36,24 @@ public abstract class DatabaseMonitorObject {
     public void removeShelf(Position position) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    //prida MasterData entitu do tabulky
+    public void addMasterData(MasterDataEntity masterData) {
+        lock.lock();
+        synchronizedAddMasterData(masterData);
+        lock.unlock();
+    }
+    
+    public void removeMasterData(MasterDataEntity masterData) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    public List<MasterDataEntity> getMasterData() {
+        lock.lock();
+        List<MasterDataEntity> masterData = synchronizedGetMasterData();
+        lock.unlock();
+        return masterData;
+    }
 
     //vrati pocet najdenych itemov (hladanie podla master entity)
     public int search(String string) {
@@ -47,5 +65,8 @@ public abstract class DatabaseMonitorObject {
     }
     
     abstract int synchronizedSearch(String string);
+    abstract void synchronizedAddMasterData(MasterDataEntity masterData);
+    abstract void synchronizedRemoveMasterData(MasterDataEntity masterData);
+    abstract List<MasterDataEntity> synchronizedGetMasterData();
     
 }
