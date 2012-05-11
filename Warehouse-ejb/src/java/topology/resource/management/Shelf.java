@@ -23,6 +23,7 @@ public class Shelf implements IShelf {
     private List<IItem> items;
     private int id;
     private int capacity;
+    private int usedSpace;
     private Database db;
         
     private static final int DEFAULT_CAPACITY = 10;
@@ -41,6 +42,8 @@ public class Shelf implements IShelf {
         } catch (NamingException ex) {
             Logger.getLogger(Shelf.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        updateUsedSpace();
     }
     
     public Shelf(int id, int capacity) {
@@ -57,6 +60,8 @@ public class Shelf implements IShelf {
         } catch (NamingException ex) {
             Logger.getLogger(Shelf.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        updateUsedSpace();
     }
             
     @Override
@@ -78,16 +83,11 @@ public class Shelf implements IShelf {
             }
         }
         return counter;
-        
     }
 
     @Override
     public int getFreeSpace() {
-        int totalAmount = 0;
-        for(IItem item : items) {
-            totalAmount += item.getAmount();
-        }
-        return capacity - totalAmount;
+        return capacity - usedSpace;
     }
 
     @Override
@@ -97,22 +97,23 @@ public class Shelf implements IShelf {
 
     @Override
     public void insertItem(IItem item) {
-        if(capacity > items.size()) {
+        if(item.getAmount() <= getFreeSpace()) {
             items.add(item);
             db.updateShelf(items, id);
         }
+        updateUsedSpace();
     }
 
        
     @Override
     public IItem removeItem(IItem item) {
         if(!items.isEmpty()) {
-            
             if(!items.remove(item)) {
                 item = null;
             }
             db.updateShelf(items, id);
         }
+        updateUsedSpace();
         
         return item;
     }
@@ -126,5 +127,11 @@ public class Shelf implements IShelf {
         capacity = -1;
         
         return retItems;
+    }
+    
+    private void updateUsedSpace() {
+        for(IItem item : items) {
+            usedSpace += item.getAmount();
+        }
     }
 }
