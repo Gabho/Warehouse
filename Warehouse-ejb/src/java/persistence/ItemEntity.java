@@ -97,7 +97,10 @@ public class ItemEntity implements Serializable {
     public void setShelf(int shelf) {
         this.shelf = shelf;
     }
-    
+
+    public MasterDataEntity getMasterData() {
+        return masterData;
+    }
     
 
     @Override

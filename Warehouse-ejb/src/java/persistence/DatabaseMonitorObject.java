@@ -5,6 +5,7 @@
 package persistence;
 
 import java.util.List;
+import topology.resource.management.IItem;
 import topology.resource.management.Item;
 import topology.resource.management.Position;
 
@@ -19,26 +20,25 @@ public abstract class DatabaseMonitorObject {
     private MonitorCondition condition = new MonitorCondition(lock);
     
     //Vracia zoznam položiek nachádzajúcich sa na danej poličke
-    public List<Item> getShelf(Position position) {
+    public List<IItem> getShelf(int shelfId) {
         lock.lock();
-        List<Item> items = synchronizedGetShelf(position);
+        List<IItem> items = synchronizedGetShelf(shelfId);
         lock.unlock();
         return items;
     }
 
-    //Pridá poličku na danú pozíciu
-    public void addShelf(Position position) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     //Aktualizuje obsah poličky na danej pozícii
-    public void updateShelf(Position position) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void updateShelf(List<Item> items, int shelfId) {
+        lock.lock();
+        synchronizesUpdateShelf(items, shelfId);
+        lock.unlock();
     }
     
     //Odstráni celú poličku z danej pozície
-    public void removeShelf(Position position) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void removeShelf(int shelfId) {
+        lock.lock();
+        synchronizedRemoveShelf(shelfId);
+        lock.unlock();
     }
     
     //Prida MasterData entitu do tabuľky
@@ -72,7 +72,9 @@ public abstract class DatabaseMonitorObject {
         return quantity;
     }
     
-    abstract List<Item> synchronizedGetShelf(Position position);
+    abstract List<IItem> synchronizedGetShelf(int shelfId);
+    abstract void synchronizesUpdateShelf(List<Item> items, int shelfId);
+    abstract void synchronizedRemoveShelf(int shelfId);
     abstract int synchronizedSearch(String string);
     abstract void synchronizedAddMasterData(MasterDataEntity masterData);
     abstract void synchronizedRemoveMasterData(String id);

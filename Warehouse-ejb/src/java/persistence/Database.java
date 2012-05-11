@@ -12,7 +12,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.ws.rs.HEAD;
+import topology.resource.management.IItem;
 import topology.resource.management.Item;
 import topology.resource.management.Position;
 
@@ -24,7 +24,7 @@ import topology.resource.management.Position;
 @Stateless
 @LocalBean
 public class Database extends DatabaseMonitorObject {
-
+    
     @PersistenceContext
     private EntityManager em;
     private static final Logger LOGGER = Logger.getLogger(Database.class.getName());
@@ -42,18 +42,18 @@ public class Database extends DatabaseMonitorObject {
             quantity = search.getQuantity();
             LOGGER.log(Level.INFO, "..............................Searched string {0}..............................", searchString);
             LOGGER.log(Level.INFO, "..............................Searched quantity {0}..............................", Integer.toString(quantity));
-
+            
             return quantity;
         }
-
+        
     }
 
     //Pridávanie master dat do tabuľky
     @Override
     void synchronizedAddMasterData(MasterDataEntity masterData) {
-        try{
+        try {
             em.persist(masterData);
-        }catch(Exception e){
+        } catch (Exception e) {
         }
     }
 
@@ -72,16 +72,38 @@ public class Database extends DatabaseMonitorObject {
         return data;
     }
 
-    
-    
-
-
     //Vráti obsah poličky na danej pozícii
     @Override
-    List<Item> synchronizedGetShelf(Position position) {
-        TypedQuery<ItemEntity> getItems = em.createQuery("SELECT i FROM ItemEntity i WHERE i.aisle =",ItemEntity.class);
-        return null;
+    List<IItem> synchronizedGetShelf(int shelfId) {
+        TypedQuery<ItemEntity> getItems = em.createQuery("SELECT i FROM ItemEntity i WHERE i.shelf=" + shelfId + "", ItemEntity.class);
+        List<ItemEntity> items = getItems.getResultList();
+        List<IItem> returnItems = null;
+        for (ItemEntity item : items) {
+            Position pos = new Position(item.getShelf(), item.getRack(), item.getAisle());
+            IItem i = new Item(item.getId(), item.getQuantity(), item.getMasterData().getId(), item.getMasterData().getDescription(), item.getExpDate(), pos);
+            returnItems.add(i);
+        }
+        return returnItems;
     }
 
+    //Odstráni celú poličku z databázy
+    @Override
+    void synchronizedRemoveShelf(int shelfId) {
+        TypedQuery<ItemEntity> getItems = em.createQuery("SELECT i FROM ItemEntity i WHERE i.shelf=" + shelfId + "", ItemEntity.class);
+        List<ItemEntity> items = getItems.getResultList();
+        for(ItemEntity item : items){
+            em.remove(item);
+        }
+    }
+
+    @Override
+    void synchronizesUpdateShelf(List<Item> items, int shelfId) {
+        synchronizedRemoveShelf(shelfId);
+        for(Item item : items){
+            MasterDataEntity masterData = em.find(MasterDataEntity.class, item.getType());
+            ItemEntity i = new ItemEntity(item.getPosition().getAisle(), item.getPosition().getRack(), item.getPosition().getShelf(), item.getAmount(), item.getExpiration(), masterData);
+            em.persist(i);
+        }
+    }
 
 }
