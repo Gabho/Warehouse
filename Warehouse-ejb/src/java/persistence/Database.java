@@ -93,16 +93,18 @@ public class Database extends DatabaseMonitorObject {
         List<ItemEntity> items = getItems.getResultList();
         for(ItemEntity item : items){
             em.remove(item);
+            item.getMasterData().updateQuantity();
         }
     }
 
     @Override
-    void synchronizesUpdateShelf(List<IItem> items, int shelfId) {
+    void synchronizedUpdateShelf(List<IItem> items, int shelfId) {
         synchronizedRemoveShelf(shelfId);
         for(IItem item : items){
             MasterDataEntity masterData = em.find(MasterDataEntity.class, item.getType());
             ItemEntity i = new ItemEntity(item.getPosition().getAisle(), item.getPosition().getRack(), item.getPosition().getShelf(), item.getAmount(), item.getExpiration(), masterData);
             em.persist(i);
+            masterData.updateQuantity();
         }
     }
 

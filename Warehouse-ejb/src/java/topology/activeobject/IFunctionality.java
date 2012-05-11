@@ -24,7 +24,7 @@ public interface IFunctionality {
     
     void insertNewItem(Item item);
     
-    void removeItem(Item item);
+    void removeItem(int quantity, MasterDataEntity masterData);
     
     IFuture<List<Item>> makeOrder(List<Item> items);
     

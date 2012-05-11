@@ -47,5 +47,8 @@
         
         <a href=<%= helperConfig%>>Configure warehouse</a>
 
+        <br>
+        <a href="item.jsp">Add/Remove Item</a><br>
+        <a href="makeOrder.jsp">Make order</a>
     </body>
 </html>

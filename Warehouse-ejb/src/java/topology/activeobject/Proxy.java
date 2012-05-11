@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import persistence.Database;
 import persistence.MasterDataEntity;
 import topology.resource.management.Item;
+import topology.storage.IObjectManager;
 
 /**
  *
@@ -24,6 +25,8 @@ public class Proxy implements IFunctionality {
     private Scheduler scheduler = new Scheduler();
     @EJB
     private Database database;
+    @EJB
+    private IObjectManager manager;
 
     @Override
     public IFuture<Integer> search(String search) {
@@ -49,12 +52,12 @@ public class Proxy implements IFunctionality {
 
     @Override
     public void insertNewItem(Item item) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        scheduler.enqueue(new MethodRequestInsertItem(item, manager));
     }
 
     @Override
-    public void removeItem(Item item) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void removeItem(int quantity, MasterDataEntity masterData) {
+        scheduler.enqueue(new MethodRequestRemoveItem(quantity, masterData, manager));
     }
 
     @Override
