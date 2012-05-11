@@ -26,8 +26,13 @@ public class MethodRequestSearch implements IMethodRequest {
 
     @Override
     public void call() {
-        int quantity = database.search(search);
-        result.addResult(quantity);
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                int quantity = database.search(search);
+                result.addResult(quantity);
+            }
+        };
+        thread.start();
     }
-    
 }

@@ -9,15 +9,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import topology.resource.management.Item;
+import topology.resource.management.Position;
 
 /**
  *
- * @author Gabo
+ * @author Gabriel Cervenak
  */
+//Java Bean zabezpečujúia prácu s databázou
 @Stateless
 @LocalBean
 public class Database extends DatabaseMonitorObject {
@@ -26,6 +28,7 @@ public class Database extends DatabaseMonitorObject {
     private EntityManager em;
     private static final Logger LOGGER = Logger.getLogger(Database.class.getName());
 
+    //Metóda na vyhľadávanie
     @Override
     int synchronizedSearch(String searchString) {
         int quantity;
@@ -44,6 +47,7 @@ public class Database extends DatabaseMonitorObject {
 
     }
 
+    //Pridávanie master dat do tabuľky
     @Override
     void synchronizedAddMasterData(MasterDataEntity masterData) {
         try{
@@ -52,16 +56,26 @@ public class Database extends DatabaseMonitorObject {
         }
     }
 
+    //Mazanie master dat z tabuľky
     @Override
-    void synchronizedRemoveMasterData(MasterDataEntity masterData) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    void synchronizedRemoveMasterData(String id) {
+        MasterDataEntity masterData = em.find(MasterDataEntity.class, id);
+        em.remove(masterData);
     }
 
+    //Získanie zoznamu vsetkých master dát nachádzajúcich sa v tabuľke
     @Override
     List<MasterDataEntity> synchronizedGetMasterData() {
         TypedQuery<MasterDataEntity> getData = em.createQuery("SELECT m FROM MasterDataEntity m ORDER BY m.id", MasterDataEntity.class);
         List<MasterDataEntity> data = getData.getResultList();
         return data;
+    }
+
+    //Vráti obsah poličky na danej pozícii
+    @Override
+    List<Item> synchronizedGetShelf(Position position) {
+        TypedQuery<ItemEntity> getItems = em.createQuery("SELECT i FROM ItemEntity i WHERE i.aisle =",ItemEntity.class);
+        return null;
     }
 
 }

@@ -10,44 +10,52 @@ import topology.resource.management.Position;
 
 /**
  *
- * @author Gabo
+ * @author Gabriel Cervenak
  */
+//Trieda predstavujúca databázu ako monitor objekt
 public abstract class DatabaseMonitorObject {
     
     private MonitorLock lock = new MonitorLock();
     private MonitorCondition condition = new MonitorCondition(lock);
     
-    //vracia zoznam poloziek nachadzajucich sa na danej policke
+    //Vracia zoznam položiek nachádzajúcich sa na danej poličke
     public List<Item> getShelf(Position position) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        lock.lock();
+        List<Item> items = synchronizedGetShelf(position);
+        lock.unlock();
+        return items;
     }
 
-    //prida policku na danu poziciu
+    //Pridá poličku na danú pozíciu
     public void addShelf(Position position) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    //aktualizuje obsah policky na danej pozicii
+    //Aktualizuje obsah poličky na danej pozícii
     public void updateShelf(Position position) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    //odstrani celu policku z danej pozicie
+    //Odstráni celú poličku z danej pozície
     public void removeShelf(Position position) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    //prida MasterData entitu do tabulky
+    //Prida MasterData entitu do tabuľky
     public void addMasterData(MasterDataEntity masterData) {
         lock.lock();
         synchronizedAddMasterData(masterData);
         lock.unlock();
     }
     
-    public void removeMasterData(MasterDataEntity masterData) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    //Vymaže z tabuľky MasterData entitu spolu so všetkými prislúchajúcimi itemami
+    public void removeMasterData(String id) {
+        lock.lock();
+        synchronizedRemoveMasterData(id);
+        lock.unlock();
     }
     
+    //Vracia zoznam všetkých master dát v tabuľke
     public List<MasterDataEntity> getMasterData() {
         lock.lock();
         List<MasterDataEntity> masterData = synchronizedGetMasterData();
@@ -55,7 +63,7 @@ public abstract class DatabaseMonitorObject {
         return masterData;
     }
 
-    //vrati pocet najdenych itemov (hladanie podla master entity)
+    //Vráti počet nájdených itemov (hľadanie podľa master data entity)
     public int search(String string) {
         int quantity;
         lock.lock();
@@ -64,9 +72,10 @@ public abstract class DatabaseMonitorObject {
         return quantity;
     }
     
+    abstract List<Item> synchronizedGetShelf(Position position);
     abstract int synchronizedSearch(String string);
     abstract void synchronizedAddMasterData(MasterDataEntity masterData);
-    abstract void synchronizedRemoveMasterData(MasterDataEntity masterData);
+    abstract void synchronizedRemoveMasterData(String id);
     abstract List<MasterDataEntity> synchronizedGetMasterData();
     
 }

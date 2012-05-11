@@ -20,7 +20,7 @@ public interface IFunctionality {
     
     void insertMasterData(MasterDataEntity masterData);
     
-    void removeMasterData(MasterDataEntity masterData);
+    void removeMasterData(String id);
     
     void insertNewItem(Item item);
     

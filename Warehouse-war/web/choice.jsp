@@ -12,8 +12,9 @@
         <title>Choice</title>
     </head>
     <body>
-        <h4>Vyber akciu:</h4>
-        <a href="masterData.jsp">Spravovanie Master Dat</a><br>
-        <a href="search.jsp">Vyhľadávanie</a>
+        <h4>Choose action:</h4>
+        <a href="masterData.jsp">Manage master data</a><br>
+        <a href="search.jsp">Search</a><br>
+        <a href="config.jsp">Configure warehouse</a>
     </body>
 </html>
