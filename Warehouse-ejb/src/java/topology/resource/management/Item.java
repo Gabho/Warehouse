@@ -16,6 +16,7 @@ public class Item implements IItem{
     private String decription;
     private Date expirationDate;
     private Position position;
+    private int id;
 
     /**
      * Costructor for internal use of item. Object creation is 
@@ -33,7 +34,7 @@ public class Item implements IItem{
      * @param expirationDate
      * @param position 
      */
-    public Item(int amount, String type, String decription, 
+    public Item(int id, int amount, String type, String decription, 
             Date expirationDate, Position position) {
         this.amount = amount;
         this.type = type;
@@ -65,5 +66,19 @@ public class Item implements IItem{
     @Override
     public Position getPosition() {
         return position;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 }

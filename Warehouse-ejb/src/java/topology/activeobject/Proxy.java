@@ -39,12 +39,12 @@ public class Proxy implements IFunctionality {
 
     @Override
     public void insertMasterData(MasterDataEntity masterData) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        scheduler.enqueue(new MethodRequestInsertMD(masterData, database));
     }
 
     @Override
-    public void removeMasterData(MasterDataEntity masterData) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void removeMasterData(String id) {
+        scheduler.enqueue(new MethodRequestRemoveMD(id, database));
     }
 
     @Override

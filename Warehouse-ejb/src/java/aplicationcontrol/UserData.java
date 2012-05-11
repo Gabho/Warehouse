@@ -20,6 +20,7 @@ public class UserData {
     private Connection conn;
     private int rights = 0;
     Object o = new Object();
+    private String logged = "error";
     
     
    
@@ -68,7 +69,7 @@ public class UserData {
             rs = st.executeQuery("SELECT accessrights FROM employee WHERE username ='"+this.name+"' AND password ="+"'"+this.pass+"'");
             rs.next();
             this.setRights(rs.getInt(1));
-            
+            this.setLogged("logged");
         }
         
     }
@@ -85,6 +86,20 @@ public class UserData {
      */
     public void setRights(int rights) {
         this.rights = rights;
+    }
+
+    /**
+     * @return the logged
+     */
+    public String isLogged() {
+        return logged;
+    }
+
+    /**
+     * @param logged the logged to set
+     */
+    public void setLogged(String logged) {
+        this.logged = logged;
     }
     
     

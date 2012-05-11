@@ -1,18 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package persistence;
 
 /**
- *
- * @author Gabo
+ * 
+ * @author Gabriel Cervenak
  */
+//Trieda predstavujúca zámok pre monitor objekt
 public class MonitorLock {
     
     volatile boolean locked = false;
     Thread thread = null;
     
+    //Metóda na získanie zámku
     public synchronized void lock(){
         while(locked){
             try{
@@ -27,6 +25,7 @@ public class MonitorLock {
         locked = true;
     }
     
+    //Uvoľnenie zámku
     public synchronized void unlock(){
         if(locked && Thread.currentThread() == this.thread){
             thread = null;

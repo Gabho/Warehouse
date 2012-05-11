@@ -14,7 +14,7 @@ public class Authorization {
     public boolean Authorize(int accessRights,Object rights){
         
         int usersRights = Integer.parseInt(rights.toString());
-        if(accessRights < usersRights){
+        if(accessRights <= usersRights){
            return true; 
         } else {
             return false;

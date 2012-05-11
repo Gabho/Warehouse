@@ -10,8 +10,9 @@ import javax.persistence.*;
 
 /**
  *
- * @author Gabo
+ * @author Gabriel Cervenak
  */
+//Trieda predstavujúca položku v databáze
 @Entity
 public class ItemEntity implements Serializable {
 
@@ -28,9 +29,11 @@ public class ItemEntity implements Serializable {
     @ManyToOne
     private MasterDataEntity masterData;
 
+    //Bezparametrický konštruktor
     public ItemEntity() {
     }
 
+    //Konštruktor s parametrami - id uličky, id regálu, id poličky, počet, dátum spotreby, prislúchajúce master data
     public ItemEntity(int aisle, int rack, int shelf, int quantity, Date expDate, MasterDataEntity data) {
         this.aisle = aisle;
         this.rack = rack;
@@ -40,13 +43,62 @@ public class ItemEntity implements Serializable {
         this.masterData = data;
     }
 
+    //Vracia id položky
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    //Vracia id uličky,v ktorej sa nachádza
+    public int getAisle() {
+        return aisle;
     }
+
+    //Nastaví id uličky
+    public void setAisle(int aisle) {
+        this.aisle = aisle;
+    }
+
+    //Vracia dátum spotreby
+    public Date getExpDate() {
+        return expDate;
+    }
+
+    //Naství dátum spotreby
+    public void setExpDate(Date expDate) {
+        this.expDate = expDate;
+    }
+
+    //Vracia počet položiek
+    public int getQuantity() {
+        return quantity;
+    }
+
+    //Nastaví počet položiek
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    //Vracia id regálu, v ktorom sa nachádza položka
+    public int getRack() {
+        return rack;
+    }
+
+    //Nastaví id regálu
+    public void setRack(int rack) {
+        this.rack = rack;
+    }
+
+    //Vracia is poločky, kde sa nachádza položka
+    public int getShelf() {
+        return shelf;
+    }
+
+    //Nastaví id poličky
+    public void setShelf(int shelf) {
+        this.shelf = shelf;
+    }
+    
+    
 
     @Override
     public int hashCode() {

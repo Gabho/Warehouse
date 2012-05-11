@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package persistence;
 
 import java.io.Serializable;
@@ -13,8 +9,9 @@ import javax.persistence.OneToMany;
 
 /**
  *
- * @author Gabo
+ * @author Gabriel Cervenak
  */
+//Trieda predstavujúca master data
 @Entity
 public class MasterDataEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -25,52 +22,53 @@ public class MasterDataEntity implements Serializable {
     private String description;
     private int quantity;
     
+    //Bezparametrický konštruktor triedy MasterDataEntity
     public MasterDataEntity() {
     }
     
+    //Konštruktor s dvoma parametrami - meno a opis
     public MasterDataEntity(String id ,String description){
         this.id = id;
         this.description = description;
     }
-    
-    public MasterDataEntity(String id){
-        this.id = id;
-    }
 
+    //Vracia opis dat
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
+    //Vracia id master dat
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
+    //Vracia zoznam položiek prislúchajúcich k master datam
     public List<ItemEntity> getItemEntitys() {
         return itemEntities;
     }
 
+    //Uloži zoznam položiek prislúchajúcich k master datam
     public void setItemEntitys(List<ItemEntity> itemEntitys) {
         this.itemEntities = itemEntitys;
     }
 
+    //Vracia počet položiek
     public int getQuantity() {
         return quantity;
     }
 
+    //Nastavi počet položiek
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
     
+    //Metóda na aktualizáciu počtu položiek
     public void updateQuantity(){
-        setQuantity(itemEntities.size());
+        int amount = 0;
+        for(ItemEntity item : itemEntities){
+            amount = amount + item.getQuantity();
+        }
+        setQuantity(amount);
     }
 
     @Override
