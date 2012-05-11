@@ -28,7 +28,7 @@
         if(quantity != null){%>Quantity: <%= quantity%><%}
         %></h2>
         
-        <a href="choice.jsp">späť</a>
+        <a href="choice.jsp">Back</a>
         
     </body>
 </html>

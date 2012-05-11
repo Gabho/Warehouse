@@ -26,9 +26,11 @@
             String name = request.getParameter("name");
             String pass = mb1.getPass();
             int rights = mb1.getRights();
+            String logged = mb1.isLogged();
             session.setAttribute("name",name);
             session.setAttribute("pass",pass);
             session.setAttribute("rights",rights);
+            session.setAttribute("logged",logged);
             %>
             
             <jsp:getProperty name = "mb1" property = "rights"/>
@@ -44,6 +46,6 @@
             %>
             
         </form>
-            <a href="search.jsp">Search</a>
+            
     </body>
 </html>
