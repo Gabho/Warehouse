@@ -30,10 +30,14 @@ public class Shelf implements IShelf {
     public Shelf(int id) {
         this.id = id;
         this.capacity = DEFAULT_CAPACITY;
-        items = new ArrayList<IItem>(capacity);
         try {
             db = (Database) new InitialContext().lookup("java:global/Warehouse/Warehouse-ejb/Database");
-            //TODO item loading
+            List<IItem> loadedItems = db.getShelf(id);
+            if(loadedItems.size() > 0) {
+                items = new ArrayList<IItem>(loadedItems);
+            } else {
+                items = new ArrayList<IItem>(capacity);
+            }
         } catch (NamingException ex) {
             Logger.getLogger(Shelf.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -42,10 +46,14 @@ public class Shelf implements IShelf {
     public Shelf(int id, int capacity) {
         this.id = id;
         this.capacity = capacity;
-        items = new ArrayList<IItem>(capacity);
         try {
             db = (Database) new InitialContext().lookup("java:global/Warehouse/Warehouse-ejb/Database");
-            //TODO item loading
+            List<IItem> loadedItems = db.getShelf(id);
+            if(loadedItems.size() > 0) {
+                items = new ArrayList<IItem>(loadedItems);
+            } else {
+                items = new ArrayList<IItem>(capacity);
+            }
         } catch (NamingException ex) {
             Logger.getLogger(Shelf.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -91,32 +99,32 @@ public class Shelf implements IShelf {
     public void insertItem(IItem item) {
         if(capacity > items.size()) {
             items.add(item);
-            //db.updateShelf(id);
+            db.updateShelf(items, id);
         }
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
        
     @Override
-    public Item removeItem(IItem item) {
-        IItem removedItem = null;
+    public IItem removeItem(IItem item) {
         if(!items.isEmpty()) {
-            items.remove(item);
-            //db.updateShelf(id);
+            
+            if(!items.remove(item)) {
+                item = null;
+            }
+            db.updateShelf(items, id);
         }
-        throw new UnsupportedOperationException("Not supported yet.");
-        //return removedItem;
+        
+        return item;
     }
     
     @Override
     public List<IItem> remove() {
         List<IItem> retItems = items;
-        throw new UnsupportedOperationException("Not supported yet.");
-        //db.removeShelf(id);
-        //items = null;
-        //id = -1;
-        //capacity = -1;
+        db.removeShelf(id);
+        items = null;
+        id = -1;
+        capacity = -1;
         
-        //return retItems;
+        return retItems;
     }
 }

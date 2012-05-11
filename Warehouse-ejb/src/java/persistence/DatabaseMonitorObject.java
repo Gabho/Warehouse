@@ -28,7 +28,7 @@ public abstract class DatabaseMonitorObject {
     }
 
     //Aktualizuje obsah poličky na danej pozícii
-    public void updateShelf(List<Item> items, int shelfId) {
+    public void updateShelf(List<IItem> items, int shelfId) {
         lock.lock();
         synchronizesUpdateShelf(items, shelfId);
         lock.unlock();
@@ -73,7 +73,7 @@ public abstract class DatabaseMonitorObject {
     }
     
     abstract List<IItem> synchronizedGetShelf(int shelfId);
-    abstract void synchronizesUpdateShelf(List<Item> items, int shelfId);
+    abstract void synchronizesUpdateShelf(List<IItem> items, int shelfId);
     abstract void synchronizedRemoveShelf(int shelfId);
     abstract int synchronizedSearch(String string);
     abstract void synchronizedAddMasterData(MasterDataEntity masterData);
