@@ -5,7 +5,6 @@
 package topology.storage;
 
 import javax.ejb.Local;
-import topology.configuration.AbstractComponent;
 
 /**
  *
@@ -14,7 +13,7 @@ import topology.configuration.AbstractComponent;
 @Local
 public interface IObjectManager {
     public void insert(Object object);
-    public void remove(Object object);
+    public String remove(String hashKey);
     public Object find(String hashKey);
     
     public int addItem();

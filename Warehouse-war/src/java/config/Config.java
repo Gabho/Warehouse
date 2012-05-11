@@ -20,7 +20,10 @@ import topology.configuration.ComponentConfigurator;
  */
 @WebServlet(name = "Config", urlPatterns = {"/Config"})
 public class Config extends HttpServlet {
-    @EJB ComponentConfigurator cc;
+
+    @EJB
+    ComponentConfigurator cc;
+
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -32,7 +35,7 @@ public class Config extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException { 
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String command = request.getParameter("command");
@@ -42,14 +45,18 @@ public class Config extends HttpServlet {
              */
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Config</title>");
+            out.println("<title>Warehouse Control System</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Config at " + request.getContextPath() + "</h1>");
-            out.println(command);
-            cc.processTask(command);
-            out.println("OK");
-            out.println("</html>");
+            out.println("<h1>Welcome to Warehouse Control System</h1>");
+            out.print("<form action=\"Config\" method=\"post\">");
+            out.print("Command: <input type=\"text\" name=\"command\" size=\"80\" /><br>"); 
+            out.print("<input type=\"submit\"/></form>");
+            //out.println("<b>Command: </b><i>"+ command + "</i><br>"); 
+            if (!command.equals("")) {
+                out.println("<b><i>" + cc.processTask(command) + "</i></b><br>");
+                out.println("</html>");
+            }
         } finally {
             out.close();
         }

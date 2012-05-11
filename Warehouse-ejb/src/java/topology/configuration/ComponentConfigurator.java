@@ -11,9 +11,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import topology.resource.management.ProxyShelf;
 import topology.storage.Aisle;
 import topology.storage.Rack;
 import topology.storage.IObjectManager;
+import topology.storage.IStorageComponent;
 
 /**
  *
@@ -23,14 +25,20 @@ import topology.storage.IObjectManager;
 public class ComponentConfigurator {
 
     File config;
-    @EJB IObjectManager storage;
+    @EJB
+    IObjectManager storage;
+    /*
+     * Constructor of Component Configurator.
+     */
 
     public ComponentConfigurator() {
         config = new File("C:/Documents and Settings/Mao/My Documents/NetBeansProjects/WJ2EE/WJ2EE-ejb/src/java/topology/configuration/load.txt");
 
     }
 
-    // Configure components from script at start of system.
+    /*
+     * Configure components from script at start of system.
+     */
     public void configure() {
         FileInputStream fis;
         BufferedInputStream bis;
@@ -60,25 +68,14 @@ public class ComponentConfigurator {
                 storage.insert(instance);
                 if (instance instanceof Rack) {
                     setRacksToAisle((Rack) instance);
+                    setShelfsToRack((Rack) instance);
                 }
                 System.out.println("#Loading " + instance.getClass().getName() + " " + tokens[1] + ": OK");
             }
             // dispose all the resources after using them.
-            fis.close();
+            fis.close();   
             bis.close();
             dis.close();
-//            Aisle a = (Aisle) storage.find("A"+1);
-//            try {
-//                System.out.println(a.getRacks().get(0).info()); 
-//                a = (Aisle) storage.find("A"+1);
-//                System.out.println(a.getRacks().get(1).info()); 
-//                a = (Aisle) storage.find("A"+2);
-//                System.out.println(a.getRacks().get(0).info()); 
-//                a = (Aisle) storage.find("A"+2);
-//                System.out.println(a.getRacks().get(1).info()); 
-//            } catch (Exception ex) {
-//                Logger.getLogger(ComponentConfigurator.class.getName()).log(Level.SEVERE, null, ex);
-//            }
         } catch (IllegalArgumentException ex) {
             Logger.getLogger(ComponentConfigurator.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
@@ -97,11 +94,19 @@ public class ComponentConfigurator {
             System.out.println("File not found!");
         } catch (IOException e) {
             System.out.println("IO Error!");
-        }
+        } 
     }
 
-    // Configure component at runtime from admin command.
-    public void processTask(String task) {
+    /*
+     * Configure component at runtime from admin command. Format of commands:
+     * load path.to.Component string_name_component int_capacity 
+     * remove string_name_component 
+     * configure string_name_component string_new_name_component int_capacity [string_insert_to_upper_componet]
+     *
+     * Example: load topology.storage.Aisle A1 5 remove A1 configure R1 5 A1
+     *
+     */
+    public String processTask(String task) {
         System.out.println("Start proccesig task: " + task);
         String delims = "[ ]";
         String[] tokens = task.split(delims);
@@ -118,6 +123,7 @@ public class ComponentConfigurator {
                 //insert object to repositary
                 storage.insert((AbstractComponent) instance);
                 System.out.println("#Load: OK");
+                return "Load: OK";
             } catch (IllegalArgumentException ex) {
                 Logger.getLogger(ComponentConfigurator.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InvocationTargetException ex) {
@@ -126,7 +132,7 @@ public class ComponentConfigurator {
                 Logger.getLogger(ComponentConfigurator.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SecurityException ex) {
                 Logger.getLogger(ComponentConfigurator.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (ClassNotFoundException ex) { 
                 Logger.getLogger(ComponentConfigurator.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InstantiationException ex) {
                 Logger.getLogger(ComponentConfigurator.class.getName()).log(Level.SEVERE, null, ex);
@@ -135,24 +141,36 @@ public class ComponentConfigurator {
             }
         } else if (tokens[0].equals("remove")) {
             AbstractComponent object = (AbstractComponent) storage.find(tokens[1]);
-            object.suspend(); 
-            storage.remove(object);
-            System.out.println("#Remove: OK");
+            if (object != null) {
+                System.out.println(object.info());
+                object.suspend();
+                //remove object from Object Manager
+                storage.remove(object.getCode());
+                return "Remove: OK!";
+            } else return "Error: No match to object!";
         } else if (tokens[0].endsWith("configure")) {
-            try {
+            try { 
                 AbstractComponent object = (AbstractComponent) storage.find(tokens[1]);
                 object.suspend();
-                
-                //TODO: dorobit set metody a prekonfigurovat komponent.
-  
+                IStorageComponent cObject = (IStorageComponent) object;
+                cObject.setCode(tokens[2]);
+                cObject.setCapacity(Integer.valueOf(tokens[3]));
+                if (!(cObject instanceof Aisle)) {
+                    AbstractComponent storeComponent = (AbstractComponent) storage.find(tokens[4]);
+                    cObject.addComponent(storeComponent);
+                }
                 object.resume();
-                System.out.println("#Configure: OK");
+                return "Configure: OK!";
             } catch (IllegalArgumentException ex) {
                 Logger.getLogger(ComponentConfigurator.class.getName()).log(Level.SEVERE, null, ex);
-            } 
+            }
         }
+        return "Error: Unknown command!";
     }
 
+    /*
+     * Load class to system at runtime.
+     */
     private Object loadMyClass(String classToLoad) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         ClassLoader loader = ComponentConfigurator.class.getClassLoader();
         Class classLoaded = loader.loadClass(classToLoad);
@@ -161,6 +179,9 @@ public class ComponentConfigurator {
     }
     int count = 0;
     int aisleID = 1;
+    /*
+     * Create depends of store components.
+     */
 
     private void setRacksToAisle(Rack rack) {
         count += 1;
@@ -173,6 +194,12 @@ public class ComponentConfigurator {
             aisle.getRacks().add(rack);
         } catch (Exception ex) {
             Logger.getLogger(ComponentConfigurator.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void setShelfsToRack(Rack rack) {
+        for (int i = 1; i < 6; i++) {
+            rack.addComponent(new ProxyShelf(i));
         }
     }
 }

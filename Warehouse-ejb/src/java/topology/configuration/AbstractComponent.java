@@ -15,3 +15,4 @@ public abstract class AbstractComponent {
     public abstract String info();
     public abstract String getCode();
 }
+  

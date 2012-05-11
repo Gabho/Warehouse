@@ -5,8 +5,12 @@
 package topology.storage;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateful;
 import topology.configuration.AbstractComponent;
+import topology.resource.management.ProxyShelf;
 
 
 /**
@@ -19,7 +23,7 @@ public class Storage implements IObjectManager {
    private HashMap manager;
 
     public Storage() {
-        manager = new HashMap();
+        manager = new HashMap();  
     }
    
     @Override
@@ -32,8 +36,10 @@ public class Storage implements IObjectManager {
     }
 
     @Override
-    public void remove(Object object) {
-        manager.remove(object.hashCode());
+    public String remove(String hashKey) {
+        if(manager.remove(hashKey) == null) 
+            return "Error: No match to object!";
+        else return "Remove: OK";
     } 
 
     @Override
@@ -55,10 +61,26 @@ public class Storage implements IObjectManager {
     public int findItem() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
+    /*
+     * Return free space.
+     */
     @Override
     public int getFreeSpace() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int countOfRacks = 15;
+        int freeSpace = 0;
+        for (int i = 1; i < 16; i++) {
+            Rack rack = (Rack) manager.get("R"+i);
+            try {
+                List<ProxyShelf>  lst = rack.getShelfs();
+                for (int j = 0; j < lst.size(); j++) {
+                    ProxyShelf proxyS = lst.get(j);
+                    freeSpace += proxyS.getFreeSpace();
+                }
+            } catch (Exception ex) {
+                Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return freeSpace;
     }
 
     

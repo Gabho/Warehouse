@@ -4,16 +4,16 @@
  */
 package topology.storage;
 
-import topology.configuration.AbstractComponent;
 import java.util.ArrayList;
 import java.util.List;
+import topology.configuration.AbstractComponent;
 
 /**
  *
  * @author Mao
  */
-public class Aisle extends AbstractComponent {
-     private String code;
+public class Aisle extends AbstractComponent implements IStorageComponent {
+    private String code;
     private int capacity;
     private List<Rack> racks;
     private Boolean isReady;
@@ -66,5 +66,20 @@ public class Aisle extends AbstractComponent {
     @Override
     public String info() {
         return "This is an Aisle for Racks.\nCode: " + code + "\n" + "Capacity: " + capacity;
+    }
+
+    @Override
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @Override
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    @Override
+    public void addComponent(Object object) {
+        racks.add((Rack)object);              
     }
 }
