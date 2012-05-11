@@ -8,6 +8,11 @@ package topology.resource.management;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import persistence.Database;
 
 /**
  *
@@ -18,26 +23,32 @@ public class Shelf implements IShelf {
     private List<IItem> items;
     private int id;
     private int capacity;
-    //TODO: add database connection or something
-    
+    private Database db;
+        
     private static final int DEFAULT_CAPACITY = 10;
 
     public Shelf(int id) {
         this.id = id;
         this.capacity = DEFAULT_CAPACITY;
         items = new ArrayList<IItem>(capacity);
-        
-        //TODO: check for existing items.
-        //getShelf from database
+        try {
+            db = (Database) new InitialContext().lookup("java:global/Warehouse/Warehouse-ejb/Database");
+            //TODO item loading
+        } catch (NamingException ex) {
+            Logger.getLogger(Shelf.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public Shelf(int id, int capacity) {
         this.id = id;
         this.capacity = capacity;
         items = new ArrayList<IItem>(capacity);
-        
-        //TODO: check for existing items.
-        //getShelf from database
+        try {
+            db = (Database) new InitialContext().lookup("java:global/Warehouse/Warehouse-ejb/Database");
+            //TODO item loading
+        } catch (NamingException ex) {
+            Logger.getLogger(Shelf.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
             
     @Override
@@ -77,16 +88,22 @@ public class Shelf implements IShelf {
     }
 
     @Override
-    public void insertItem(Item item) {
+    public void insertItem(IItem item) {
         throw new UnsupportedOperationException("Not supported yet.");
-        //TODO: inserting item
+        //db.addShelf(id);
     }
 
        
     @Override
-    public void removeItem(Item item) {
+    public Item removeItem(IItem item) {
         throw new UnsupportedOperationException("Not supported yet.");
-        //TODO: removing item
+        //return db.updateShelf(null);
     }
     
+    @Override
+    public List<IItem> remove() {
+        throw new UnsupportedOperationException("Not supported yet.");
+        //db.removeShelf(id);
+        //return this.items;
+    }
 }

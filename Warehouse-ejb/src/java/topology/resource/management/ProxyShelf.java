@@ -9,7 +9,7 @@ import java.util.List;
  * 
  * @author Martin Lofaj
  */
-public class ProxyShelf implements IShelf{
+public class ProxyShelf implements IShelf {
     
     private IShelf shelf;
     private ResourceCache<IShelf> cache;
@@ -72,17 +72,26 @@ public class ProxyShelf implements IShelf{
     }
 
     @Override
-    public void insertItem(Item item) {
+    public void insertItem(IItem item) {
         getShelf();
         shelf.insertItem(item);
         cacheShelf();
     }
 
     @Override
-    public void removeItem(Item item) {
+    public IItem removeItem(IItem item) {
         getShelf();
-        shelf.insertItem(item);
+        IItem removedItem = shelf.removeItem(item);
         cacheShelf();
+        return removedItem;
+    }
+    
+    @Override
+    public List<IItem> remove() {
+        getShelf();
+        List<IItem> items =  shelf.remove();
+        shelf = null;
+        return items;
     }
     
     private void getShelf() {

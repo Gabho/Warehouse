@@ -18,9 +18,10 @@ public interface IShelf {
     public int getID();
     
     //Pravdepodobne potrebne metody
-    public void insertItem(Item item);
-    public void removeItem(Item item);
-    //public void findItem(int id); // ziskanie itemu podla id ?
+    public void insertItem(IItem item);
+    public IItem removeItem(IItem item);
     
+    public List<IItem> remove();
+    //public void findItem(int id); // ziskanie itemu podla id ?
     
 }
