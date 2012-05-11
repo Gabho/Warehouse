@@ -4,6 +4,10 @@
 package topology.resource.management;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
  * 
@@ -17,9 +21,13 @@ public class ProxyShelf implements IShelf {
     //Id of the actual shelf.
     private int id;
 
-    public ProxyShelf(int id, ResourceCache<IShelf> cache) {
+    public ProxyShelf(int id) {
         this.id = id;
-        this.cache = cache;
+        try {
+            cache = (ResourceCache<IShelf>) new InitialContext().lookup("java:global/Warehouse/Warehouse-ejb/ResourceCache");
+        } catch (NamingException ex) {
+            Logger.getLogger(ProxyShelf.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

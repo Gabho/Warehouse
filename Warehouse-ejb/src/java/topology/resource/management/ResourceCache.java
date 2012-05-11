@@ -6,18 +6,21 @@ package topology.resource.management;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.ejb.Stateful;
 
 
 /**
  * @author Martin Lofaj
  */
+@Stateful
 public class ResourceCache<T> {
 
     private Map<Integer ,CachedResource<T>> cache;
     private int capacity;
+    private static final int DEFAULT_CAPACITY = 10;
 
-    public ResourceCache(int capacity) {
-        this.capacity = capacity;
+    public ResourceCache() {
+        this.capacity = DEFAULT_CAPACITY;
         cache = new HashMap<Integer ,CachedResource<T>>(capacity);
     }
 
