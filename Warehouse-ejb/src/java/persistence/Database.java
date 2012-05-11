@@ -63,5 +63,6 @@ public class Database extends DatabaseMonitorObject {
         List<MasterDataEntity> data = getData.getResultList();
         return data;
     }
-
+    
+    
 }
