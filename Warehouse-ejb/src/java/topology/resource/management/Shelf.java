@@ -89,21 +89,34 @@ public class Shelf implements IShelf {
 
     @Override
     public void insertItem(IItem item) {
+        if(capacity > items.size()) {
+            items.add(item);
+            //db.updateShelf(id);
+        }
         throw new UnsupportedOperationException("Not supported yet.");
-        //db.addShelf(id);
     }
 
        
     @Override
     public Item removeItem(IItem item) {
+        IItem removedItem = null;
+        if(!items.isEmpty()) {
+            items.remove(item);
+            //db.updateShelf(id);
+        }
         throw new UnsupportedOperationException("Not supported yet.");
-        //return db.updateShelf(null);
+        //return removedItem;
     }
     
     @Override
     public List<IItem> remove() {
+        List<IItem> retItems = items;
         throw new UnsupportedOperationException("Not supported yet.");
         //db.removeShelf(id);
-        //return this.items;
+        //items = null;
+        //id = -1;
+        //capacity = -1;
+        
+        //return retItems;
     }
 }
