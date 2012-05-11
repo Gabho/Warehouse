@@ -49,5 +49,7 @@
         if(quantity != null){%>Quantity: <%= quantity%><%}
         %></h2>
         
+        <a href="choice.jsp">späť</a>
+        
     </body>
 </html>

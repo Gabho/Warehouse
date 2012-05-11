@@ -4,12 +4,15 @@
  */
 package persistence;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -26,6 +29,7 @@ public class Database extends DatabaseMonitorObject {
     @Override
     int synchronizedSearch(String searchString) {
         int quantity;
+        searchString = searchString.toUpperCase();
         MasterDataEntity search = em.find(MasterDataEntity.class, searchString);
         if (search == null) {
             LOGGER.log(Level.INFO, "..............................Searched not found..............................");
@@ -38,6 +42,26 @@ public class Database extends DatabaseMonitorObject {
             return quantity;
         }
 
+    }
+
+    @Override
+    void synchronizedAddMasterData(MasterDataEntity masterData) {
+        try{
+            em.persist(masterData);
+        }catch(Exception e){
+        }
+    }
+
+    @Override
+    void synchronizedRemoveMasterData(MasterDataEntity masterData) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    List<MasterDataEntity> synchronizedGetMasterData() {
+        TypedQuery<MasterDataEntity> getData = em.createQuery("SELECT m FROM MasterDataEntity m ORDER BY m.id", MasterDataEntity.class);
+        List<MasterDataEntity> data = getData.getResultList();
+        return data;
     }
 
 }

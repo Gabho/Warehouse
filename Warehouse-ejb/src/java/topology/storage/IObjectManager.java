@@ -1,17 +1,24 @@
 /*
- * Interface for Component Configurator
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package topology.storage;
 
 import javax.ejb.Local;
+import topology.configuration.AbstractComponent;
 
 /**
  *
- * @author Martin Pakandl
+ * @author Mao
  */
 @Local
 public interface IObjectManager {
     public void insert(Object object);
     public void remove(Object object);
-    public Object find(Object object);
+    public Object find(String hashKey);
+    
+    public int addItem();
+    public int removeItem();
+    public int findItem();
+    public int getFreeSpace();
 }

@@ -6,7 +6,6 @@ package httpServlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -15,23 +14,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import persistence.Database;
-import topology.activeobject.IFunctionality;
-import topology.activeobject.IFuture;
+import persistence.MasterDataEntity;
 
 /**
  *
  * @author Gabo
  */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
-public class SearchServlet extends HttpServlet {
-    
+@WebServlet(name = "MasterDataServlet", urlPatterns = {"/masterData"})
+public class MasterDataServlet extends HttpServlet {
+
+    private static final Logger LOGGER = Logger.getLogger(MasterDataServlet.class.getName());
     @EJB
     private Database database;
-    @EJB 
-    private IFunctionality proxy;
-    private int quantity;
-    private IFuture quantityFututre = null;
-    private static final Logger LOGGER = Logger.getLogger(SearchServlet.class.getName());
 
     /**
      * Processes requests for both HTTP
@@ -53,13 +47,13 @@ public class SearchServlet extends HttpServlet {
              */
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SearchServlet</title>");            
+            out.println("<title>Servlet MasterDataServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SearchServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet MasterDataServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
-        } finally {            
+        } finally {
             out.close();
         }
     }
@@ -77,10 +71,8 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        quantity = (Integer)quantityFututre.get();
-        LOGGER.log(Level.INFO, "..............................Quantity: {0}..............................", quantity);
-        request.setAttribute("quantity", Integer.toString(quantity));
-        request.getRequestDispatcher("/search.jsp").forward(request, response);
+        request.setAttribute("masterData", database.getMasterData());
+        request.getRequestDispatcher("/masterData.jsp").forward(request, response);
     }
 
     /**
@@ -95,14 +87,17 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String search = request.getParameter("searchString");
-        if(proxy != null){
-            LOGGER.log(Level.INFO, "..............................Search:Proxy succesfully initialized..............................");
+        String name = request.getParameter("name");
+        String description = request.getParameter("description");
+        if (name != null && description != null) {
+            name = name.toUpperCase();
+            MasterDataEntity masterData = new MasterDataEntity(name, description);
+            try{
+                database.addMasterData(masterData);
+            }catch(Exception e){}
+            
         }
-        quantityFututre = proxy.search(search);
-        if(quantityFututre != null){
-            LOGGER.log(Level.INFO, "..............................Search:Future succesfully returned..............................");
-        }
+        //request.getRequestDispatcher("/masterData.jsp").forward(request, response);
         doGet(request, response);
     }
 

@@ -1,20 +1,22 @@
 /*
- * Object Manager pattern - Warehouse topology
- * 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
  */
 package topology.storage;
 
 import java.util.HashMap;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
+import topology.configuration.AbstractComponent;
+
 
 /**
  *
- * @author Martin Pakandl
+ * @author Mao
  */
-@Stateless
-public class Storage implements IObjectManager, IStorage {
+@Stateful
+public class Storage implements IObjectManager {
 
-    private HashMap manager;
+   private HashMap manager;
 
     public Storage() {
         manager = new HashMap();
@@ -22,19 +24,23 @@ public class Storage implements IObjectManager, IStorage {
    
     @Override
     public void insert(Object object) {
-        manager.put(object.hashCode(), object);
+        String hashKey;
+        AbstractComponent object1 = (AbstractComponent) object;
+        hashKey = object1.getCode();
+
+       manager.put(hashKey, object);
     }
 
     @Override
     public void remove(Object object) {
         manager.remove(object.hashCode());
-    }
+    } 
 
     @Override
-    public Object find(Object object) {
-        return manager.get(object.hashCode());
+    public Object find(String hashKey) {
+        return manager.get(hashKey);
     }
-
+    
     @Override
     public int addItem() {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -54,5 +60,6 @@ public class Storage implements IObjectManager, IStorage {
     public int getFreeSpace() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
     
 }

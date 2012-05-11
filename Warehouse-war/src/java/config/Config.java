@@ -2,37 +2,25 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package httpServlets;
+package config;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import persistence.Database;
-import topology.activeobject.IFunctionality;
-import topology.activeobject.IFuture;
+import topology.configuration.ComponentConfigurator;
 
 /**
  *
- * @author Gabo
+ * @author Mao
  */
-@WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
-public class SearchServlet extends HttpServlet {
-    
-    @EJB
-    private Database database;
-    @EJB 
-    private IFunctionality proxy;
-    private int quantity;
-    private IFuture quantityFututre = null;
-    private static final Logger LOGGER = Logger.getLogger(SearchServlet.class.getName());
-
+@WebServlet(name = "Config", urlPatterns = {"/Config"})
+public class Config extends HttpServlet {
+    @EJB ComponentConfigurator cc;
     /**
      * Processes requests for both HTTP
      * <code>GET</code> and
@@ -44,22 +32,25 @@ public class SearchServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException { 
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        String command = request.getParameter("command");
         try {
             /*
              * TODO output your page here. You may use following sample code.
              */
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet SearchServlet</title>");            
+            out.println("<title>Servlet Config</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet SearchServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
+            out.println("<h1>Servlet Config at " + request.getContextPath() + "</h1>");
+            out.println(command);
+            cc.processTask(command);
+            out.println("OK");
             out.println("</html>");
-        } finally {            
+        } finally {
             out.close();
         }
     }
@@ -77,10 +68,7 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        quantity = (Integer)quantityFututre.get();
-        LOGGER.log(Level.INFO, "..............................Quantity: {0}..............................", quantity);
-        request.setAttribute("quantity", Integer.toString(quantity));
-        request.getRequestDispatcher("/search.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -95,15 +83,7 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String search = request.getParameter("searchString");
-        if(proxy != null){
-            LOGGER.log(Level.INFO, "..............................Search:Proxy succesfully initialized..............................");
-        }
-        quantityFututre = proxy.search(search);
-        if(quantityFututre != null){
-            LOGGER.log(Level.INFO, "..............................Search:Future succesfully returned..............................");
-        }
-        doGet(request, response);
+        processRequest(request, response);
     }
 
     /**
