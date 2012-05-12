@@ -111,10 +111,8 @@ public class Database extends DatabaseMonitorObject {
         for(ItemEntity item : masterData.getItemEntitys()){
                 quantity = quantity + item.getQuantity();
             }
-        em.getTransaction().begin();
         Query update = em.createQuery("UPDATE MasterDataEntity m SET m.quantity = "+quantity+" WHERE m.id='"+masterData.getId()+"'", MasterDataEntity.class);
         int execute = update.executeUpdate();
-        em.getTransaction().commit();
     }
 
 }
