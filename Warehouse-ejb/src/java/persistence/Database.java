@@ -51,10 +51,7 @@ public class Database extends DatabaseMonitorObject {
     //Pridávanie master dat do tabuľky
     @Override
     void synchronizedAddMasterData(MasterDataEntity masterData) {
-        try {
             em.persist(masterData);
-        } catch (Exception e) {
-        }
     }
 
     //Mazanie master dat z tabuľky
