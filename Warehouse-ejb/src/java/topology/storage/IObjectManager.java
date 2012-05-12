@@ -5,6 +5,7 @@
 package topology.storage;
 
 import javax.ejb.Local;
+import topology.resource.management.Item;
 
 /**
  *
@@ -16,7 +17,7 @@ public interface IObjectManager {
     public String remove(String hashKey);
     public Object find(String hashKey);
     
-    public int addItem();
+    public int addItem(Item item);
     public int removeItem();
     public int findItem();
     public int getFreeSpace();

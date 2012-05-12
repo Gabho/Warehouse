@@ -10,7 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateful;
 import topology.configuration.AbstractComponent;
-import topology.resource.management.ProxyShelf;
+import topology.resource.management.IShelf;
+import topology.resource.management.Item;
+import topology.resource.management.Position;
 
 
 /**
@@ -48,8 +50,31 @@ public class Storage implements IObjectManager {
     }
     
     @Override
-    public int addItem() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public int addItem(Item item) {
+        for (int i = 1; i < 4; i++) {
+            try {
+                Aisle aisle = (Aisle) manager.get("A"+i);
+                List<Rack> racks = aisle.getRacks();
+                for (int j = 0; j < racks.size(); j++) {
+                    Rack rack = racks.get(j);
+                    List<IShelf>  lst = rack.getShelfs();
+                    for (int k = 0; k < lst.size(); k++) {
+                        IShelf proxyS = lst.get(k);
+                        if(proxyS.getFreeSpace() == 0) {
+                            int rackID = Integer.valueOf(rack.getCode().charAt(1));
+                            int aisleID = Integer.valueOf(aisle.getCode().charAt(1));
+                            item.setPosition(new Position(proxyS.getID(),rackID,aisleID));
+                            proxyS.insertItem(item);
+                            return 1;
+                        }
+                    }
+                }
+                
+            } catch (Exception ex) {
+                Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+       return 0;
     }
 
     @Override
@@ -68,13 +93,17 @@ public class Storage implements IObjectManager {
     public int getFreeSpace() {
         int countOfRacks = 15;
         int freeSpace = 0;
-        for (int i = 1; i < 16; i++) {
-            Rack rack = (Rack) manager.get("R"+i);
+        for (int i = 1; i < 4; i++) {
             try {
-                List<ProxyShelf>  lst = rack.getShelfs();
-                for (int j = 0; j < lst.size(); j++) {
-                    ProxyShelf proxyS = lst.get(j);
-                    freeSpace += proxyS.getFreeSpace();
+                Aisle aisle = (Aisle) manager.get("A"+i);
+                List<Rack> racks = aisle.getRacks();
+                for (int j = 0; j < racks.size(); j++) {
+                    Rack rack = racks.get(j);
+                    List<IShelf>  lst = rack.getShelfs();
+                    for (int k = 0; k < lst.size(); k++) {
+                        IShelf proxyS = lst.get(k);
+                        freeSpace += proxyS.getFreeSpace();
+                    }
                 }
             } catch (Exception ex) {
                 Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);

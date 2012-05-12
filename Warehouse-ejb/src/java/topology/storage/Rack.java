@@ -7,6 +7,7 @@ package topology.storage;
 import java.util.ArrayList;
 import java.util.List;
 import topology.configuration.AbstractComponent;
+import topology.resource.management.IShelf;
 import topology.resource.management.ProxyShelf;
 
 /**
@@ -16,7 +17,7 @@ import topology.resource.management.ProxyShelf;
 public class Rack extends AbstractComponent implements IStorageComponent {
     private String code;
     private int capacity;
-    private List<ProxyShelf> shelfs;
+    private List<IShelf> shelfs;
     private Boolean isReady;
 
     public Rack() {
@@ -38,7 +39,7 @@ public class Rack extends AbstractComponent implements IStorageComponent {
         return code;
     }
 
-    public List<ProxyShelf> getShelfs() throws Exception {
+    public List<IShelf> getShelfs() throws Exception {
         if (isReady) {
             return shelfs;
         } else {
