@@ -47,8 +47,34 @@
         
         <a href=<%= helperConfig%>>Configure warehouse</a>
 
+        <%
+            rights = session.getAttribute("rights");
+            String helperItem;
+          
+            if(mb2.Authorize(1,rights)==true){
+               helperItem = "item.jsp";
+            } else {
+               helperItem = "choice.jsp";
+            }
+            %>
+        
         <br>
-        <a href="item.jsp">Add/Remove Item</a><br>
-        <a href="makeOrder.jsp">Make order</a>
+        <a href=<%= helperItem%>>Add/Remove Item</a><br>
+        
+        <%
+            rights = session.getAttribute("rights");
+            String helperOrder;
+          
+            if(mb2.Authorize(1,rights)==true){
+               helperOrder = "item.jsp";
+            } else {
+               helperOrder = "choice.jsp";
+            }
+            %>
+        
+        <a href=<%= helperOrder%>
+           
+           
+           >Make order</a>
     </body>
 </html>
