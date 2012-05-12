@@ -11,6 +11,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import topology.resource.management.IItem;
 import topology.resource.management.Item;
@@ -90,7 +91,7 @@ public class Database extends DatabaseMonitorObject {
         List<ItemEntity> items = getItems.getResultList();
         for(ItemEntity item : items){
             em.remove(item);
-            item.getMasterData().updateQuantity();
+            updateQuantity(item.getMasterData());
         }
     }
 
@@ -101,8 +102,19 @@ public class Database extends DatabaseMonitorObject {
             MasterDataEntity masterData = em.find(MasterDataEntity.class, item.getType());
             ItemEntity i = new ItemEntity(item.getPosition().getAisle(), item.getPosition().getRack(), item.getPosition().getShelf(), item.getAmount(), item.getExpiration(), masterData);
             em.persist(i);
-            masterData.updateQuantity();
+            updateQuantity(i.getMasterData());
         }
+    }
+    
+    void updateQuantity(MasterDataEntity masterData){
+        int quantity = 0;
+        for(ItemEntity item : masterData.getItemEntitys()){
+                quantity = quantity + item.getQuantity();
+            }
+        em.getTransaction().begin();
+        Query update = em.createQuery("UPDATE MasterDataEntity m SET m.quantity = "+quantity+" WHERE m.id='"+masterData.getId()+"'", MasterDataEntity.class);
+        int execute = update.executeUpdate();
+        em.getTransaction().commit();
     }
 
 }

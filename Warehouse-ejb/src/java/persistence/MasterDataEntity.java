@@ -47,28 +47,9 @@ public class MasterDataEntity implements Serializable {
         return itemEntities;
     }
 
-    //Uloži zoznam položiek prislúchajúcich k master datam
-    public void setItemEntitys(List<ItemEntity> itemEntitys) {
-        this.itemEntities = itemEntitys;
-    }
-
     //Vracia počet položiek
     public int getQuantity() {
         return quantity;
-    }
-
-    //Nastavi počet položiek
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-    
-    //Metóda na aktualizáciu počtu položiek
-    public void updateQuantity(){
-        int amount = 0;
-        for(ItemEntity item : itemEntities){
-            amount = amount + item.getQuantity();
-        }
-        setQuantity(amount);
     }
 
     @Override

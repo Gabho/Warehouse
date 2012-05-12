@@ -53,19 +53,9 @@ public class ItemEntity implements Serializable {
         return aisle;
     }
 
-    //Nastaví id uličky
-    public void setAisle(int aisle) {
-        this.aisle = aisle;
-    }
-
     //Vracia dátum spotreby
     public Date getExpDate() {
         return expDate;
-    }
-
-    //Naství dátum spotreby
-    public void setExpDate(Date expDate) {
-        this.expDate = expDate;
     }
 
     //Vracia počet položiek
@@ -73,29 +63,14 @@ public class ItemEntity implements Serializable {
         return quantity;
     }
 
-    //Nastaví počet položiek
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     //Vracia id regálu, v ktorom sa nachádza položka
     public int getRack() {
         return rack;
     }
 
-    //Nastaví id regálu
-    public void setRack(int rack) {
-        this.rack = rack;
-    }
-
     //Vracia is poločky, kde sa nachádza položka
     public int getShelf() {
         return shelf;
-    }
-
-    //Nastaví id poličky
-    public void setShelf(int shelf) {
-        this.shelf = shelf;
     }
 
     public MasterDataEntity getMasterData() {
