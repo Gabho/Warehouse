@@ -6,7 +6,7 @@ package topology.resource.management;
 import java.util.Date;
 
 /**
- *
+ * Inteface defining item functionality.
  * @author Martin Lofaj
  */
 public interface IItem {

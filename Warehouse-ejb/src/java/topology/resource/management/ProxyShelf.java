@@ -11,7 +11,10 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
- * 
+ * Proxy shelf stores a instance of shelf in resource cache.
+ * When shelf's method is invoked it finds the instance in cache.
+ * If its not there it reates a new one a stores puts it to cache before
+ * the method returns.
  * @author Martin Lofaj
  */
 public class ProxyShelf implements IShelf {
@@ -113,6 +116,9 @@ public class ProxyShelf implements IShelf {
         }
     }
     
+    /**
+     * Puts a working instance of shelf into resource cache.
+     */
     private void cacheShelf() {
         cache.insert(id, shelf);
         shelf = null;

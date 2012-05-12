@@ -5,7 +5,7 @@ package topology.resource.management;
 
 import java.util.Date;
 /**
- *
+ * Implementaion of item.
  * @author Martin Lofaj
  */
 
@@ -68,16 +68,10 @@ public class Item implements IItem{
         return position;
     }
 
-    /**
-     * @return the id
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(int id) {
         this.id = id;
     }

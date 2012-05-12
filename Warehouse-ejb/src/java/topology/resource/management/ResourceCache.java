@@ -10,6 +10,7 @@ import javax.ejb.Stateful;
 
 
 /**
+ * A generic resource cache. A unique id is needed to store a resource in it.
  * @author Martin Lofaj
  */
 @Stateful
@@ -19,11 +20,21 @@ public class ResourceCache<T> {
     private int capacity;
     private static final int DEFAULT_CAPACITY = 10;
 
+    /**
+     * Costructs resource cache. Sets its capacity to default and creates
+     * its hashmap representation.
+     */
     public ResourceCache() {
         this.capacity = DEFAULT_CAPACITY;
         cache = new HashMap<Integer ,CachedResource<T>>(capacity);
     }
 
+    /**
+     * Inserts a given resource into cache. If the cache is full it
+     * will remove the least used item first.
+     * @param key unique key for hash calculation.
+     * @param resource item to be stored.
+     */
     public void insert(int key, T resource) {
         if (capacity < cache.size()) {
             cache.put(key ,new CachedResource<T>(resource, new Date(), key));
@@ -33,6 +44,11 @@ public class ResourceCache<T> {
         }
     }
     
+    /**
+     * Takes specified key a tests if the key is present in the cache.
+     * @param key key to look for.
+     * @return true if item with specified key is cached false if it isn't.
+     */
     public boolean isCached(int key) {
         return cache.containsKey(key);
     }
@@ -51,13 +67,19 @@ public class ResourceCache<T> {
         return keyOldest;
     }
 
+    /**
+     * Removes item with specified key from the cache.
+     * @param key of the item to be removed.
+     * @return item bound with key
+     */
     public T remove(int key) {
         return cache.remove(key).getResource();
     }
     
     /**
-     * Item stored in resource cache
-     * @param <T>
+     * Constainer for items stored in cache. Adds some additional 
+     * information to the item (time of insertion, its key)
+     * @param <T> type of the stored item
      */
     private class CachedResource<T> {
 
@@ -65,29 +87,46 @@ public class ResourceCache<T> {
         private Date timestamp;
         private int key;
 
+        /**
+         * Creates resource object.
+         * @param resource the actual item.
+         * @param timeStamp time object was inserted into cache.
+         * @param key key of the inserted object.
+         */
         public CachedResource(T resource, Date timeStamp, int key) {
             this.resource = resource;
             this.timestamp = timeStamp;
             this.key = key;
         }
-
-        private CachedResource(T resource) {
-            this.resource = resource;
-            this.timestamp = null;
-        }
         
+        /**
+         * Returns key key of the stored item.
+         * @return object's key.
+         */
         public int getKey() {
             return key;
         }
 
+        /**
+         * Returns time of object's insertion.
+         * @return object's time stamp
+         */
         public Date getTimeStamp() {
             return this.timestamp;
         }
 
+        /**
+         * Manipulation with insertion time.
+         * @param stamp new insertion time.
+         */
         public void setTimeStamp(Date stamp) {
             this.timestamp = stamp;
         }
 
+        /**
+         * Provides accsess to object stored inside this container.
+         * @return cached resource.
+         */
         public T getResource() {
             return resource;
         }

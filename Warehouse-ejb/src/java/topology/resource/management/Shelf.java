@@ -16,7 +16,7 @@ import javax.naming.NamingException;
 import persistence.Database;
 
 /**
- *
+ * Implemetation of Shelf.
  * @author Martin Lofaj
  */
 public class Shelf implements IShelf {
@@ -29,6 +29,12 @@ public class Shelf implements IShelf {
         
     private static final int DEFAULT_CAPACITY = 10;
 
+    /**
+     * Costructs a Shelf of given id. If content of the shelf already
+     * exist in database it will load it and set up all related member
+     * variables. Uses default capacity.
+     * @param id shelf's id
+     */
     public Shelf(int id) {
         this.id = id;
         this.capacity = DEFAULT_CAPACITY;
@@ -46,7 +52,13 @@ public class Shelf implements IShelf {
         
         updateUsedSpace();
     }
-    
+    /**
+     * Costructs a Shelf of given id. If content of the shelf already
+     * exist in database it will load it and set up all related member
+     * variables. Uses specified capacity.
+     * @param id shelf's id
+     * @param capacity shelf's capacity
+     */
     public Shelf(int id, int capacity) {
         this.id = id;
         this.capacity = capacity;
@@ -130,6 +142,10 @@ public class Shelf implements IShelf {
         return retItems;
     }
     
+    /**
+     * Computes used space by adding amounts of all items stored
+     * in Shelf and writes the result to usedSpace member variable.
+     */
     private void updateUsedSpace() {
         for(IItem item : items) {
             usedSpace += item.getAmount();
