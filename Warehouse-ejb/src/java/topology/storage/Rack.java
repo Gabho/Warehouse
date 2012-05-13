@@ -15,6 +15,7 @@ import topology.resource.management.ProxyShelf;
  * @author Mao
  */
 public class Rack extends AbstractComponent implements IStorageComponent {
+
     private String code;
     private int capacity;
     private List<IShelf> shelfs;
@@ -22,7 +23,7 @@ public class Rack extends AbstractComponent implements IStorageComponent {
 
     public Rack() {
     }
-    
+
     public Rack(String code, int capacity) {
         this.code = code;
         this.capacity = capacity;
@@ -69,7 +70,8 @@ public class Rack extends AbstractComponent implements IStorageComponent {
     public String info() {
         return "This is a Rack for Shelfs.\nCode: " + code + "\n" + "Capacity: " + capacity;
     }
-      @Override
+
+    @Override
     public void setCode(String code) {
         this.code = code;
     }
@@ -80,7 +82,13 @@ public class Rack extends AbstractComponent implements IStorageComponent {
     }
 
     @Override
-    public void addComponent(Object object) {
-        shelfs.add((ProxyShelf)object);              
+    public int addComponent(Object object) {
+        shelfs.add((ProxyShelf) object);
+        if (shelfs.size() < capacity) {
+            shelfs.add((ProxyShelf) object);
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

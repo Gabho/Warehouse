@@ -112,5 +112,35 @@ public class Storage implements IObjectManager {
         return freeSpace;
     }
 
-    
+    @Override 
+    public String printStorage() {
+        String print = new String();
+        for (int i = 1; i < 4; i++) {
+            Aisle aisle = (Aisle) manager.get("A" + i);
+            print += "<p>" + aisle.getCode() + " :<br>";
+            List<Rack> racks = null;
+            try {
+                racks = aisle.getRacks();
+            } catch (Exception ex) {
+                Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            for (int j = 0; j < racks.size(); j++) {
+                Rack rack = racks.get(j);
+                List<IShelf> lst = null;
+                print += rack.getCode() + ": ";
+                try {
+                    lst = rack.getShelfs();
+                } catch (Exception ex) {
+                    Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                for (int k = 0; k < lst.size(); k++) {
+                    IShelf proxyS = lst.get(k);
+                    print += proxyS.getID() + " ";
+                }
+                print += "</br>"; 
+            }
+             print += "</p>";
+        }
+        return print;
+    }
 }

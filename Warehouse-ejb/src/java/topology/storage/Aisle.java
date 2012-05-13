@@ -79,7 +79,16 @@ public class Aisle extends AbstractComponent implements IStorageComponent {
     }
 
     @Override
-    public void addComponent(Object object) {
-        racks.add((Rack)object);              
+    public int addComponent(Object object) {
+       if(racks.size() < capacity) {
+            racks.add((Rack)object);  
+            return 1;
+        } else return 0;         
+    }
+
+    @Override
+    public int removeComponent(Rack rack) {
+        racks.remove(rack);
+        return 1;
     }
 }

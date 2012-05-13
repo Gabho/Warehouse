@@ -21,4 +21,5 @@ public interface IObjectManager {
     public int removeItem();
     public int findItem();
     public int getFreeSpace();
+    public String printStorage();
 }

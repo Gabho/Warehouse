@@ -11,5 +11,6 @@ package topology.storage;
 public interface IStorageComponent {
     public void setCode(String code);
     public void setCapacity(int capacity);
-    public void addComponent(Object object);
+    public int addComponent(Object object);
+    public int removeComponent(Rack rack);
 }
