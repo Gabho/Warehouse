@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateful;
+import persistence.ItemEntity;
+import persistence.MasterDataEntity;
 import topology.configuration.AbstractComponent;
 import topology.resource.management.IShelf;
 import topology.resource.management.Item;
@@ -78,8 +80,32 @@ public class Storage implements IObjectManager {
     }
 
     @Override
-    public int removeItem() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public int removeItem(int quantity, MasterDataEntity masterData) {
+        try {
+            ItemEntity itemEntity = masterData.getItemEntitys().get(quantity);
+            int aisleID = itemEntity.getAisle();
+            Aisle aisle = (Aisle) manager.get("A"+aisleID);
+            List<Rack> racks = aisle.getRacks();
+            Rack rack=null;
+            for (int i = 0; i < racks.size(); i++) {
+                rack = racks.get(i);
+                if (rack.getCode().equals("R"+itemEntity.getRack())) {
+                    break;
+                }
+            }
+            List<IShelf> shelfs = rack.getShelfs();
+            IShelf shelf=null;
+            for (int i = 0; i < shelfs.size(); i++) {
+                shelf = shelfs.get(i);
+                if (shelf.getID()==itemEntity.getShelf()) {
+                    break;
+                }
+            }
+            shelf.removeItem(null);
+        } catch (Exception ex) {
+            Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 
     @Override

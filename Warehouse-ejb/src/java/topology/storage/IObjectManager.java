@@ -5,6 +5,7 @@
 package topology.storage;
 
 import javax.ejb.Local;
+import persistence.MasterDataEntity;
 import topology.resource.management.Item;
 
 /**
@@ -18,7 +19,7 @@ public interface IObjectManager {
     public Object find(String hashKey);
     
     public int addItem(Item item);
-    public int removeItem();
+    public int removeItem(int quantity, MasterDataEntity masterData);
     public int findItem();
     public int getFreeSpace();
     public String printStorage();
