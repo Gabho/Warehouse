@@ -6,6 +6,8 @@ package httpServlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -15,8 +17,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import persistence.Database;
+import persistence.MasterDataEntity;
 import topology.activeobject.IFunctionality;
 import topology.activeobject.IFuture;
+import topology.activeobject.SearchResult;
 
 /**
  *
@@ -29,8 +33,8 @@ public class SearchServlet extends HttpServlet {
     private Database database;
     @EJB 
     private IFunctionality proxy;
-    private int quantity;
-    private IFuture quantityFututre = null;
+    private SearchResult searchresult;
+    private IFuture searchFututre = null;
     private static final Logger LOGGER = Logger.getLogger(SearchServlet.class.getName());
 
     /**
@@ -77,9 +81,10 @@ public class SearchServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        quantity = (Integer)quantityFututre.get();
-        LOGGER.log(Level.INFO, "..............................Quantity: {0}..............................", quantity);
-        request.setAttribute("quantity", Integer.toString(quantity));
+        searchresult = (SearchResult)searchFututre.get();
+        List<String> resultList = makeResult(searchresult);
+        LOGGER.log(Level.INFO, "..............................Quantity: {0}..............................", searchresult.getWarehouseID());
+        request.setAttribute("searchresult", resultList);
         request.getRequestDispatcher("/search.jsp").forward(request, response);
     }
 
@@ -99,8 +104,8 @@ public class SearchServlet extends HttpServlet {
         if(proxy != null){
             LOGGER.log(Level.INFO, "..............................Search:Proxy succesfully initialized..............................");
         }
-        quantityFututre = proxy.search(search);
-        if(quantityFututre != null){
+        searchFututre = proxy.search(search);
+        if(searchFututre != null){
             LOGGER.log(Level.INFO, "..............................Search:Future succesfully returned..............................");
         }
         doGet(request, response);
@@ -111,6 +116,16 @@ public class SearchServlet extends HttpServlet {
      *
      * @return a String containing servlet description
      */
+    private List<String> makeResult(SearchResult result){
+        List<String> resultList = new ArrayList<String>();
+        String id = result.getWarehouseID();
+        List<MasterDataEntity> masterData = result.getMasterData();
+        for(MasterDataEntity master : masterData){
+            resultList.add(("WAREHOUSE:"+id+": "+master.getId()+" ,quantity="+Integer.toString(master.getQuantity())));
+        }
+        return resultList;
+    }
+    
     @Override
     public String getServletInfo() {
         return "Short description";

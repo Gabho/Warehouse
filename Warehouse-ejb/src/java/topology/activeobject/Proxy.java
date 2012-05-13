@@ -29,17 +29,23 @@ public class Proxy implements IFunctionality {
     private IObjectManager manager;
 
     @Override
-    public IFuture<Integer> search(String search) {
-        if(scheduler != null){
-            LOGGER.log(Level.INFO, "..............................Proxy: scheduler nie je null....................");
-        }
-        else
-            LOGGER.log(Level.INFO, "..............................Proxy: scheduler je null !!!!!!....................");
-        Future<Integer> result = new Future<Integer>();
+    public IFuture<SearchResult> search(String search) {
+        Future<SearchResult> result = new Future<SearchResult>();
         scheduler.enqueue(new MethodRequestSearch(search, result, database));
         return result;
     }
 
+//    @Override
+//    public IFuture<Integer> search(String search) {
+//        if(scheduler != null){
+//            LOGGER.log(Level.INFO, "..............................Proxy: scheduler nie je null....................");
+//        }
+//        else
+//            LOGGER.log(Level.INFO, "..............................Proxy: scheduler je null !!!!!!....................");
+//        Future<Integer> result = new Future<Integer>();
+//        scheduler.enqueue(new MethodRequestSearch(search, result, database));
+//        return result;
+//    }
     @Override
     public void insertMasterData(MasterDataEntity masterData) {
         scheduler.enqueue(new MethodRequestInsertMD(masterData, database));
@@ -64,5 +70,4 @@ public class Proxy implements IFunctionality {
     public IFuture<List<Item>> makeOrder(List<Item> items) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
 }

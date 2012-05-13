@@ -32,21 +32,14 @@ public class Database extends DatabaseMonitorObject {
 
     //Metóda na vyhľadávanie
     @Override
-    int synchronizedSearch(String searchString) {
+    List<MasterDataEntity> synchronizedSearch(String searchString) {
         int quantity;
         searchString = searchString.toUpperCase();
-        MasterDataEntity search = em.find(MasterDataEntity.class, searchString);
-        if (search == null) {
-            LOGGER.log(Level.INFO, "..............................Searched not found..............................");
-            return 0;
-        } else {
-            quantity = search.getQuantity();
-            LOGGER.log(Level.INFO, "..............................Searched string {0}..............................", searchString);
-            LOGGER.log(Level.INFO, "..............................Searched quantity {0}..............................", Integer.toString(quantity));
-            
-            return quantity;
-        }
         
+        TypedQuery<MasterDataEntity> getMaster = em.createQuery("SELECT m FROM MasterDataEntity m WHERE m.id LIKE '%"+searchString+"%'", MasterDataEntity.class);
+        List<MasterDataEntity>  masters = getMaster.getResultList();
+
+        return masters;
     }
 
     //Pridávanie master dat do tabuľky

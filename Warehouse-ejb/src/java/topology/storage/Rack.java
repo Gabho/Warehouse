@@ -91,4 +91,9 @@ public class Rack extends AbstractComponent implements IStorageComponent {
             return 0;
         }
     }
+
+    @Override
+    public int removeComponent(Rack rack) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

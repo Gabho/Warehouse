@@ -16,7 +16,7 @@ import topology.resource.management.Item;
 @Local
 public interface IFunctionality {
     
-    IFuture<Integer> search(String search);
+    IFuture<SearchResult> search(String search);
     
     void insertMasterData(MasterDataEntity masterData);
     

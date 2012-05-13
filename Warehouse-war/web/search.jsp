@@ -4,6 +4,7 @@
     Author     : Gabo
 --%>
 
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -21,12 +22,16 @@
             Search: <input type="text" name="searchString" /><br>
             <input type="submit" value="Search" />
         </form>
-        
-        <h2><%
+        <br>
+        <hr><ol><%
         @SuppressWarnings("unchecked")
-        String quantity = (String)request.getAttribute("quantity");
-        if(quantity != null){%>Quantity: <%= quantity%><%}
-        %></h2>
+        List<String> resultList = (List<String>)request.getAttribute("searchresult");
+        if(resultList != null){
+            for(String row: resultList){ %>
+                <li> <%= row %> </li> <%
+            }
+        }
+        %></ol><hr>
         
         <a href="choice.jsp">Back</a>
         

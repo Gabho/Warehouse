@@ -62,18 +62,17 @@ public abstract class DatabaseMonitorObject {
     }
 
     //Vráti počet nájdených itemov (hľadanie podľa master data entity)
-    public int search(String string) {
-        int quantity;
+    public List<MasterDataEntity> search(String string) {
         lock.lock();
-        quantity = synchronizedSearch(string);
+        List<MasterDataEntity> masterData = synchronizedSearch(string);
         lock.unlock();
-        return quantity;
+        return masterData;
     }
     
     abstract List<IItem> synchronizedGetShelf(int shelfId);
     abstract void synchronizedUpdateShelf(List<IItem> items, int shelfId);
     abstract void synchronizedRemoveShelf(int shelfId);
-    abstract int synchronizedSearch(String string);
+    abstract List<MasterDataEntity> synchronizedSearch(String string);
     abstract void synchronizedAddMasterData(MasterDataEntity masterData);
     abstract void synchronizedRemoveMasterData(String id);
     abstract List<MasterDataEntity> synchronizedGetMasterData();
