@@ -190,7 +190,7 @@ public class ComponentConfigurator {
         Object instance = classLoaded.newInstance();
         return instance;
     }
-    int count = 0;
+    int count = 0;   
     int aisleID = 1;
     /*
      * Create depends of store components.
@@ -209,10 +209,10 @@ public class ComponentConfigurator {
         }
         count += 1;
     }
-
+    int shelfID = 0;
     private void setShelfsToRack(Rack rack) {
         for (int i = 1; i < 6; i++) {
-            rack.addComponent(new ProxyShelf(i));
+            rack.addComponent(new ProxyShelf(shelfID++));
         }
     }
 

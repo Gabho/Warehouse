@@ -11,7 +11,7 @@ import topology.resource.management.Item;
 /**
  *
  * @author Mao
- */
+ */  
 @Local
 public interface IObjectManager {
     public void insert(Object object);

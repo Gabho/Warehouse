@@ -62,7 +62,7 @@ public class Storage implements IObjectManager {
                     List<IShelf>  lst = rack.getShelfs();
                     for (int k = 0; k < lst.size(); k++) {
                         IShelf proxyS = lst.get(k);
-                        if(proxyS.getFreeSpace() == 0) {
+                        if(proxyS.getFreeSpace() != 0) {
                             int rackID = Integer.valueOf(rack.getCode().charAt(1));
                             int aisleID = Integer.valueOf(aisle.getCode().charAt(1));
                             item.setPosition(new Position(proxyS.getID(),rackID,aisleID));
@@ -117,7 +117,6 @@ public class Storage implements IObjectManager {
      */
     @Override
     public int getFreeSpace() {
-        int countOfRacks = 15;
         int freeSpace = 0;
         for (int i = 1; i < 4; i++) {
             try {
