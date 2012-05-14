@@ -83,7 +83,6 @@ public class Rack extends AbstractComponent implements IStorageComponent {
 
     @Override
     public int addComponent(Object object) {
-        shelfs.add((ProxyShelf) object);
         if (shelfs.size() < capacity) {
             shelfs.add((ProxyShelf) object);
             return 1;
