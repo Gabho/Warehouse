@@ -20,18 +20,19 @@ import javax.naming.NamingException;
 public class ProxyShelf implements IShelf {
     
     private IShelf shelf;
-    private @EJB ResourceCache<IShelf> cache;
+    private ResourceCache<IShelf> cache;
     
     //Id of the actual shelf.
     private int id;
 
-    public ProxyShelf(int id) {
+    public ProxyShelf(int id,ResourceCache<IShelf> cache) {
         this.id = id;
-        //try {
-        //    cache = (ResourceCache<IShelf>) new InitialContext().lookup("java:global/Warehouse/Warehouse-ejb/ResourceCache");
-        //} catch (NamingException ex) {
-        //    Logger.getLogger(ProxyShelf.class.getName()).log(Level.SEVERE, null, ex);
-        //}
+        this.cache = cache;
+//        try {
+//            cache = (ResourceCache<IShelf>) new InitialContext().lookup("/home/mao/NetBeansProjects/Warehouse/Warehouse-ejb/src/java/topology/resource/management/ResourceCache");
+//        } catch (NamingException ex) {
+//            Logger.getLogger(ProxyShelf.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     @Override

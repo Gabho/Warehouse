@@ -25,7 +25,7 @@ public class Shelf implements IShelf {
     private int id;
     private int capacity;
     private int usedSpace;
-    private @EJB Database db;
+    Database db;
         
     private static final int DEFAULT_CAPACITY = 10;
 
@@ -38,17 +38,17 @@ public class Shelf implements IShelf {
     public Shelf(int id) {
         this.id = id;
         this.capacity = DEFAULT_CAPACITY;
-        //try {
-        //    db = (Database) new InitialContext().lookup("java:global/Warehouse/Warehouse-ejb/Database");
+        try {
+            db = (Database) new InitialContext().lookup("java:global/Warehouse/Warehouse-ejb/Database");
             List<IItem> loadedItems = db.getShelf(id);
             if(loadedItems.size() > 0) {
                 items = new ArrayList<IItem>(loadedItems);
             } else {
                 items = new ArrayList<IItem>(capacity);
             }
-        //} catch (NamingException ex) {
-        //    Logger.getLogger(Shelf.class.getName()).log(Level.SEVERE, null, ex);
-        //}
+        } catch (NamingException ex) {
+            Logger.getLogger(Shelf.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         updateUsedSpace();
     }

@@ -12,7 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import topology.resource.management.IShelf;
+import topology.resource.management.Item;
 import topology.resource.management.ProxyShelf;
+import topology.resource.management.ResourceCache;
 import topology.storage.Aisle;
 import topology.storage.IObjectManager;
 import topology.storage.IStorageComponent;
@@ -28,13 +31,14 @@ public class ComponentConfigurator {
     File config;
     @EJB
     IObjectManager storage;
+     @EJB ResourceCache<IShelf> cache;
     /*
      * Constructor of Component Configurator.
      */
 
     public ComponentConfigurator() {
-        config = new File("C:/Documents and Settings/Mao/My Documents/NetBeansProjects/WJ2EE/WJ2EE-ejb/src/java/topology/configuration/load.txt");
-
+        config = new File("/home/mao/NetBeansProjects/Warehouse/Warehouse-ejb/src/java/topology/configuration/load.txt");
+        
     }
 
     /*
@@ -96,6 +100,7 @@ public class ComponentConfigurator {
         } catch (IOException e) {
             System.out.println("IO Error!");
         }
+        storage.addItem(new Item());
     }
 
     /*
@@ -176,6 +181,7 @@ public class ComponentConfigurator {
                 Logger.getLogger(ComponentConfigurator.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (tokens[0].equals("print")) {
+            
             return storage.printStorage();
         }
         return "Error: Unknown command!";
@@ -212,7 +218,7 @@ public class ComponentConfigurator {
     int shelfID = 0;
     private void setShelfsToRack(Rack rack) {
         for (int i = 1; i < 6; i++) {
-            rack.addComponent(new ProxyShelf(shelfID++));
+            rack.addComponent(new ProxyShelf(shelfID++,cache));
         }
     }
 
