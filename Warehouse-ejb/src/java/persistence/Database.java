@@ -4,6 +4,7 @@
  */
 package persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,7 +69,7 @@ public class Database extends DatabaseMonitorObject {
     List<IItem> synchronizedGetShelf(int shelfId) {
         TypedQuery<ItemEntity> getItems = em.createQuery("SELECT i FROM ItemEntity i WHERE i.shelf=" + shelfId + "", ItemEntity.class);
         List<ItemEntity> items = getItems.getResultList();
-        List<IItem> returnItems = null;
+        List<IItem> returnItems = new ArrayList<IItem>();
         for (ItemEntity item : items) {
             Position pos = new Position(item.getShelf(), item.getRack(), item.getAisle());
             IItem i = new Item(item.getId(), item.getQuantity(), item.getMasterData().getId(), item.getMasterData().getDescription(), item.getExpDate(), pos);
@@ -90,11 +91,16 @@ public class Database extends DatabaseMonitorObject {
 
     @Override
     void synchronizedUpdateShelf(List<IItem> items, int shelfId) {
-        synchronizedRemoveShelf(shelfId);
+        try{
+            synchronizedRemoveShelf(shelfId);
+        }catch(Exception e){
+            LOGGER.log(Level.INFO,"..............................Database: Shelf doesnt exist....................");
+        }
         for(IItem item : items){
             MasterDataEntity masterData = em.find(MasterDataEntity.class, item.getType());
             ItemEntity i = new ItemEntity(item.getPosition().getAisle(), item.getPosition().getRack(), item.getPosition().getShelf(), item.getAmount(), item.getExpiration(), masterData);
             em.persist(i);
+            em.flush();
             updateQuantity(i.getMasterData());
         }
     }

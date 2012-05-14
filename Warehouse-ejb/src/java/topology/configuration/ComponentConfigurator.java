@@ -37,7 +37,7 @@ public class ComponentConfigurator {
      */
 
     public ComponentConfigurator() {
-        config = new File("/home/mao/NetBeansProjects/Warehouse/Warehouse-ejb/src/java/topology/configuration/load.txt");
+        config = new File("D:/SKOLA/BAKALARSKA PRACA/WAREHOUSE Implementation/Warehouse/Warehouse-ejb/src/java/topology/configuration/load.txt");
         
     }
 
@@ -100,7 +100,7 @@ public class ComponentConfigurator {
         } catch (IOException e) {
             System.out.println("IO Error!");
         }
-        storage.addItem(new Item());
+        //storage.addItem(new Item(0, 10, "ZELEZO", null, null, null));
     }
 
     /*
