@@ -36,7 +36,7 @@ public class ResourceCache<T> {
      * @param resource item to be stored.
      */
     public void insert(int key, T resource) {
-        if (capacity < cache.size()) {
+        if (capacity > cache.size()) {
             cache.put(key ,new CachedResource<T>(resource, new Date(), key));
         } else {
             cache.remove(findLeastUsed());

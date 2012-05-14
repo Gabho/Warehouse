@@ -6,7 +6,7 @@ import java.util.List;
  * Interface defining basic storage funcionality.
  * @author Martin Lofaj
  */
-public interface IShelf {
+public interface IShelf extends ICoordinable{
     
     //Dohodnuty interface
     /**

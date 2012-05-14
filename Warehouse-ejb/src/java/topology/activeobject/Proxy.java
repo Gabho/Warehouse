@@ -22,7 +22,7 @@ import topology.storage.IObjectManager;
 public class Proxy implements IFunctionality {
 
     private static final Logger LOGGER = Logger.getLogger(Proxy.class.getName());
-    private Scheduler scheduler = new Scheduler();
+    private static Scheduler scheduler = new Scheduler();
     @EJB
     private Database database;
     @EJB

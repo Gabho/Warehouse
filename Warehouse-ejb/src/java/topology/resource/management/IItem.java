@@ -40,4 +40,6 @@ public interface IItem {
      * @return item's position
      */
     public Position getPosition();
+    
+    public void setPosition(Position position);
 }

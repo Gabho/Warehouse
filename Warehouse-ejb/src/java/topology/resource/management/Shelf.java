@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import persistence.Database;
@@ -25,9 +24,10 @@ public class Shelf implements IShelf {
     private int id;
     private int capacity;
     private int usedSpace;
-    Database db;
+    private Database db;
+    private IItem preparedItem=null;
         
-    private static final int DEFAULT_CAPACITY = 10;
+    public static final int DEFAULT_CAPACITY = 20;
 
     /**
      * Costructs a Shelf of given id. If content of the shelf already
@@ -110,11 +110,12 @@ public class Shelf implements IShelf {
 
     @Override
     public void insertItem(IItem item) {
-        if(item.getAmount() <= getFreeSpace()) {
+        //if(item.getAmount() <= getFreeSpace()) {
             items.add(item);
+            System.out.println("[insert] amount je " + item.getAmount());
             db.updateShelf(items, id);
-        }
-        updateUsedSpace();
+            updateUsedSpace();
+        //}
     }
 
        
@@ -150,5 +151,28 @@ public class Shelf implements IShelf {
         for(IItem item : items) {
             usedSpace += item.getAmount();
         }
+    }
+
+    @Override
+    public void prepare(IItem item) throws TaskFailureException {
+        System.out.println("Preparing........ "+item.getAmount()+"");
+        if(getFreeSpace() >= item.getAmount()) {
+            preparedItem = item;
+            usedSpace += item.getAmount();
+            System.out.println("[shelf prepare] amount " + preparedItem.getAmount());
+        } else {
+            throw new TaskFailureException(); 
+        }
+    }
+
+    @Override
+    public void commit() {
+        insertItem(preparedItem);
+    }
+
+    @Override
+    public void abort() {
+        usedSpace -= preparedItem.getAmount();
+        preparedItem = null;
     }
 }

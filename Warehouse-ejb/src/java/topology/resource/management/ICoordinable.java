@@ -9,7 +9,7 @@ public interface ICoordinable {
     /** Prepares all necessary stuff
      *  @throws TaskFailureException if the task fails.
      */
-    public void prepare() throws TaskFailureException;
+    public void prepare(IItem item) throws TaskFailureException;
    
     /** Commits prepared results */
     public void commit();

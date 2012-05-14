@@ -100,7 +100,6 @@ public class ComponentConfigurator {
         } catch (IOException e) {
             System.out.println("IO Error!");
         }
-        //storage.addItem(new Item(0, 10, "ZELEZO", null, null, null));
     }
 
     /*

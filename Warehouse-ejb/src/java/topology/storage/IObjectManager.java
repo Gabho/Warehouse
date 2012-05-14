@@ -18,7 +18,7 @@ public interface IObjectManager {
     public String remove(String hashKey);
     public Object find(String hashKey);
     
-    public int addItem(Item item);
+    public boolean addItem(Item item);
     public int removeItem(int quantity, MasterDataEntity masterData);
     public int findItem();
     public int getFreeSpace();

@@ -4,11 +4,6 @@
 package topology.resource.management;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.EJB;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 /**
  * Proxy shelf stores a instance of shelf in resource cache.
@@ -123,6 +118,27 @@ public class ProxyShelf implements IShelf {
     private void cacheShelf() {
         cache.insert(id, shelf);
         shelf = null;
+    }
+
+    @Override
+    public void prepare(IItem item) throws TaskFailureException {
+        getShelf();
+        shelf.prepare(item);
+        cacheShelf();
+    }
+
+    @Override
+    public void commit() {
+        getShelf();
+        shelf.commit();
+        cacheShelf();
+    }
+
+    @Override
+    public void abort() {
+        getShelf();
+        shelf.abort();
+        cacheShelf();
     }
     
 }

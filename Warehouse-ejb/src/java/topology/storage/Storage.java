@@ -4,6 +4,7 @@
  */
 package topology.storage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -12,10 +13,7 @@ import javax.ejb.Stateful;
 import persistence.ItemEntity;
 import persistence.MasterDataEntity;
 import topology.configuration.AbstractComponent;
-import topology.resource.management.IShelf;
-import topology.resource.management.Item;
-import topology.resource.management.Position;
-
+import topology.resource.management.*;
 
 /**
  *
@@ -24,59 +22,97 @@ import topology.resource.management.Position;
 @Stateful
 public class Storage implements IObjectManager {
 
-   private HashMap manager;
+    private static HashMap manager = new HashMap();
 
-    public Storage() {
-        manager = new HashMap();  
-    }
-   
     @Override
     public void insert(Object object) {
         String hashKey;
         AbstractComponent object1 = (AbstractComponent) object;
         hashKey = object1.getCode();
 
-       manager.put(hashKey, object);
+        manager.put(hashKey, object);
     }
 
     @Override
     public String remove(String hashKey) {
-        if(manager.remove(hashKey) == null) 
+        if (manager.remove(hashKey) == null) {
             return "Error: No match to object!";
-        else return "Remove: OK";
-    } 
+        } else {
+            return "Remove: OK";
+        }
+    }
 
     @Override
     public Object find(String hashKey) {
         return manager.get(hashKey);
     }
-    
+
     @Override
-    public int addItem(Item item) {
+    public boolean addItem(Item item){ 
+        //TODO: koordinovane ulozenie rozlozeneho itemu.
+        int shelfCap = Shelf.DEFAULT_CAPACITY;
+        int itemAmount = item.getAmount();
+        List<IShelf> shelfs = new ArrayList();
+        //rozlozenie itemu.
+        int numofShelfs = itemAmount / shelfCap + 1;
+        try {
+            IItem it;
+            for (int i = 0; i < numofShelfs; i++) {
+                if (itemAmount > shelfCap) {
+                    it = new Item(item.getId() + i, shelfCap, item.getType(),
+                            item.getDescription(), item.getExpiration(), null);
+                    shelfs.add(setPosition(it)); //ulozenie daneho itemu do shelfu (PREPARE !!)
+                    itemAmount -= shelfCap;               
+                } else if (itemAmount > 0) {
+                    it = new Item(item.getId() + i, itemAmount, item.getType(),
+                            item.getDescription(), item.getExpiration(), null);
+                    shelfs.add(setPosition(it)); //ulozenie itemu do shelfu (PREPARE !!)              
+                }
+            }
+        } catch (TaskFailureException e) {
+            //abort v pripade neuspechu
+            for (IShelf shelf : shelfs) {
+                shelf.abort();
+            }
+            return false;
+        }
+        //comit coordinovanej operacie
+        for (IShelf shelf : shelfs) {
+            shelf.commit();
+        }
+        shelfs.clear();
+        return true;
+    }
+
+    private IShelf setPosition(IItem item) throws TaskFailureException {
         for (int i = 1; i < 4; i++) {
             try {
-                Aisle aisle = (Aisle) manager.get("A"+i);
+                Aisle aisle = (Aisle) manager.get("A" + i);
                 List<Rack> racks = aisle.getRacks();
                 for (int j = 0; j < racks.size(); j++) {
                     Rack rack = racks.get(j);
-                    List<IShelf>  lst = rack.getShelfs();
+                    List<IShelf> lst = rack.getShelfs();
                     for (int k = 0; k < lst.size(); k++) {
                         IShelf proxyS = lst.get(k);
-                        if(proxyS.getFreeSpace() != 0) {
-                            int rackID = Integer.valueOf(rack.getCode().charAt(1));
-                            int aisleID = Integer.valueOf(aisle.getCode().charAt(1));
-                            item.setPosition(new Position(proxyS.getID(),rackID,aisleID));
-                            proxyS.insertItem(item);
-                            return 1;
+                        if (proxyS.getFreeSpace() >= item.getAmount()) {
+                            //int rackID = Integer.valueOf(rack.getCode().charAt(1));\
+                            int rackID = 1;
+                            //TODO: opravit
+                            System.out.println("RACK : - " + rack.getCode() + " = " + rackID );
+                            int aisleID = 1;//Integer.valueOf(aisle.getCode().charAt(1));
+                            item.setPosition(new Position(proxyS.getID(), rackID, aisleID));
+                            proxyS.prepare(item); //Prepare !!
+                            System.out.println("Proxy ID - setPos :" + proxyS.getID());
+                            return proxyS;
                         }
                     }
                 }
-                
+
             } catch (Exception ex) {
                 Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-       return 0;
+        throw new TaskFailureException();
     }
 
     @Override
@@ -84,20 +120,20 @@ public class Storage implements IObjectManager {
         try {
             ItemEntity itemEntity = masterData.getItemEntitys().get(quantity);
             int aisleID = itemEntity.getAisle();
-            Aisle aisle = (Aisle) manager.get("A"+aisleID);
+            Aisle aisle = (Aisle) manager.get("A" + aisleID);
             List<Rack> racks = aisle.getRacks();
-            Rack rack=null;
+            Rack rack = null;
             for (int i = 0; i < racks.size(); i++) {
                 rack = racks.get(i);
-                if (rack.getCode().equals("R"+itemEntity.getRack())) {
+                if (rack.getCode().equals("R" + itemEntity.getRack())) {
                     break;
                 }
             }
             List<IShelf> shelfs = rack.getShelfs();
-            IShelf shelf=null;
+            IShelf shelf = null;
             for (int i = 0; i < shelfs.size(); i++) {
                 shelf = shelfs.get(i);
-                if (shelf.getID()==itemEntity.getShelf()) {
+                if (shelf.getID() == itemEntity.getShelf()) {
                     break;
                 }
             }
@@ -115,16 +151,17 @@ public class Storage implements IObjectManager {
     /*
      * Return free space.
      */
+
     @Override
     public int getFreeSpace() {
         int freeSpace = 0;
         for (int i = 1; i < 4; i++) {
             try {
-                Aisle aisle = (Aisle) manager.get("A"+i);
+                Aisle aisle = (Aisle) manager.get("A" + i);
                 List<Rack> racks = aisle.getRacks();
                 for (int j = 0; j < racks.size(); j++) {
                     Rack rack = racks.get(j);
-                    List<IShelf>  lst = rack.getShelfs();
+                    List<IShelf> lst = rack.getShelfs();
                     for (int k = 0; k < lst.size(); k++) {
                         IShelf proxyS = lst.get(k);
                         freeSpace += proxyS.getFreeSpace();
@@ -137,7 +174,7 @@ public class Storage implements IObjectManager {
         return freeSpace;
     }
 
-    @Override 
+    @Override
     public String printStorage() {
         String print = new String();
         for (int i = 1; i < 4; i++) {
@@ -162,9 +199,9 @@ public class Storage implements IObjectManager {
                     IShelf proxyS = lst.get(k);
                     print += proxyS.getID() + " ";
                 }
-                print += "</br>"; 
+                print += "</br>";
             }
-             print += "</p>";
+            print += "</p>";
         }
         return print;
     }
