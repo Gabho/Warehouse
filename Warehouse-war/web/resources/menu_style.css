@@ -1,0 +1,98 @@
+*{
+	list-style:none;
+}
+#menucontainer{
+	position:relative;
+	height:40px;
+	color:#FFFFFF;
+	background:#383636;
+	width:800px;
+	font-family:Helvetica,Arial,Verdana,sans-serif;
+	margin-left:auto;
+	margin-right:auto;
+	}
+#menunav{
+	position:relative;
+	height:38px;
+	font-size:12px;
+	text-transform:uppercase;
+	font-weight:bold;
+	background:#fff url(background.jpg) repeat-x bottom left;
+	padding:0 0 0 20px;}
+	
+#menunav ul{
+	margin:0;
+	padding:0;
+	list-style-type:none;
+	width:auto;	
+	float:left;}
+
+#menunav ul li{
+	display:block;
+	float:left;
+	margin:0 1px;}
+
+#menunav ul li a{
+	display:block;
+	float:left;
+	color:#EAF3F8;
+	text-decoration:none;
+	padding:0 0 0 20px;
+	height:38px;}
+
+#menunav ul li a span{
+	padding:12px 20px 0 0;
+	height:21px;
+	float:left;}
+
+#menunav ul li a:hover{
+	color:#fff;	
+	background:transparent url(hover.jpg) repeat-x bottom left;}
+
+#menunav ul li a:hover span{
+	display:block;
+	width:auto;
+	cursor:pointer;}
+#menunav ul li a.current, #menunav ul li a.current:hover{
+	color:#fff;
+	background:#1D6893 url(left.jpg) no-repeat top left;
+	line-height:275%;}
+#menunav ul li a.current span{
+	display:block;
+	padding:0 20px 0 0;
+	width:auto;
+	background:#383636 url(right.jpg) no-repeat top right;
+	height:38px;}
+
+/* ---------------------- END Dolphin nav ---------------------- */
+.outer a, .outer div, .outer li, .outer ul, .outer body{
+	margin: 0;
+	padding: 0;
+	font-family: Verdana, Helvetica, Arial, sans-serif;
+}
+div.menu{
+	position:absolute;
+	
+	width: 150px;
+}
+div.menu ul{
+	list-style: none;
+	text-indent: 0px;
+}
+div.menu li{
+	margin-top: 3px;
+}
+div.menu a{
+	font: 12px Verdana;
+	padding: 4px;
+	color: #646464;
+	display:block;
+	padding: 6px 30px;
+	height: 20px;
+	text-decoration: none;
+	background: url('images/background.gif');
+}
+div.menu a:hover{
+	background: url('images/highlight.gif') no-repeat right;
+	padding: 6px 40px;
+}:148px;background:url(images/nav_active.jpg) no-repeat;color:#b18211;}

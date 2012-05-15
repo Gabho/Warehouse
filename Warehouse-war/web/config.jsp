@@ -1,19 +1,17 @@
 <%-- 
-    Document   : Search
-    Created on : May 8, 2012, 1:48:27 PM
-    Author     : Gabo
+    Document   : about
+    Created on : 15.5.2012, 21:06:38
+    Author     : Mao
 --%>
 
-<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<html>
     <head> 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-       <link href="resources/menu_style.css" rel="stylesheet" type="text/css" />
+        <link href="resources/menu_style.css" rel="stylesheet" type="text/css" />
         <link href="resources/warehouse.css" rel="stylesheet" type="text/css" />
-        <title>Search</title>
+        <title>About</title>
     </head>
 
     <body>
@@ -26,10 +24,10 @@
             <div id="menunav">
                 <ul>
                     <li><a href="login.jsp" target="_self" title="Úvod"><span>Login</span></a></li>
-                    <li><a href="search.jsp" target="_self" title="Koberce" class="current"><span>Search</span></a></li>
+                    <li><a href="search.jsp" target="_self" title="Koberce"><span>Search</span></a></li>
                     <li><a href="item.jsp" target="_self" title="PVC"><span>Manage items</span></a></li>
                     <li><a href="masterData.jsp" target="_self" title="Koberce"><span>Manage master data</span></a></li>
-                    <li><a href="config.jsp" target="_self" title="Koberce"><span>Configure warehouse</span></a></li>
+                    <li><a href="config.jsp" target="_self" title="Koberce" class="current"><span>Configure warehouse</span></a></li>
                     <li><a href="about.jsp" target="_self" title="Koberce"><span>About</span></a></li>
                 </ul>
             </div>
@@ -37,20 +35,15 @@
 
         <div id="middle">
             <div id="text">
-                <form method="POST" action="search">
-                    Search: <input type="text" name="searchString" /><br><br>
-                        <input type="submit" value="Search" /> 
-                </form>
-                <br>
-                    <ol><%
+               <form action="Config" method="post">
+                   <b>Command:</b><input type="text" name="command" size="80" /><br><br> 
+            <input type="submit" value="Run!" /></form>
+                 <ol><%
                         @SuppressWarnings("unchecked")
-                        List<String> resultList = (List<String>) request.getAttribute("searchresult");
-                        if (resultList != null) {
-                for (String row : resultList) {%>
-                        <li> <%= row%> </li> <%
-                                }
-                            }
-                        %></ol>
+                        String result = (String) request.getAttribute("result");%>
+                       
+               
+                        <li>result</li></ol>
 
             </div>
         </div>

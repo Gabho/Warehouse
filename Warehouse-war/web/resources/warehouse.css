@@ -1,0 +1,132 @@
+/* CSS Document for Element 
+	Martin P.
+	4.2.2011
+*/
+
+body {
+background-color:#62595B;
+}
+
+
+#head {
+width:800px;
+height:190px;
+background-color:#ffffff;
+margin-top:15px;
+margin-left:auto;
+margin-right:auto;
+}
+
+#middle {
+width:800px;
+background-color:#F3F3F3;
+margin-left:auto;
+margin-right:auto;
+color:#000000;
+min-height:500px;
+height:auto !important;
+height:500px; 
+}
+
+#middle a {
+	color: #666666;
+}
+
+#middle ul {
+	padding-top:10px;
+	margin-top:0;
+	line-height:170%;
+}
+
+#middle ul li a {
+	font:bold 14px Georgia, "Times New Roman", Times, serif;
+}
+
+#text {
+	position: relative;
+	width: 600px;
+	top:25px;
+	left:150px;
+	text-align:left;
+	padding-top:5px;
+	padding-bottom:30px;
+	background-color:#F3F3F3;
+	}
+
+#text p {
+    font:15px Georgia, "Times New Roman", Times, serif;
+	text-align:justify;
+	text-indent:35px;
+	line-height:150%;
+	color:black;
+}
+
+#text b {
+    font:italic bold 15px Georgia, "Times New Roman", Times, serif;
+	text-align:justify;
+	text-indent:35px;
+	line-height:150%;
+	color: #333333;
+	
+}
+
+#text ul {
+	text-align:left;
+	list-style-type:circle;
+}
+
+.down { 
+position: relative; 
+width:800px;
+height:25px; 
+background:black; 
+color:#FFFFFF;
+margin:0 auto 0 auto;
+}
+
+/*------------zaoblenie rohov------*/
+#ctl, #cbl, #ctr, #cbr {
+position:absolute; 
+width:20px; 
+height:20px; 
+color:black; 
+background:#62595B;
+overflow:hidden; 
+font-style:normal; 
+z-index:1;
+}
+
+#ctl { top:0; left:0; }
+#cbl { bottom:0; left:0; }
+#ctr { top:0; right:0; }
+#cbr { bottom:0; right:0; } 
+
+.down em b { 
+position:absolute; 
+font-size:150px; 
+font-family:arial; 
+color:black; 
+line-height:40px; 
+font-weight:normal;
+}
+
+
+#cbl b { left:-8px; top:-17px; }
+#cbr b { left:-25px; top:-17px; }
+
+.down p { 
+position:relative; 
+z-index:100; 
+padding:5px 5px 7px; 
+color:#CCCCCC;
+text-align:right;
+}
+.down b {
+	position:absolute;
+	text-align:center;
+	color:#CCCCCC;
+	font-size:12px;
+	left: 651px;
+	top: 4px;
+	font-family:Geneva, Arial, Helvetica, sans-serif, bahamas;
+}
