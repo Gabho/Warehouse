@@ -1,26 +1,34 @@
 package persistence;
 
+import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Trieda reprezentuje podmienku monitor objektu
  * @author Gabriel Cervenak
  */
-//Trieda predstavujúca podmienku monitor objektu
 public class MonitorCondition {
     
     private MonitorLock lock;
     private Deque<Long> threadIDs;
     private volatile boolean notify = true;
     
+    /**
+     * Konštruktor s jedným parametrom, ktorý vytvorí inštanciu podmienky a nastaví zámok
+     * @param lock zámok monitor objektu
+     */
     public MonitorCondition(MonitorLock lock) {
         this.lock = lock;
+        this.threadIDs = new ArrayDeque<Long>();
     }
         
-    //Čakanie vlákna, pokiaľ nebude splnená podmienka
-    void goWait(long id) {
+    /**
+     * Vlákno uvoľní zámok a čaká, pokiaľ nebude môcť pokračovať vo vykonávaní
+     * Pred pokračovaním potrebuje opätovne získať zámok
+     */
+    void goWait() {
         lock.unlock();
         synchronized (this) {
             threadIDs.addLast(Thread.currentThread().getId());
@@ -35,7 +43,9 @@ public class MonitorCondition {
         lock.lock();
     }
     
-    //Metóda na upovedomenie vlákna o splnení podmienky
+    /**
+     * Obnovenie čakajúceho vlákna
+     */
     void goNotify() {
         threadIDs.removeFirst();
     }

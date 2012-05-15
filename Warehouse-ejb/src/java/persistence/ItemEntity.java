@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package persistence;
 
 import java.io.Serializable;
@@ -9,10 +5,9 @@ import java.util.Date;
 import javax.persistence.*;
 
 /**
- *
+ * Serializovateľná trieda predstavujúca položku v databáze
  * @author Gabriel Cervenak
  */
-//Trieda predstavujúca položku v databáze
 @Entity
 public class ItemEntity implements Serializable {
 
@@ -29,11 +24,21 @@ public class ItemEntity implements Serializable {
     @ManyToOne
     private MasterDataEntity masterData;
 
-    //Bezparametrický konštruktor
+    /**
+     * Bezparametrický konštruktor - vytvorí položku
+     */
     public ItemEntity() {
     }
 
-    //Konštruktor s parametrami - id uličky, id regálu, id poličky, počet, dátum spotreby, prislúchajúce master data
+    /**
+     * Vytvorí novú položku
+     * @param aisle ulička, v ktorej sa nachádza položka
+     * @param rack regál, v ktorom sa nachádza položka
+     * @param shelf polička, na ktorej sa nachádza položka
+     * @param quantity množstvo
+     * @param expDate dátum spotreby
+     * @param data master dáta danej položky
+     */
     public ItemEntity(int aisle, int rack, int shelf, int quantity, Date expDate, MasterDataEntity data) {
         this.aisle = aisle;
         this.rack = rack;
@@ -43,36 +48,58 @@ public class ItemEntity implements Serializable {
         this.masterData = data;
     }
 
-    //Vracia id položky
+    /**
+     * Vracia id položky
+     * @return celé číslo reprezentujúce id položky
+     */
     public int getId() {
         return id;
     }
 
-    //Vracia id uličky,v ktorej sa nachádza
+    /**
+     * Vracia id uličky, v ktorej sa položka nachádza
+     * @return celé číslo reprezentujúce uličku
+     */
     public int getAisle() {
         return aisle;
     }
 
-    //Vracia dátum spotreby
+    /**
+     * Vracia dátum spotreby položky
+     * @return dátum spotreby
+     */
     public Date getExpDate() {
         return expDate;
     }
 
-    //Vracia počet položiek
+    /**
+     * Vracia množstvo
+     * @return celé číslo reprezentujúce množstvo
+     */
     public int getQuantity() {
         return quantity;
     }
 
-    //Vracia id regálu, v ktorom sa nachádza položka
+    /**
+     * Vracia id regálu, v ktorom sa položka nachádza
+     * @return celé číslo reprezentujúce regál
+     */
     public int getRack() {
         return rack;
     }
 
-    //Vracia is poločky, kde sa nachádza položka
+    /**
+     * Vracia id poličky, na ktorej sa položka nachádza
+     * @return celé číslo reprezentujúce poličku
+     */
     public int getShelf() {
         return shelf;
     }
 
+    /**
+     * Vracia master dáta položky
+     * @return master dáta
+     */
     public MasterDataEntity getMasterData() {
         return masterData;
     }

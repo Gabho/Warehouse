@@ -8,10 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 /**
- *
+ * Serializovateľná trieda predstavujúca master dáta
  * @author Gabriel Cervenak
  */
-//Trieda predstavujúca master data
 @Entity
 public class MasterDataEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -22,32 +21,50 @@ public class MasterDataEntity implements Serializable {
     private String description;
     private int quantity;
     
-    //Bezparametrický konštruktor triedy MasterDataEntity
+    /**
+     * Bezparametrický konštruktor, vytvorí inštanciu triedy
+     */
     public MasterDataEntity() {
     }
     
-    //Konštruktor s dvoma parametrami - meno a opis
+    /**
+     * Vytvorí novú inštanciu
+     * @param id reťazec reprezentujúci id entity
+     * @param description reťazec predstavujúci opis daných dát
+     */
     public MasterDataEntity(String id ,String description){
         this.id = id;
         this.description = description;
     }
 
-    //Vracia opis dat
+    /**
+     * Vracia opis master dát
+     * @return reťazec reprezentujúci opis dát
+     */
     public String getDescription() {
         return description;
     }
 
-    //Vracia id master dat
+    /**
+     * Vracia id master dát
+     * @return reťazec reprezentujúci id master dát
+     */
     public String getId() {
         return id;
     }
 
-    //Vracia zoznam položiek prislúchajúcich k master datam
+    /**
+     * Vracia zoznam položiek prislúchajúcich k daným master dátam
+     * @return zoznam položiek
+     */
     public List<ItemEntity> getItemEntitys() {
         return itemEntities;
     }
 
-    //Vracia počet položiek
+    /**
+     * Vracia počet položiek prislúchajúci k master dátam
+     * @return celé číslo reprezentujúce množstvo položiek
+     */
     public int getQuantity() {
         return quantity;
     }

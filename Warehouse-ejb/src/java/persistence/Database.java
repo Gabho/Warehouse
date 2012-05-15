@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package persistence;
 
 import java.util.ArrayList;
@@ -19,10 +15,9 @@ import topology.resource.management.Item;
 import topology.resource.management.Position;
 
 /**
- *
+ * Enterprise Java Bean implementujúci operácie, ktoré môžeme vykonať nad databázou
  * @author Gabriel Cervenak
  */
-//Java Bean zabezpečujúia prácu s databázou
 @Stateless
 @LocalBean
 public class Database extends DatabaseMonitorObject {
@@ -31,7 +26,6 @@ public class Database extends DatabaseMonitorObject {
     private EntityManager em;
     private static final Logger LOGGER = Logger.getLogger(Database.class.getName());
 
-    //Metóda na vyhľadávanie
     @Override
     List<MasterDataEntity> synchronizedSearch(String searchString) {
         int quantity;
@@ -43,20 +37,17 @@ public class Database extends DatabaseMonitorObject {
         return masters;
     }
 
-    //Pridávanie master dat do tabuľky
     @Override
     void synchronizedAddMasterData(MasterDataEntity masterData) {
             em.persist(masterData);
     }
 
-    //Mazanie master dat z tabuľky
     @Override
     void synchronizedRemoveMasterData(String id) {
         MasterDataEntity masterData = em.find(MasterDataEntity.class, id);
         em.remove(masterData);
     }
 
-    //Získanie zoznamu vsetkých master dát nachádzajúcich sa v tabuľke
     @Override
     List<MasterDataEntity> synchronizedGetMasterData() {
         TypedQuery<MasterDataEntity> getData = em.createQuery("SELECT m FROM MasterDataEntity m ORDER BY m.id", MasterDataEntity.class);
@@ -64,7 +55,6 @@ public class Database extends DatabaseMonitorObject {
         return data;
     }
 
-    //Vráti obsah poličky na danej pozícii
     @Override
     List<IItem> synchronizedGetShelf(int shelfId) {
         TypedQuery<ItemEntity> getItems = em.createQuery("SELECT i FROM ItemEntity i WHERE i.shelf=" + shelfId + "", ItemEntity.class);
@@ -78,13 +68,13 @@ public class Database extends DatabaseMonitorObject {
         return returnItems;
     }
 
-    //Odstráni celú poličku z databázy
     @Override
     void synchronizedRemoveShelf(int shelfId) {
         TypedQuery<ItemEntity> getItems = em.createQuery("SELECT i FROM ItemEntity i WHERE i.shelf=" + shelfId + "", ItemEntity.class);
         List<ItemEntity> items = getItems.getResultList();
         for(ItemEntity item : items){
             em.remove(item);
+            em.flush();
             updateQuantity(item.getMasterData());
         }
     }

@@ -1,16 +1,17 @@
 package persistence;
 
 /**
- * 
+ * Trieda reprezentujúca zámok monitor objektu
  * @author Gabriel Cervenak
  */
-//Trieda predstavujúca zámok pre monitor objekt
 public class MonitorLock {
     
     volatile boolean locked = false;
     Thread thread = null;
     
-    //Metóda na získanie zámku
+    /**
+     * Získanie zámku
+     */
     public synchronized void lock(){
         while(locked){
             try{
@@ -25,7 +26,9 @@ public class MonitorLock {
         locked = true;
     }
     
-    //Uvoľnenie zámku
+    /**
+     * Uvoľnenie zámku
+     */
     public synchronized void unlock(){
         if(locked && Thread.currentThread() == this.thread){
             thread = null;

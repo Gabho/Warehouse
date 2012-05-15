@@ -1,23 +1,24 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package persistence;
 
 import java.util.List;
 import topology.resource.management.IItem;
 
 /**
- *
+ * Abstraktná trieda, ktorá definuje funkcionalitu databázy
+ * a zároveň reprezentuje Monitor Object. Zabezpečuje synchronizovaný
+ * prístup a vykonávanie operácií nad databázou.
  * @author Gabriel Cervenak
  */
-//Trieda predstavujúca databázu ako monitor objekt
 public abstract class DatabaseMonitorObject {
     
     private MonitorLock lock = new MonitorLock();
     private MonitorCondition condition = new MonitorCondition(lock);
     
-    //Vracia zoznam položiek nachádzajúcich sa na danej poličke
+    /**
+     * Vráti poličku s daným id
+     * @param shelfId id poličky, ktorú chcem získať
+     * @return zoznam itemov z danej poličky
+     */
     public List<IItem> getShelf(int shelfId) {
         lock.lock();
         List<IItem> items = synchronizedGetShelf(shelfId);
@@ -25,35 +26,51 @@ public abstract class DatabaseMonitorObject {
         return items;
     }
 
-    //Aktualizuje obsah poličky na danej pozícii
+    /**
+     * Aktualizuje obsah poličky s daným id
+     * @param items zoznam itemov, ktoré sa na poličke majú nachádzať
+     * @param shelfId id poličky, ktorú chcem aktualizovať
+     */
     public void updateShelf(List<IItem> items, int shelfId) {
         lock.lock();
         synchronizedUpdateShelf(items, shelfId);
         lock.unlock();
     }
     
-    //Odstráni celú poličku z danej pozície
+    /**
+     * Odstráni poličku s daným id
+     * @param shelfId id poličky, ktorú chcem odstrániť
+     */
     public void removeShelf(int shelfId) {
         lock.lock();
         synchronizedRemoveShelf(shelfId);
         lock.unlock();
     }
     
-    //Prida MasterData entitu do tabuľky
+    /**
+     * Vkladanie nových master dát
+     * @param masterData master data, ktoré majú byť vložené
+     */
     public void addMasterData(MasterDataEntity masterData) {
         lock.lock();
         synchronizedAddMasterData(masterData);
         lock.unlock();
     }
     
-    //Vymaže z tabuľky MasterData entitu spolu so všetkými prislúchajúcimi itemami
+    /**
+     * Odstránenie master dát spolu so všetkými prislúchajúcimi položkami
+     * @param id reťazec reprezentujúci id master dát
+     */
     public void removeMasterData(String id) {
         lock.lock();
         synchronizedRemoveMasterData(id);
         lock.unlock();
     }
     
-    //Vracia zoznam všetkých master dát v tabuľke
+    /**
+     * Vracia zoznam všetkých master dát nachádzajúcich sa v databáze
+     * @return zoznam master dát
+     */
     public List<MasterDataEntity> getMasterData() {
         lock.lock();
         List<MasterDataEntity> masterData = synchronizedGetMasterData();
@@ -61,12 +78,30 @@ public abstract class DatabaseMonitorObject {
         return masterData;
     }
 
-    //Vráti počet nájdených itemov (hľadanie podľa master data entity)
+    /**
+     * Hľadanie položiek na základe vyhľadávacieho reťazca
+     * @param string vyhľadávací reťazec
+     * @return zoznam master dát
+     */
     public List<MasterDataEntity> search(String string) {
         lock.lock();
         List<MasterDataEntity> masterData = synchronizedSearch(string);
         lock.unlock();
         return masterData;
+    }
+    
+    /**
+     * Pozastaví vykonávanie vlákna až pokiaľ iné vlákno nezavolá metódu goNotify()
+     */
+    public void gowait(){
+        condition.goWait();
+    }
+    
+    /**
+     * Upovedomí pozastavené vlákno, že môže pokračovať vo vykonávaní
+     */
+    public void goNotify(){
+        condition.goNotify();
     }
     
     abstract List<IItem> synchronizedGetShelf(int shelfId);
