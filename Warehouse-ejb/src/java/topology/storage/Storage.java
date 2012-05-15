@@ -66,7 +66,8 @@ public class Storage implements IObjectManager {
                 } else if (itemAmount > 0) {
                     it = new Item(item.getId() + i, itemAmount, item.getType(),
                             item.getDescription(), item.getExpiration(), null);
-                    shelfs.add(setPosition(it)); //ulozenie itemu do shelfu (PREPARE !!)              
+                    shelfs.add(setPosition(it)); //ulozenie itemu do shelfu (PREPARE !!)  
+                    itemAmount -= shelfCap;  
                 }
             }
         } catch (TaskFailureException e) {
