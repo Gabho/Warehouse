@@ -32,19 +32,24 @@ public class ComponentConfigurator {
     File config;
     @EJB
     IObjectManager storage;
-     @EJB ResourceCache<IShelf> cache;
+    @EJB
+    ResourceCache<IShelf> cache;
     /*
      * Constructor of Component Configurator.
      */
 
-    public ComponentConfigurator() {
-        config = new File("C:/Documents and Settings/Mao/My Documents/NetBeansProjects/Warehouse/Warehouse-ejb/src/java/topology/configuration/load.txt");
+    public ComponentConfigurator() {        
+        String filePath = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+        int endindex = filePath.indexOf("dist/gfdeploy");
+        filePath = filePath.substring(6, endindex);
+        filePath = filePath + ("Warehouse-ejb/src/java/topology/configuration/load.txt");
         
-    }
+        config = new File(filePath);
+        }
 
-    /*
-     * Configure components from script at start of system.
-     */
+        /*
+         * Configure components from script at start of system.
+         */
     public void configure() {
         FileInputStream fis;
         BufferedInputStream bis;
@@ -101,7 +106,7 @@ public class ComponentConfigurator {
         } catch (IOException e) {
             System.out.println("IO Error!");
         }
-       // storage.removeItem(count, new MasterDataEntity());
+        // storage.removeItem(count, new MasterDataEntity());
     }
 
     /*
@@ -155,8 +160,8 @@ public class ComponentConfigurator {
                 //remove object from Object Manager
                 storage.remove(object.getCode());
                 removeFromParent((Rack) object);
-                return "Remove: OK!"; 
-            } else {   
+                return "Remove: OK!";
+            } else {
                 return "Error: No match to object!";
             }
         } else if (tokens[0].equals("configure")) {
@@ -182,7 +187,7 @@ public class ComponentConfigurator {
                 Logger.getLogger(ComponentConfigurator.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (tokens[0].equals("print")) {
-            
+
             return storage.printStorage();
         }
         return "Error: Unknown command!";
@@ -197,7 +202,7 @@ public class ComponentConfigurator {
         Object instance = classLoaded.newInstance();
         return instance;
     }
-    int count = 0;    
+    int count = 0;
     int aisleID = 1;
     /*
      * Create depends of store components.
@@ -216,11 +221,11 @@ public class ComponentConfigurator {
         }
         count += 1;
     }
-    
     int shelfID = 0;
+
     private void setShelfsToRack(Rack rack) {
         for (int i = 1; i < 6; i++) {
-            rack.addComponent(new ProxyShelf(shelfID++,cache));
+            rack.addComponent(new ProxyShelf(shelfID++, cache));
         }
     }
 
