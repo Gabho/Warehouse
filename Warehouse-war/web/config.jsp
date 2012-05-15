@@ -35,15 +35,15 @@
 
         <div id="middle">
             <div id="text">
-               <form action="Config" method="post">
-                   <b>Command:</b><input type="text" name="command" size="80" /><br><br> 
-            <input type="submit" value="Run!" /></form>
-                 <ol><%
-                        @SuppressWarnings("unchecked")
-                        String result = (String) request.getAttribute("result");%>
-                       
-               
-                        <li>result</li></ol>
+                <form action="Config" method="post">
+                    <b>Command:</b><input type="text" name="command" size="80" /><br><br> 
+                    <input type="submit" value="Run!" /></form>
+                <ol><%                    
+                    @SuppressWarnings("unchecked")
+                    String result = (String) request.getAttribute("result");
+                   %>
+                    <li><%= result%></li>
+                </ol>
 
             </div>
         </div>

@@ -83,6 +83,11 @@ background:black;
 color:#FFFFFF;
 margin:0 auto 0 auto;
 }
+#login {
+position:fixed;
+top:200px;
+left:500px;
+}
 
 /*------------zaoblenie rohov------*/
 #ctl, #cbl, #ctr, #cbr {

@@ -21,8 +21,7 @@ import topology.configuration.ComponentConfigurator;
 @WebServlet(name = "Config", urlPatterns = {"/Config"})
 public class Config extends HttpServlet {
 
-    @EJB
-    ComponentConfigurator cc;
+    @EJB ComponentConfigurator cc;
 
     /**
      * Processes requests for both HTTP
@@ -36,30 +35,7 @@ public class Config extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        String command = request.getParameter("command");
-        try {
-            /*
-             * TODO output your page here. You may use following sample code.
-             */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Warehouse Control System</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Welcome to Warehouse Control System</h1>");
-            out.print("<form action=\"Config\" method=\"post\">");
-            out.print("Command: <input type=\"text\" name=\"command\" size=\"80\" /><br>"); 
-            out.print("<input type=\"submit\"/></form>");
-            //out.println("<b>Command: </b><i>"+ command + "</i><br>"); 
-            if (!command.equals("")) {
-                out.println("<b><i>" + cc.processTask(command) + "</i></b><br>");
-                out.println("</html>");
-            }
-        } finally {
-            out.close();
-        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -75,7 +51,7 @@ public class Config extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
     }
 
     /**
@@ -90,7 +66,10 @@ public class Config extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String command = request.getParameter("command");
+        String msg = cc.processTask(command);
+        request.setAttribute("result", msg); 
+        request.getRequestDispatcher("/config.jsp").forward(request, response);
     }
 
     /**
