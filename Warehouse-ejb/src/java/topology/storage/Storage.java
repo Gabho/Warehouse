@@ -113,36 +113,41 @@ public class Storage implements IObjectManager {
             }
         }
         throw new TaskFailureException();
-    }
-
-    @Override
-    public int removeItem(int quantity, MasterDataEntity masterData) {
-        try {
-            ItemEntity itemEntity = masterData.getItemEntitys().get(quantity);
-            int aisleID = itemEntity.getAisle();
-            Aisle aisle = (Aisle) manager.get("A" + aisleID);
-            List<Rack> racks = aisle.getRacks();
-            Rack rack = null;
-            for (int i = 0; i < racks.size(); i++) {
-                rack = racks.get(i);
-                if (rack.getCode().equals("R" + itemEntity.getRack())) {
-                    break;
+    } 
+ 
+    @Override 
+    public boolean removeItem(int quantity, MasterDataEntity masterData) {
+        String type = masterData.getId();
+            
+        System.out.println("Type from masterData: " + type); 
+        for (int i = 1; i < 16; i++) {
+            try {
+                Rack rack = (Rack) manager.get("R"+i);
+                List<IShelf> shelfs = rack.getShelfs();
+                for (IShelf iShelf : shelfs) {
+                    List<IItem> items = iShelf.getItems();
+                    for (int j = 0; j < items.size(); j++) {
+                        IItem iItem = items.get(j);
+                        System.out.println("Type from item: "+ iItem.getType()); 
+                        System.out.println("quantity: "+ quantity);
+                        System.out.println("amout: "+ iItem.getAmount());
+                        if(type.equals(iItem.getType())&& (quantity>=iItem.getAmount())) {
+                            quantity -= iItem.getAmount();
+                            iShelf.removeItem(iItem); 
+                            
+                            System.out.println("Deleting...rest quantity is: "+ quantity);
+                        }
+                    }
                 }
+            } catch (Exception ex) {
+                Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
             }
-            List<IShelf> shelfs = rack.getShelfs();
-            IShelf shelf = null;
-            for (int i = 0; i < shelfs.size(); i++) {
-                shelf = shelfs.get(i);
-                if (shelf.getID() == itemEntity.getShelf()) {
-                    break;
-                }
-            }
-            shelf.removeItem(null);
-        } catch (Exception ex) {
-            Logger.getLogger(Storage.class.getName()).log(Level.SEVERE, null, ex);
+            
         }
-        return 0;
+        
+        return true;
     }
+  
 
     @Override
     public int findItem() {

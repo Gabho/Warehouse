@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import persistence.MasterDataEntity;
 import topology.resource.management.IShelf;
 import topology.resource.management.Item;
 import topology.resource.management.ProxyShelf;
@@ -37,7 +38,7 @@ public class ComponentConfigurator {
      */
 
     public ComponentConfigurator() {
-        config = new File("D:/SKOLA/BAKALARSKA PRACA/WAREHOUSE Implementation/Warehouse/Warehouse-ejb/src/java/topology/configuration/load.txt");
+        config = new File("C:/Documents and Settings/Mao/My Documents/NetBeansProjects/Warehouse/Warehouse-ejb/src/java/topology/configuration/load.txt");
         
     }
 
@@ -100,6 +101,7 @@ public class ComponentConfigurator {
         } catch (IOException e) {
             System.out.println("IO Error!");
         }
+       // storage.removeItem(count, new MasterDataEntity());
     }
 
     /*
@@ -195,7 +197,7 @@ public class ComponentConfigurator {
         Object instance = classLoaded.newInstance();
         return instance;
     }
-    int count = 0;   
+    int count = 0;    
     int aisleID = 1;
     /*
      * Create depends of store components.
@@ -214,6 +216,7 @@ public class ComponentConfigurator {
         }
         count += 1;
     }
+    
     int shelfID = 0;
     private void setShelfsToRack(Rack rack) {
         for (int i = 1; i < 6; i++) {

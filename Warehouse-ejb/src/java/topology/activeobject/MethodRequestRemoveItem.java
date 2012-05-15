@@ -27,7 +27,7 @@ public class MethodRequestRemoveItem implements IMethodRequest{
 
     @Override
     public void call() {
-        //manager.removeItem(quantity, masterData);
+        manager.removeItem(quantity, masterData);
         Logger LOGGER = Logger.getLogger(MethodRequestRemoveItem.class.getName());
         LOGGER.log(Level.INFO, "..............................MethodRequest Remove Item: {0} {1}",new Object[]{masterData.getId(), quantity});
     }
