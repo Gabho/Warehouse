@@ -6,42 +6,51 @@ package topology.resource.management;
 import java.util.Date;
 
 /**
- * Inteface defining item functionality.
+ * Rozhranie definujúce operácie nad najmešou položkou skladu.
+ * Item predstavuje položku (tovar), ktorá je na sklade.
  * @author Martin Lofaj
  */
 public interface IItem {
     
     /** 
-     * Returns amount of items of a particular type 
-     * @return amount of items
+     * Prístup k množstvu tovaruv položke.
+     * @return počet položiek.
      */
     public int getAmount();
     
     /** 
-     * Gets the type of the item represented by this object.
-     * @return type of the item
+     * Vráti typ materialu, ktorý je uložený v položke.
+     * @return typ materiálu.
      */
     public String getType();
     
     /**
-     * Gets description of the item represented by this object.
-     * @return item's description
+     * Vráti popis pre danú položku.
+     * @return popis materiálu.
      */
     public String getDescription();
     
     /**
-     * Gets expiration date of the item represented by this object.
-     * @return item's expiration date
+     * Vráti dátum spotreby materiálu v položke.
+     * @return dátum spotreby.
      */
     public Date getExpiration();
     
     /**
-     * Gets position of the item in warehouse topology.
-     * @return item's position
+     * Vráti pozíciu položky, nad ktorou je metóda volaná, v skalde.
+     * @return pozícia v sklade.
      */
     public Position getPosition();
     
+    /**
+     * Nastaví pozíciu pre daný tovar v skade.
+     * @param position pozícia v sklade.
+     */
     public void setPosition(Position position);
 
-    public void setAmount(int i);
+    /**
+     * Nastaví množstvo daného tovaru v položke.
+     * @param amount nové množstvo tovaru.
+     */
+    public void setAmount(int amount);
 }

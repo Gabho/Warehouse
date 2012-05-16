@@ -4,11 +4,11 @@
 package topology.resource.management;
 
 import java.util.Date;
+
 /**
- * Implementaion of item.
+ * Implementácia položky tovaru.
  * @author Martin Lofaj
  */
-
 public class Item implements IItem{
 
     private int amount;
@@ -19,20 +19,12 @@ public class Item implements IItem{
     private int id;
 
     /**
-     * Costructor for internal use of item. Object creation is 
-     * based on data from database.
-     */
-    public Item() {
-        //TODO: fetch data from database ?
-    }
-
-    /**
-     * Constructor for inserting item into storage.
-     * @param amount
-     * @param type
-     * @param decription
-     * @param expirationDate
-     * @param position 
+     * Vytvorenie položky.
+     * @param amount množstvo tovaru v položke.
+     * @param type typ tovaru v položke.
+     * @param decription popis tovaru.
+     * @param expirationDate dátum spotreby.
+     * @param position pozícia položky v sklade.
      */
     public Item(int id, int amount, String type, String decription, 
             Date expirationDate, Position position) {

@@ -3,58 +3,68 @@
  */
 package topology.resource.management;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import javax.ejb.Stateful;
-
+import java.util.*;
 
 /**
- * A generic resource cache. A unique id is needed to store a resource in it.
+ * Generický resource cache. Slúži ako úložisko pre často používané objekty aby
+ * sa predišlo ich opätovnému vytváraniu. K ukladaní prvkov do cache je potrebný
+ * jedinečný kľúč. Prvky sú ukladané v údajovej štruktúre HashMap. Cache je
+ * automaticky vyprázdňovaný po uplinutí definovaného časového intervalu.
+ *
  * @author Martin Lofaj
  */
 @Stateful
 public class ResourceCache<T> {
 
-    private Map<Integer ,CachedResource<T>> cache;
+    private Map<Integer, CachedResource<T>> cache;
     private int capacity;
     private static final int DEFAULT_CAPACITY = 10;
+    private Timer timer;
+    private boolean lock;
 
     /**
-     * Costructs resource cache. Sets its capacity to default and creates
-     * its hashmap representation.
+     * Vytvorenie resource cache. Kapacita a interval čistenia cache sú
+     * nastavené na predvolenú hodnotu.
      */
     public ResourceCache() {
         this.capacity = DEFAULT_CAPACITY;
-        cache = new HashMap<Integer ,CachedResource<T>>(capacity);
+        cache = new HashMap<Integer, CachedResource<T>>(capacity);
     }
 
     /**
-     * Inserts a given resource into cache. If the cache is full it
-     * will remove the least used item first.
-     * @param key unique key for hash calculation.
-     * @param resource item to be stored.
+     * Vloženie prvku do cahce. Ak je cache plný odstráni sa najstarší prvok.
+     * Novo vloženému prvku sa riradí čas vloženia.
+     *
+     * @param key jedinečný kľúč.
+     * @param resource vkladaný prvok.
      */
     public void insert(int key, T resource) {
         if (capacity > cache.size()) {
-            cache.put(key ,new CachedResource<T>(resource, new Date(), key));
+            cache.put(key, new CachedResource<T>(resource, new Date(), key));
         } else {
             cache.remove(findLeastUsed());
             cache.put(key, new CachedResource<T>(resource, new Date(), key));
         }
     }
-    
+
     /**
-     * Takes specified key a tests if the key is present in the cache.
-     * @param key key to look for.
-     * @return true if item with specified key is cached false if it isn't.
+     * Vezme jedinečný kľúč prvku a vyhľadá podľa neho prvok.
+     *
+     * @param key kľúč hľadaného prvku.
+     * @return true ak sa prvok v cache nachádza, false v prípade, že sa
+     * nenachádza.
      */
     public boolean isCached(int key) {
         return cache.containsKey(key);
     }
 
-    //pri pouziti odstranovania najmenej pouzivaneho prvku je 
-    //zlozitost operacie vkladania dost velka.
+    /**
+     * Nájdenie najstaršieho prvku v cache. Metóda porovnáva časi všetkých
+     * prvkov v cache a najstarší sa vráti.
+     *
+     * @return kľúč nájdeného prvku.
+     */
     private int findLeastUsed() {
         Date oldestTime = new Date();
         int keyOldest = 0;
@@ -68,18 +78,30 @@ public class ResourceCache<T> {
     }
 
     /**
-     * Removes item with specified key from the cache.
-     * @param key of the item to be removed.
-     * @return item bound with key
+     * Odobratie prvku z cache podľa zadaného kľúča.
+     *
+     * @param key kľúč prvku, ktorý má byť odobraný.
+     * @return odobraný prvok.
      */
     public T remove(int key) {
         return cache.remove(key).getResource();
     }
-    
+
     /**
-     * Constainer for items stored in cache. Adds some additional 
-     * information to the item (time of insertion, its key)
-     * @param <T> type of the stored item
+     * Odstránenie všetkých uložených prvkov. Vymazanie celého resource cache.
+     */
+    public void clearCache() {
+        if (!cache.isEmpty()) {
+            System.out.println("[Resource Cache] clearing cache ...");
+            cache.clear();
+            System.out.println("[Resource Cache] clearing cache done");
+        }
+    }
+
+    /**
+     * Kontainer pre prvok uložený v cache. Prvku dopĺňa potrebné informácie pre
+     * cache ako je kľúč prvku a čas jeho pridania.
+     * @param <T> typ prvkov ukládaných do cache.
      */
     private class CachedResource<T> {
 
@@ -88,27 +110,30 @@ public class ResourceCache<T> {
         private int key;
 
         /**
-         * Creates resource object.
-         * @param resource the actual item.
-         * @param timeStamp time object was inserted into cache.
-         * @param key key of the inserted object.
+         * Vytvorí kontainer pre prvok.
+         *
+         * @param resource samotný prvok.
+         * @param timeStamp čas vloženia/použitia do cache.
+         * @param key kľúč prvku.
          */
         public CachedResource(T resource, Date timeStamp, int key) {
             this.resource = resource;
             this.timestamp = timeStamp;
             this.key = key;
         }
-        
+
         /**
-         * Returns key key of the stored item.
-         * @return object's key.
+         * Vráti jedinečný kľúč prvku.
+         *
+         * @return kľúč prvku.
          */
         public int getKey() {
             return key;
         }
 
         /**
-         * Returns time of object's insertion.
+         * Vráti čas uloženia prvku.
+         *
          * @return object's time stamp
          */
         public Date getTimeStamp() {
@@ -116,7 +141,8 @@ public class ResourceCache<T> {
         }
 
         /**
-         * Manipulation with insertion time.
+         * Pozmení šas vloženia prvku.
+         *
          * @param stamp new insertion time.
          */
         public void setTimeStamp(Date stamp) {
@@ -124,8 +150,9 @@ public class ResourceCache<T> {
         }
 
         /**
-         * Provides accsess to object stored inside this container.
-         * @return cached resource.
+         * Poskytoje prístup k prvkom uložených v cache.
+         *
+         * @return uložený prvok.
          */
         public T getResource() {
             return resource;
@@ -145,8 +172,8 @@ public class ResourceCache<T> {
                 return false;
             }
             final CachedResource<T> other = (CachedResource<T>) obj;
-            if (this.resource != other.resource && (this.resource == null ||
-                    !this.resource.equals(other.resource))) {
+            if (this.resource != other.resource && (this.resource == null
+                    || !this.resource.equals(other.resource))) {
                 return false;
             }
             return true;

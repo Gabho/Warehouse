@@ -6,10 +6,10 @@ package topology.resource.management;
 import java.util.List;
 
 /**
- * Proxy shelf stores a instance of shelf in resource cache.
- * When shelf's method is invoked it finds the instance in cache.
- * If its not there it reates a new one a stores puts it to cache before
- * the method returns.
+ * ProxyShelf vytvára inštanciu poličky až prípade, že je vyžadovaná jej
+ * funkcionalita. Pri volaní metódy sa vyhľadá inštancia poličky v resource
+ * cache. Ak sa tam nenachádza vytvorí sa nová. A pred návratom z metódy sa
+ * inštancia uloží do resource cache.
  * @author Martin Lofaj
  */
 public class ProxyShelf implements IShelf {
@@ -20,14 +20,15 @@ public class ProxyShelf implements IShelf {
     //Id of the actual shelf.
     private int id;
 
+    /**
+     * Vytvorenie nového proxy. Pridelenie jedinečného identifikátora
+     * a referencie na resource cache.
+     * @param id
+     * @param cache 
+     */
     public ProxyShelf(int id,ResourceCache<IShelf> cache) {
         this.id = id;
         this.cache = cache;
-//        try {
-//            cache = (ResourceCache<IShelf>) new InitialContext().lookup("/home/mao/NetBeansProjects/Warehouse/Warehouse-ejb/src/java/topology/resource/management/ResourceCache");
-//        } catch (NamingException ex) {
-//            Logger.getLogger(ProxyShelf.class.getName()).log(Level.SEVERE, null, ex);
-//        }
     }
 
     @Override
@@ -102,6 +103,10 @@ public class ProxyShelf implements IShelf {
         return items;
     }
     
+    /**
+     * Získanie inštancie poličky. Najprv sa vyhľadáva v resource cache. V príade,
+     * že sa tam inštancia nenachádza vytvára sa nová (volá sa konštruktor).
+     */
     private void getShelf() {
         if(shelf == null) {
             if(cache.isCached(id)) {
@@ -113,7 +118,8 @@ public class ProxyShelf implements IShelf {
     }
     
     /**
-     * Puts a working instance of shelf into resource cache.
+     * Uloží inštanciu poličky do resource cache.
+     * Zmaže referenciu na objekt poličky.
      */
     private void cacheShelf() {
         cache.insert(id, shelf);

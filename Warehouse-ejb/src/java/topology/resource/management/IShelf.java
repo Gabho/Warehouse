@@ -3,62 +3,59 @@ package topology.resource.management;
 import java.util.List;
 
 /**
- * Interface defining basic storage funcionality.
+ * Reprezentácia najmenšej úložnej jednotky v sklade (poličky).
  * @author Martin Lofaj
  */
 public interface IShelf extends ICoordinable{
     
     //Dohodnuty interface
     /**
-     * Returns a list of items stored in the shelf.
+     * Vracia zoznam objektov typu IItem, uložených na poličke.
      * @return items stored in the shelf.
      */
     public List<IItem> getItems();
     
     /**
-     * Return value of a member variable capacity.
-     * @return capacity of the shelf
+     * Vráti maximálnu kapacitu polčky.
+     * @return kapacita poličky.
      */
     public int getCapacity();
     
-    //item sa bude odovdavat alebo typ itemu?
-    
     /**
-     * Return exact amount of items specfied in the parameter.
-     * @param type of the desired item
-     * @return amount of specified items
+     * Vráti počet položiek zadaného materiálu.
+     * @param type typ materiálu.
+     * @return počet položiek.
      */
     public int getItemCount(String type);
     
     /**
-     * Computes free space in the shelf.
-     * @return free space in the shelf
+     * Vypočíta voľné miesto na poličke.
+     * @return voľné miesto.
      */
     public int getFreeSpace();
     
     /**
-     * Return id of acctual shelf.
-     * @return shelf id.
+     * Vráti identifikátor poličky.
+     * @return identifikátor poličky.
      */
     public int getID();
     
     /**
-     * Insert item into shelf if the amout of inserted item is less or
-     * equal than free space in the shelf.
-     * @param item item to store
+     * Vloženie položky na poličku.
+     * @param item položka, ktorá sa ma na poličku umiestniť.
      */
     public void insertItem(IItem item);
     
     /**
-     * 
-     * @param item item to be removed.
-     * @return removed item or null if specified item is not stored
+     * Vybratie položky z poličky.
+     * @param item položka, ktorá má byť vybratá.
+     * @return polžka odstránená z poličky.
      */
     public IItem removeItem(IItem item);
     
     /**
-     * Destroys entire shelf by easing all items stored in databaase.
-     * @return list of all stored items
+     * Odstráni celú poličku zo skaldu, zmaže jej údaje z databázy.
+     * @return všetky položky, ktoré sa na poličke vyskytovali.
      */
     public List<IItem> remove();
     

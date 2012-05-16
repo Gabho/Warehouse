@@ -15,7 +15,7 @@ import javax.naming.NamingException;
 import persistence.Database;
 
 /**
- * Implemetation of Shelf.
+ * Implementácia úložného objektu polička.
  * @author Martin Lofaj
  */
 public class Shelf implements IShelf {
@@ -30,10 +30,11 @@ public class Shelf implements IShelf {
     public static final int DEFAULT_CAPACITY = 20;
 
     /**
-     * Costructs a Shelf of given id. If content of the shelf already
-     * exist in database it will load it and set up all related member
-     * variables. Uses default capacity.
-     * @param id shelf's id
+     * Vytvorí poličku so zadaným identifikátorom. Ak polička už existuje
+     * jej obsah sa načíta z databázy. Nastavia sa všetky potrebné členské premenné
+     * triedy a aktualizuje premenná obsahujúúca informaciu o použitom mieste.
+     * Veľkosť poličky je predvolená.
+     * @param id identifikátor poličky.
      */
     public Shelf(int id) {
         this.id = id;
@@ -53,26 +54,27 @@ public class Shelf implements IShelf {
         updateUsedSpace();
     }
     /**
-     * Costructs a Shelf of given id. If content of the shelf already
-     * exist in database it will load it and set up all related member
-     * variables. Uses specified capacity.
-     * @param id shelf's id
-     * @param capacity shelf's capacity
+     * Vytvorí poličku so zadaným identifikátorom. Ak polička už existuje
+     * jej obsah sa načíta z databázy. Nastavia sa všetky potrebné členské premenné
+     * triedy a aktualizuje premenná obsahujúúca informaciu o použitom mieste.
+     * Veľkosť poličky je nastavená na základe parametra.
+     * @param id identfikátor poličky.
+     * @param capacity maximálna kapacita poličky.
      */
     public Shelf(int id, int capacity) {
         this.id = id;
         this.capacity = capacity;
-        //try {
-        //    db = (Database) new InitialContext().lookup("java:global/Warehouse/Warehouse-ejb/Database");
+        try {
+            db = (Database) new InitialContext().lookup("java:global/Warehouse/Warehouse-ejb/Database");
             List<IItem> loadedItems = db.getShelf(id);
             if(loadedItems.size() > 0) {
                 items = new ArrayList<IItem>(loadedItems);
             } else {
                 items = new ArrayList<IItem>(capacity);
             }
-        //} catch (NamingException ex) {
-        //    Logger.getLogger(Shelf.class.getName()).log(Level.SEVERE, null, ex);
-        //}
+        } catch (NamingException ex) {
+            Logger.getLogger(Shelf.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         updateUsedSpace();
     }
@@ -110,12 +112,10 @@ public class Shelf implements IShelf {
 
     @Override
     public void insertItem(IItem item) {
-        //if(item.getAmount() <= getFreeSpace()) {
             items.add(item);
             System.out.println("[insert] amount je " + item.getAmount());
             db.updateShelf(items, id);
             updateUsedSpace();
-        //}
     }
 
        
@@ -144,8 +144,7 @@ public class Shelf implements IShelf {
     }
     
     /**
-     * Computes used space by adding amounts of all items stored
-     * in Shelf and writes the result to usedSpace member variable.
+     * Vypočíta použité miesto na poličke.
      */
     private void updateUsedSpace() {
         for(IItem item : items) {
