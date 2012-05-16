@@ -25,13 +25,13 @@ public class ItemEntity implements Serializable {
     private MasterDataEntity masterData;
 
     /**
-     * Bezparametrický konštruktor - vytvorí položku
+     * Bezparametrický konštruktor vytvorí položku
      */
     public ItemEntity() {
     }
 
     /**
-     * Vytvorí novú položku
+     * Vytvorenie novej položky
      * @param aisle ulička, v ktorej sa nachádza položka
      * @param rack regál, v ktorom sa nachádza položka
      * @param shelf polička, na ktorej sa nachádza položka

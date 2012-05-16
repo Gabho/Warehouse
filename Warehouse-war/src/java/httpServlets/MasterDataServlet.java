@@ -1,14 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package httpServlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +13,8 @@ import persistence.MasterDataEntity;
 import topology.activeobject.IFunctionality;
 
 /**
- *
+ * Trieda dediaca od HttpServletu, ktorá slúži na obslúženie vstupu od používateľa.
+ * Zabezpečuje zachytávanie udalostí pre vkladanie a odstraňovanie master dát.
  * @author Gabriel Cervenak
  */
 @WebServlet(name = "MasterDataServlet", urlPatterns = {"/masterData"})

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package topology.activeobject;
 
 import java.util.List;
@@ -10,8 +6,8 @@ import persistence.Database;
 import persistence.MasterDataEntity;
 
 /**
- *
- * @author Gabo
+ * Trieda reprezentujúca požiadavku na vyhľadávanie.
+ * @author Gabriel Cervenak
  */
 public class MethodRequestSearch implements IMethodRequest {
 
@@ -20,12 +16,21 @@ public class MethodRequestSearch implements IMethodRequest {
     private Future<SearchResult> result;
     private Database database;
 
+    /**
+     * Vytvorenie novej požiadavky na hľadanie.
+     * @param search vyhľadávací reťazec.
+     * @param result Future, do ktorého bude uložené oznámenie o úspešnosti prebehnutia operácie.
+     * @param database EJB poskytujúci prístup k databáze.
+     */
     public MethodRequestSearch(String search, Future<SearchResult> result, Database database) {
         this.search = search;
         this.result = result;
         this.database = database;
     }
 
+    /**
+     * Vytvorenie nového vlákna, v ktorom prebehne operácia vyhľadávania.
+     */
     @Override
     public void call() {
         Thread thread = new Thread() {

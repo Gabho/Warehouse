@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package httpServlets;
 
 import java.io.IOException;
@@ -23,8 +19,7 @@ import topology.resource.management.Item;
 
 /**
  * Trieda dediaca od HttpServletu, ktorá slúži na obslúženie vstupu od
- * používateľa pri vkladaní a odstraňovaní položiek
- *
+ * používateľa pri vkladaní a odstraňovaní položiek.
  * @author Gabriel Cervenak
  */
 @WebServlet(name = "ItemServlet", urlPatterns = {"/item"})
@@ -162,7 +157,6 @@ public class ItemServlet extends HttpServlet {
 
     /**
      * Returns a short description of the servlet.
-     *
      * @return a String containing servlet description
      */
     @Override

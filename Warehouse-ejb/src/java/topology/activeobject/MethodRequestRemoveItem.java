@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package topology.activeobject;
 
 import java.util.logging.Level;
@@ -10,8 +6,8 @@ import persistence.MasterDataEntity;
 import topology.storage.IObjectManager;
 
 /**
- *
- * @author Gabo
+ * Trieda reprezentujúca požiadavku na odstránenie položiek z databázy.
+ * @author Gabriel Cervenak
  */
 public class MethodRequestRemoveItem implements IMethodRequest{
     
@@ -20,6 +16,13 @@ public class MethodRequestRemoveItem implements IMethodRequest{
     private MasterDataEntity masterData;
     private Future<Boolean> result;
     
+    /**
+     * Vytvorenie novej požiadavky na odstránenie položiek.
+     * @param quantity počet položiek, ktoré chceme odstrániť.
+     * @param masterData master dáta položiek, ktoré chceme odstrániť.
+     * @param result Future, do ktorého bude zapísané oznámenie o výsledku operácie.
+     * @param manager objekt manažér, ktorý implementuje funkcionalitu.
+     */
     public MethodRequestRemoveItem(int quantity, MasterDataEntity masterData, Future<Boolean> result, IObjectManager manager){
         this.quantity = quantity;
         this.masterData = masterData;
@@ -27,6 +30,10 @@ public class MethodRequestRemoveItem implements IMethodRequest{
         this.manager = manager;
     }
 
+    /**
+     * Zavolanie metódy na odstránenie položiek. Oznámenie o úspešnosti vykonanie operácie
+     * sa zapíše do objektu Future.
+     */
     @Override
     public void call() {
         result.addResult(manager.removeItem(quantity, masterData));

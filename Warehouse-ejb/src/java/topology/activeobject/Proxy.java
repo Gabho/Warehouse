@@ -1,11 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package topology.activeobject;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -15,8 +10,8 @@ import topology.resource.management.Item;
 import topology.storage.IObjectManager;
 
 /**
- *
- * @author Gabo
+ * EJB reprezentujúci proxy, ktorý vytvorí požiadavky na metódy a uloží ich do radu požiadaviek.
+ * @author Gabriel Cervenak
  */
 @Stateless
 public class Proxy implements IFunctionality {

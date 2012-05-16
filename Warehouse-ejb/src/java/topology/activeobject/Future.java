@@ -1,17 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package topology.activeobject;
 
 /**
- *
- * @author Gabo
+ * Trieda reprezentujúca odpoveď, ide o generickú triedu, nakoľko odpoveď môže byť rôzneho typu.
+ * Implementácia návrhového vzoru Future, ktorý poskytne odpoveď hneď po vyvolaní metódy, aj keď
+ * hodnota odpovede ešte nie je dostupná.
+ * @author Gabriel Cervenak
  */
 public class Future<T> implements IFuture<T> {
 
     private T result;
 
+    /**
+     * Vloženie hodnoty do odpovede.
+     * @param result hodnota odpovede.
+     */
     public synchronized void addResult(T result) {
         this.result = result;
         notifyAll();
@@ -34,6 +36,9 @@ public class Future<T> implements IFuture<T> {
         }
     }
 
+    /**
+     * Čakanie vlákna, pokým odpoveď nebude dostupná.
+     */
     private void waitForResult() {
         try {
             wait();

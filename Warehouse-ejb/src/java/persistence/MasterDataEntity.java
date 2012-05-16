@@ -28,7 +28,7 @@ public class MasterDataEntity implements Serializable {
     }
     
     /**
-     * Vytvorí novú inštanciu
+     * Vytvorenie nových máster dát
      * @param id reťazec reprezentujúci id entity
      * @param description reťazec predstavujúci opis daných dát
      */

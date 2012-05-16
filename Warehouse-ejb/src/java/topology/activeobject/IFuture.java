@@ -1,17 +1,20 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package topology.activeobject;
 
 /**
- *
- * @author Gabo
+ * Rozhranie definijúce správanie objektu Future.
+ * @author Gabriel Cervenak
  */
 public interface IFuture<T> {
-        
-        T get();
 
-        boolean isDone();
-    
+    /**
+     * Získanie hodnoty odpovede z obejktu Future, ide o blokujúce čítanie.
+     * @return hodnotu odpovede.
+     */
+    T get();
+
+    /**
+     * Neblokujúce overenie, či je odpoveď dostupná.
+     * @return true, ak je dostupná, false, ak nie je.
+     */
+    boolean isDone();
 }
