@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package topology.storage;
 
 import java.util.ArrayList;
@@ -9,25 +5,41 @@ import java.util.List;
 import topology.configuration.AbstractComponent;
 
 /**
- *
- * @author Mao
+ * Ulička v topológií skladu.
+ * @author Martin Pakandl
  */
 public class Aisle extends AbstractComponent implements IStorageComponent {
+    //identifikátor uličky
     private String code;
+    //kapacita uličky
     private int capacity;
+    //zoznam regálov v uličke
     private List<Rack> racks;
+    //status objektu uličky
     private Boolean isReady;
-   
+    
+    /**
+     * Bezparametrický konštruktor uličky. Pre potreby dynamického načítania triedy.
+     */
     public Aisle() {
     }
     
+    /**
+     * Konštruktor uličky.
+     * @param code identifikátor uličky
+     * @param capacity kapacita uličky
+     */
     public Aisle(String code, int capacity) {
         this.code = code;
         this.capacity = capacity;
         racks = new ArrayList();
         isReady = false;
     }
-
+    
+    /**
+     * Získanie informície o kapacite uličky.
+     * @return kapacitu uličky
+     */
     public int getCapacity() {
         return capacity;
     }
@@ -36,7 +48,12 @@ public class Aisle extends AbstractComponent implements IStorageComponent {
     public String getCode() {
         return code;
     }
-
+    
+    /**
+     * Získanie informície o regáloch v uličke.
+     * @return zoznam regálov
+     * @throws Exception 
+     */
     public List<Rack> getRacks() throws Exception {
         if (isReady) {
             return racks;

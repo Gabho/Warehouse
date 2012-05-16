@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package topology.configuration;
 
 import java.io.*;
@@ -12,9 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import persistence.MasterDataEntity;
 import topology.resource.management.IShelf;
-import topology.resource.management.Item;
 import topology.resource.management.ProxyShelf;
 import topology.resource.management.ResourceCache;
 import topology.storage.Aisle;
@@ -23,21 +17,23 @@ import topology.storage.IStorageComponent;
 import topology.storage.Rack;
 
 /**
- *
- * @author Mao
+ * Vzor Komponent Konfigurátor - konfigurácia systém za behu. 
+ * @author Martin Pakandl
  */
 @Stateless
 public class ComponentConfigurator {
-
+    //konfiguračný súbor
     File config;
+    //sprístupnenie EJB Objekt Manažéra
     @EJB
     IObjectManager storage;
+    //sprístupnenie EJB pamäte typu cache.
     @EJB
     ResourceCache<IShelf> cache;
-    /*
-     * Constructor of Component Configurator.
+   
+    /**
+     * Konštruktor Komponent Konfigurátora. Načíta konfiguračný súbor.
      */
-
     public ComponentConfigurator() {
         String filePath = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
         int endindex = filePath.indexOf("dist/gfdeploy");
@@ -47,8 +43,8 @@ public class ComponentConfigurator {
         config = new File(filePath);
     }
 
-    /*
-     * Configure components from script at start of system.
+    /**
+     * Konfigurácia systému pri jeho štarte.
      */
     public void configure() {
         FileInputStream fis;
@@ -106,18 +102,12 @@ public class ComponentConfigurator {
         } catch (IOException e) {
             System.out.println("IO Error!");
         }
-        // storage.removeItem(count, new MasterDataEntity());
     }
 
-    /*
-     * Configure component at runtime from admin command. Format of commands:
-     * load path.to.Component string_name_component int_capacity remove
-     * string_name_component configure string_name_component
-     * string_new_name_component int_capacity [string_insert_to_upper_componet]
-     *
-     * Example: load topology.storage.Aisle A1 5; remove A1; configure R2 R1 5
-     * A1
-     *
+    /**
+     * Konfigurácia systému počas jeho behu. 
+     * @param task konfiguračný príkaz
+     * @return správu o výsledku konfigurácie
      */
     public String processTask(String task) {
         System.out.println("Start proccesig task: " + task);
@@ -195,8 +185,13 @@ public class ComponentConfigurator {
         return "Error: Unknown command!";
     }
 
-    /*
-     * Load class to system at runtime.
+    /**
+     * Načítanie triedy  počas behu systému.
+     * @param classToLoad cesta k triede
+     * @return objekt triedy
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException 
      */
     private Object loadMyClass(String classToLoad) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         ClassLoader loader = ComponentConfigurator.class.getClassLoader();
@@ -204,12 +199,15 @@ public class ComponentConfigurator {
         Object instance = classLoaded.newInstance();
         return instance;
     }
+    //počet priradených regálov
     int count = 0;
+    //identifikátor uličky
     int aisleID = 1;
-    /*
-     * Create depends of store components.
+    
+    /**
+     * Priradenie regálu do uličky.
+     * @param rack regál
      */
-
     private void setRacksToAisle(Rack rack) {
         if (count > 4) {
             count = 0;
@@ -224,13 +222,20 @@ public class ComponentConfigurator {
         count += 1;
     }
     int shelfID = 0;
-
+    /**
+     * Priradí regálu poličku.
+     * @param rack regál
+     */
     private void setShelfsToRack(Rack rack) {
         for (int i = 1; i < 6; i++) {
             rack.addComponent(new ProxyShelf(shelfID++, cache));
         }
     }
-
+    /**
+     * Odstránienie regálu z uličky.
+     * @param rack regál
+     * @return identifikátor uličky z ktorého bol regál odstránený
+     */
     private String removeFromParent(Rack rack) {
         for (int i = 1; i < aisleID; i++) {
             try {

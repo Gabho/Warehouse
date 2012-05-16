@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package topology.storage;
 
 import java.util.ArrayList;
@@ -15,8 +11,8 @@ import topology.configuration.AbstractComponent;
 import topology.resource.management.*;
 
 /**
- *
- * @author Mao
+ * Repozitár objektov - vzor Objekt Manažér.
+ * @author Martin Pakandl
  */
 @Stateful
 public class Storage implements IObjectManager {
@@ -94,7 +90,12 @@ public class Storage implements IObjectManager {
         shelfs.clear();
         return true;
     }
-    
+    /**
+     * Nastavenie pozície vkladanej položky.
+     * @param item položka
+     * @return polička pre vloženie položky
+     * @throws TaskFailureException 
+     */
     private IShelf setPosition(IItem item) throws TaskFailureException {
         for (int i = 1; i < 4; i++) {
             try {
@@ -163,15 +164,7 @@ public class Storage implements IObjectManager {
         
         return true;
     }
-    
-    @Override
-    public int findItem() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-    /*
-     * Return free space.
-     */
-    
+
     @Override
     public int getFreeSpace() {
         int freeSpace = 0;

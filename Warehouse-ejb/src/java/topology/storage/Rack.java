@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package topology.storage;
 
 import java.util.ArrayList;
@@ -11,26 +7,43 @@ import topology.resource.management.IShelf;
 import topology.resource.management.ProxyShelf;
 
 /**
+ * Regál pre topológiu skladu.
  *
- * @author Mao
+ * @author Martin Pakandl
  */
 public class Rack extends AbstractComponent implements IStorageComponent {
+    //identifikátor uličky
 
     private String code;
+    //kapacita uličky
     private int capacity;
+    //zoznam poličiek v regále
     private List<IShelf> shelfs;
+    //status objektu uličky
     private Boolean isReady;
 
+    /**
+     * Bezparametrický konštruktor uličky. Pre potreby dynamického načítania
+     * triedy.
+     */
     public Rack() {
     }
 
+     /**
+     * Konštruktor regálu.
+     * @param code identifikátor regálu
+     * @param capacity kapacita regálu
+     */
     public Rack(String code, int capacity) {
         this.code = code;
         this.capacity = capacity;
         shelfs = new ArrayList();
         isReady = false;
     }
-
+ /**
+     * Získanie informície o kapacite regálu.
+     * @return kapacitu regálu
+     */
     public int getCapacity() {
         return capacity;
     }
@@ -39,7 +52,11 @@ public class Rack extends AbstractComponent implements IStorageComponent {
     public String getCode() {
         return code;
     }
-
+ /**
+     * Získanie informície o poličkách v regále.
+     * @return zoznam poličiek
+     * @throws Exception 
+     */
     public List<IShelf> getShelfs() throws Exception {
         if (isReady) {
             return shelfs;
