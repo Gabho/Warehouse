@@ -13,7 +13,7 @@
 <html>
     <head> 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
-       <link href="resources/menu_style.css" rel="stylesheet" type="text/css" />
+        <link href="resources/menu_style.css" rel="stylesheet" type="text/css" />
         <link href="resources/warehouse.css" rel="stylesheet" type="text/css" />
         <title>Manage items</title>
     </head>
@@ -47,29 +47,56 @@
                             Database database = (Database) new InitialContext().lookup("java:global/Warehouse/Warehouse-ejb/Database");
                             List<MasterDataEntity> masterData = database.getMasterData();
                             if (masterData != null) {
-                        for (MasterDataEntity data : masterData) {%>
+                                for (MasterDataEntity data : masterData) {%>
                         <option><%= data.getId()%></option><%
                                 }
                             }
                         %>
                     </select><br>
-                    Quantity: <input type="text" name="quantity" size="2" /><br>
-                    Date: <input type="text" name="day" maxlength="2" size="1">
+                    Quantity: <input type="text" name="quantity" size="2" />
+                    <%
+                        String nullQuantity = (String) request.getAttribute("nullQuantity");
+                        if (nullQuantity != null) {
+                    %><font color="red"><%= nullQuantity%></font><%
+                            }
+                    %>
+                    <br>
+                    Date (dd:mm:yyyy) <input type="text" name="day" maxlength="2" size="1">
                     <input type="text" name="month" maxlength="2" size="1">
-                    <input type="text" name="year" maxlength="4" size="1"><br>
+                    <input type="text" name="year" maxlength="4" size="1">
+                    <%
+                        String nullDate = (String) request.getAttribute("nullDate");
+                        if (nullDate != null) {
+                    %><font color="red"><%= nullDate%></font><%
+                            }
+                    %>
+                    <br>
                     <input type="submit" name="command" value="Insert" /><br>
                     <br>
 
                     <b>Remove item</b><br>
                     <select name="removeMD" id="removeMD">
                         <%
-                    for (MasterDataEntity data : masterData) {%>
+                            for (MasterDataEntity data : masterData) {%>
                         <option><%= data.getId()%></option><%
                             }
                         %>
                     </select><br>
-                    Quantity: <input type="text" name="rmQuantity" size="2" /><br> 
-                    <input type="submit" name="command" value="Remove" />                 
+                    Quantity: <input type="text" name="rmQuantity" size="2" />
+                    <%
+                        String nullQuantityRm = (String) request.getAttribute("nullQuantityRm");
+                        if (nullQuantityRm != null) {
+                    %><font color="red"><%= nullQuantityRm%></font><%
+                            }
+                    %>
+                    <br> 
+                    <input type="submit" name="command" value="Remove" />       
+                    <%
+                        String error = (String) request.getAttribute("error");
+                        if (error != null) {
+                    %><h3><font color="red"><%= error%></font></h3><%
+                        }
+                        %>
                 </form>
 
             </div>
