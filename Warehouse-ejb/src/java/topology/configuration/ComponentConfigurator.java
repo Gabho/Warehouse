@@ -38,18 +38,18 @@ public class ComponentConfigurator {
      * Constructor of Component Configurator.
      */
 
-    public ComponentConfigurator() {        
+    public ComponentConfigurator() {
         String filePath = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
         int endindex = filePath.indexOf("dist/gfdeploy");
         filePath = filePath.substring(6, endindex);
         filePath = filePath + ("Warehouse-ejb/src/java/topology/configuration/load.txt");
-        
-        config = new File(filePath);
-        }
 
-        /*
-         * Configure components from script at start of system.
-         */
+        config = new File(filePath);
+    }
+
+    /*
+     * Configure components from script at start of system.
+     */
     public void configure() {
         FileInputStream fis;
         BufferedInputStream bis;
@@ -159,7 +159,9 @@ public class ComponentConfigurator {
                 object.suspend();
                 //remove object from Object Manager
                 storage.remove(object.getCode());
-                removeFromParent((Rack) object);
+                if (!(object instanceof Aisle)) {
+                    removeFromParent((Rack) object);
+                }
                 return "Remove: OK!";
             } else {
                 return "Error: No match to object!";
@@ -230,9 +232,13 @@ public class ComponentConfigurator {
     }
 
     private String removeFromParent(Rack rack) {
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < aisleID; i++) {
             try {
                 Aisle aisle = (Aisle) storage.find("A" + i);
+                if (aisle == null) {
+                    i++;
+                    aisle = (Aisle) storage.find("A" + i);
+                }
                 List<Rack> racks = aisle.getRacks();
                 for (int j = 0; j < racks.size(); j++) {
                     Rack rack1 = racks.get(j);

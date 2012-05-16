@@ -85,8 +85,8 @@ margin:0 auto 0 auto;
 }
 #login {
 position:fixed;
-top:200px;
-left:500px;
+top:40%;
+left:40%;
 }
 
 /*------------zaoblenie rohov------*/
