@@ -75,8 +75,14 @@ public class Item implements IItem{
     public void setId(int id) {
         this.id = id;
     }
-
+    
+    @Override
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    @Override
+    public void setAmount(int amount) {
+       this.amount = amount;
     }
 }

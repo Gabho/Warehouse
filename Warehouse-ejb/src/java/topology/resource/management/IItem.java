@@ -42,4 +42,6 @@ public interface IItem {
     public Position getPosition();
     
     public void setPosition(Position position);
+
+    public void setAmount(int i);
 }

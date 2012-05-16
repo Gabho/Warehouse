@@ -135,8 +135,15 @@ public class Storage implements IObjectManager {
                         if(type.equals(iItem.getType())&& (quantity>=iItem.getAmount())) {
                             quantity -= iItem.getAmount();
                             iShelf.removeItem(iItem); 
-                            
-                            System.out.println("Deleting...rest quantity is: "+ quantity);
+                            System.out.println("Deleting item...rest quantity is: "+ quantity);
+                        } else if(type.equals(iItem.getType())&& (quantity<iItem.getAmount())&& (quantity>0)) {
+                            IItem newItem = iItem;
+                            iShelf.removeItem(iItem);
+                            newItem.setAmount(newItem.getAmount()-quantity);
+                            iShelf.insertItem(newItem);
+                           // iItem.setAmout(iItem.getAmount()- quantity);
+                            System.out.println("Change amout...rest quantity is: "+ quantity);
+                            return true;
                         }
                     }
                 }
