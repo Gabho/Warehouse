@@ -18,10 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 import persistence.Database;
 import persistence.MasterDataEntity;
 import topology.activeobject.IFunctionality;
+import topology.activeobject.IFuture;
 import topology.resource.management.Item;
 
 /**
- * Trieda dediaca od HttpServletu, ktorá slúži na obslúženie vstupu od používateľa pri vkladaní a odstraňovaní položiek
+ * Trieda dediaca od HttpServletu, ktorá slúži na obslúženie vstupu od
+ * používateľa pri vkladaní a odstraňovaní položiek
+ *
  * @author Gabriel Cervenak
  */
 @WebServlet(name = "ItemServlet", urlPatterns = {"/item"})
@@ -32,6 +35,8 @@ public class ItemServlet extends HttpServlet {
     private IFunctionality proxy;
     @EJB
     private Database database;
+    private IFuture resultFututre = null;
+    private static boolean wasInsert;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -46,6 +51,20 @@ public class ItemServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Boolean result = (Boolean) resultFututre.get();
+        if (wasInsert == true) {
+            if (result == true) {
+                request.setAttribute("error", "Item succesfully inserted!");
+            }
+            else if(result == false)
+                request.setAttribute("error", "Insertion of item failed");
+        }
+        else if(wasInsert == false){
+            if(result = true)
+                request.setAttribute("error", "Item succesfully removed");
+            else if(result = false)
+                request.setAttribute("error", "Removal of item failed");
+        }
         request.getRequestDispatcher("/item.jsp").forward(request, response);
     }
 
@@ -69,6 +88,7 @@ public class ItemServlet extends HttpServlet {
 
         //Vkladanie údajov (itemov) do databázy
         if (request.getParameter("command").equals("Insert")) {
+            wasInsert = true;
             try {
                 masterDataID = request.getParameter("selectMD");
                 quantity = request.getParameter("quantity");
@@ -103,7 +123,7 @@ public class ItemServlet extends HttpServlet {
                 }
                 expDate = new Date(yy, mm, dd);
                 Item item = new Item(0, itemQuantity, masterDataID, masterData.getDescription(), expDate, null);
-                proxy.insertNewItem(item);
+                resultFututre = proxy.insertNewItem(item);
                 LOGGER.log(Level.INFO, "..............................Input:{0}, {1}, {2}, {3}, {4}....................", new Object[]{masterData.getId(), itemQuantity, dd, mm, yy});
             } catch (NumberFormatException e) {
                 request.setAttribute("error", "Wrong input format!");
@@ -112,6 +132,7 @@ public class ItemServlet extends HttpServlet {
 
         //Odstránenie itemov z databázy
         if (request.getParameter("command").equals("Remove")) {
+            wasInsert = false;
             try {
                 masterDataID = request.getParameter("removeMD");
                 quantity = request.getParameter("rmQuantity");
@@ -129,14 +150,14 @@ public class ItemServlet extends HttpServlet {
                 if (itemQuantity > masterData.getQuantity()) {
                     request.setAttribute("nullQuantityRm", ("In stock only " + masterData.getQuantity() + " items"));
                 } else {
-                    proxy.removeItem(itemQuantity, masterData);
+                    resultFututre = proxy.removeItem(itemQuantity, masterData);
                     LOGGER.log(Level.INFO, "..............................Input:{0}, {1}....................", new Object[]{masterDataID, itemQuantity});
                 }
             } catch (NumberFormatException e) {
                 request.setAttribute("error", "Wrong input format!");
             }
         }
-        request.getRequestDispatcher("/item.jsp").forward(request, response);
+        doGet(request, response);
     }
 
     /**

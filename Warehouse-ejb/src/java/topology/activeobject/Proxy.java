@@ -35,17 +35,6 @@ public class Proxy implements IFunctionality {
         return result;
     }
 
-//    @Override
-//    public IFuture<Integer> search(String search) {
-//        if(scheduler != null){
-//            LOGGER.log(Level.INFO, "..............................Proxy: scheduler nie je null....................");
-//        }
-//        else
-//            LOGGER.log(Level.INFO, "..............................Proxy: scheduler je null !!!!!!....................");
-//        Future<Integer> result = new Future<Integer>();
-//        scheduler.enqueue(new MethodRequestSearch(search, result, database));
-//        return result;
-//    }
     @Override
     public void insertMasterData(MasterDataEntity masterData) {
         scheduler.enqueue(new MethodRequestInsertMD(masterData, database));
@@ -57,13 +46,17 @@ public class Proxy implements IFunctionality {
     }
 
     @Override
-    public void insertNewItem(Item item) {
-        scheduler.enqueue(new MethodRequestInsertItem(item, manager));
+    public IFuture<Boolean> insertNewItem(Item item) {
+        Future<Boolean> result = new Future<Boolean>();
+        scheduler.enqueue(new MethodRequestInsertItem(item, result, manager));
+        return result;
     }
 
     @Override
-    public void removeItem(int quantity, MasterDataEntity masterData) {
-        scheduler.enqueue(new MethodRequestRemoveItem(quantity, masterData, manager));
+    public IFuture<Boolean> removeItem(int quantity, MasterDataEntity masterData) {
+        Future<Boolean> result = new Future<Boolean>();
+        scheduler.enqueue(new MethodRequestRemoveItem(quantity, masterData, result, manager));
+        return result;
     }
 
     @Override

@@ -17,16 +17,18 @@ import topology.storage.IObjectManager;
 public class MethodRequestInsertItem implements IMethodRequest {
 
     private Item item;
+    private Future<Boolean> result;
     private IObjectManager manager;
 
-    public MethodRequestInsertItem(Item item, IObjectManager manager) {
+    public MethodRequestInsertItem(Item item, Future<Boolean> result, IObjectManager manager) {
         this.item = item;
+        this.result = result;
         this.manager = manager;
     }
 
     @Override
     public void call() {
-        manager.addItem(item);
+        result.addResult(manager.addItem(item));
         Logger LOGGER = Logger.getLogger(MethodRequestInsertItem.class.getName());
         LOGGER.log(Level.INFO, "..............................MethodRequest Insert Item: {0} {1}", new Object[]{item.getType(), item.getAmount()});
     }

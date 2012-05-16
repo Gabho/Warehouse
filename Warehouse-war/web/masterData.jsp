@@ -42,8 +42,22 @@
             <div id="text">
                 <b>Insert Master Data</b>
                 <form method="POST" action="masterData">
-                    Name:        <input type="text" name="name" /><br>
-                    Description: <input type="text" name="description" /><br>
+                    Name:        <input type="text" name="name" />
+                    <%
+                        String nullName = (String) request.getAttribute("nullName");
+                        if (nullName != null) {
+                    %><font color="red"><%= nullName%></font><%
+                            }
+                    %>
+                    <br>
+                    Description: <input type="text" name="description" />
+                    <%
+                        String nullDesc = (String) request.getAttribute("nullDesc");
+                        if (nullDesc != null) {
+                    %><font color="red"><%= nullDesc%></font><%
+                            }
+                    %>
+                    <br>
                     <input type="submit" name="command" value="Insert"/>
                     <br>
                     <br>
@@ -62,6 +76,12 @@
                         %>
                     </select><br>
                     <input type="submit" name="command" value="Remove"/><br>
+                    <%
+                        String error = (String) request.getAttribute("error");
+                        if (error != null) {
+                    %><h3><font color="red"><%= error%></font></h3><%
+                        }
+                        %>
                 </form>
 
             </div>

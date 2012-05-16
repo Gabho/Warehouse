@@ -26,43 +26,10 @@ import topology.activeobject.IFunctionality;
 @WebServlet(name = "MasterDataServlet", urlPatterns = {"/masterData"})
 public class MasterDataServlet extends HttpServlet {
 
-    private static final Logger LOGGER = Logger.getLogger(MasterDataServlet.class.getName());
     @EJB
     private IFunctionality proxy;
     @EJB
     private Database database;
-
-    /**
-     * Processes requests for both HTTP
-     * <code>GET</code> and
-     * <code>POST</code> methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
-            /*
-             * TODO output your page here. You may use following sample code.
-             */
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Wrong Input</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h3><font color=\"red\">Master data with such ID exist!</font></h3>");
-            out.println("<br><a href=\"masterData.jsp\">Back</a>");
-            out.println("</body>");
-            out.println("</html>");
-        } finally {
-            out.close();
-        }
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -95,10 +62,14 @@ public class MasterDataServlet extends HttpServlet {
         if (request.getParameter("command").equals("Insert")) {
             String name = request.getParameter("name");
             String description = request.getParameter("description");
-            if (name != null && description != null) {
+            if(name.equals(""))
+                request.setAttribute("nullName", "Enter name");
+            if(description.equals(""))
+                request.setAttribute("nullDesc", "Enter description");
+            if ((!name.equals("")) && (!description.equals(""))) {
                 name = name.toUpperCase();
                 if (checkName(name) == true) {
-                    processRequest(request, response);
+                    request.setAttribute("error", "Master data with such ID exist!");
                 } else {
                     MasterDataEntity masterData = new MasterDataEntity(name, description);
                     proxy.insertMasterData(masterData);
@@ -112,7 +83,6 @@ public class MasterDataServlet extends HttpServlet {
         if (request.getParameter("command").equals("Remove")) {
 
             String value = (String) request.getParameter("selectMD");
-            LOGGER.log(Level.INFO, "&&&&&&&&&&&&&&&&&&&&.....Selected value:{0} .......@@@@@@@@@@@@@@@@@@", value);
             proxy.removeMasterData(value);
             try {
                 Thread.sleep(1000);

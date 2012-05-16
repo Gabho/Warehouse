@@ -22,9 +22,9 @@ public interface IFunctionality {
     
     void removeMasterData(String id);
     
-    void insertNewItem(Item item);
+    IFuture<Boolean> insertNewItem(Item item);
     
-    void removeItem(int quantity, MasterDataEntity masterData);
+    IFuture<Boolean> removeItem(int quantity, MasterDataEntity masterData);
     
     IFuture<List<Item>> makeOrder(List<Item> items);
     

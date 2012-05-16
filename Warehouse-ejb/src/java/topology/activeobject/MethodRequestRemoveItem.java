@@ -18,16 +18,18 @@ public class MethodRequestRemoveItem implements IMethodRequest{
     private IObjectManager manager;
     private int quantity;
     private MasterDataEntity masterData;
+    private Future<Boolean> result;
     
-    public MethodRequestRemoveItem(int quantity, MasterDataEntity masterData, IObjectManager manager){
+    public MethodRequestRemoveItem(int quantity, MasterDataEntity masterData, Future<Boolean> result, IObjectManager manager){
         this.quantity = quantity;
         this.masterData = masterData;
+        this.result = result;
         this.manager = manager;
     }
 
     @Override
     public void call() {
-        manager.removeItem(quantity, masterData);
+        result.addResult(manager.removeItem(quantity, masterData));
         Logger LOGGER = Logger.getLogger(MethodRequestRemoveItem.class.getName());
         LOGGER.log(Level.INFO, "..............................MethodRequest Remove Item: {0} {1}",new Object[]{masterData.getId(), quantity});
     }
