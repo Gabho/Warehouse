@@ -99,17 +99,17 @@ public class Rack extends AbstractComponent implements IStorageComponent {
     }
 
     @Override
-    public int addComponent(Object object) {
+    public boolean addComponent(Object object) {
         if (shelfs.size() < capacity) {
             shelfs.add((ProxyShelf) object);
-            return 1;
+            return true;
         } else {
-            return 0;
+            return false;
         }
     }
 
     @Override
-    public int removeComponent(Rack rack) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public boolean removeComponent(Rack rack) {
+        throw new UnsupportedOperationException("Not supported for this component.");
     }
 }

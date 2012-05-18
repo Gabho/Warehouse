@@ -166,7 +166,7 @@ public class ComponentConfigurator {
                 if (!(cObject instanceof Aisle)) {
                     IStorageComponent storeComponent = (IStorageComponent) storage.find(tokens[4]);
                     String parent = removeFromParent((Rack) object);
-                    if (storeComponent.addComponent(object) == 0) {
+                    if (storeComponent.addComponent(object) == false) {
                         storeComponent = (IStorageComponent) storage.find(parent);
                         storeComponent.addComponent(object);
                         object.resume();

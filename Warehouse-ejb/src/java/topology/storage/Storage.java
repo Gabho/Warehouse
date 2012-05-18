@@ -28,6 +28,7 @@ public class Storage implements IObjectManager {
         hashKey = object1.getCode();
         if (hashKey.startsWith("A")) {
             aisleCount++;
+            System.out.println(aisleCount);
         } else if (hashKey.startsWith("R")) {
             rackCount++;
         }
@@ -168,7 +169,7 @@ public class Storage implements IObjectManager {
     @Override
     public int getFreeSpace() {
         int freeSpace = 0;
-        for (int i = 1; i < aisleCount; i++) {
+        for (int i = 1; i <= aisleCount; i++) {
             try {
                 Aisle aisle = (Aisle) manager.get("A" + i);
                 List<Rack> racks = aisle.getRacks();
@@ -191,7 +192,7 @@ public class Storage implements IObjectManager {
     public String printStorage() {
         String print = new String();
         
-        for (int i = 1; i < (aisleCount + 1); i++) {
+        for (int i = 1; i <= aisleCount; i++) {
             System.out.println(i);
             Aisle aisle = (Aisle) manager.get("A" + i);
             if (aisle == null) {

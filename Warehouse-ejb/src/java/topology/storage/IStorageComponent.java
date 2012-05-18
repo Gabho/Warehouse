@@ -23,12 +23,12 @@ public interface IStorageComponent {
      * @param object komponent
      * @return stav vykonania
      */
-    public int addComponent(Object object);
+    public boolean addComponent(Object object);
 
     /**
      * Odstránenie regálu z uličky.
      * @param rack regál
      * @return stav vykonania
      */
-    public int removeComponent(Rack rack);
+    public boolean removeComponent(Rack rack);
 }
