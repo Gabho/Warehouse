@@ -122,6 +122,7 @@ public class ItemServlet extends HttpServlet {
                 LOGGER.log(Level.INFO, "..............................Input:{0}, {1}, {2}, {3}, {4}....................", new Object[]{masterData.getId(), itemQuantity, dd, mm, yy});
             } catch (NumberFormatException e) {
                 request.setAttribute("error", "Wrong input format!");
+                request.getRequestDispatcher("/item.jsp").forward(request, response);
             }
         }
 
@@ -150,6 +151,7 @@ public class ItemServlet extends HttpServlet {
                 }
             } catch (NumberFormatException e) {
                 request.setAttribute("error", "Wrong input format!");
+                request.getRequestDispatcher("/item.jsp").forward(request, response);
             }
         }
         doGet(request, response);
