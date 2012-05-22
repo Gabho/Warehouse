@@ -17,11 +17,14 @@ import topology.storage.IStorageComponent;
 import topology.storage.Rack;
 
 /**
- * Vzor Komponent Konfigurátor - konfigurácia systém za behu. 
+ * Vzor Komponent Konfigurátor - konfigurácia systém za behu.
+ *
  * @author Martin Pakandl
  */
 @Stateless
 public class ComponentConfigurator {
+
+    private static Logger LOGGER = Logger.getLogger(ComponentConfigurator.class.getName());
     //konfiguračný súbor
     File config;
     //sprístupnenie EJB Objekt Manažéra
@@ -30,16 +33,20 @@ public class ComponentConfigurator {
     //sprístupnenie EJB pamäte typu cache.
     @EJB
     ResourceCache<IShelf> cache;
-   
+
     /**
      * Konštruktor Komponent Konfigurátora. Načíta konfiguračný súbor.
      */
     public ComponentConfigurator() {
         String filePath = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+        
         int endindex = filePath.indexOf("dist/gfdeploy");
         filePath = filePath.substring(6, endindex);
         filePath = filePath + ("Warehouse-ejb/src/java/topology/configuration/load.txt");
-
+        
+//        filePath = filePath.substring(6);
+//        filePath = filePath + ("topology/configuration/load.txt");
+        
         config = new File(filePath);
     }
 
@@ -105,7 +112,8 @@ public class ComponentConfigurator {
     }
 
     /**
-     * Konfigurácia systému počas jeho behu. 
+     * Konfigurácia systému počas jeho behu.
+     *
      * @param task konfiguračný príkaz
      * @return správu o výsledku konfigurácie
      */
@@ -186,12 +194,13 @@ public class ComponentConfigurator {
     }
 
     /**
-     * Načítanie triedy  počas behu systému.
+     * Načítanie triedy počas behu systému.
+     *
      * @param classToLoad cesta k triede
      * @return objekt triedy
      * @throws ClassNotFoundException
      * @throws InstantiationException
-     * @throws IllegalAccessException 
+     * @throws IllegalAccessException
      */
     private Object loadMyClass(String classToLoad) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
         ClassLoader loader = ComponentConfigurator.class.getClassLoader();
@@ -203,9 +212,10 @@ public class ComponentConfigurator {
     int count = 0;
     //identifikátor uličky
     int aisleID = 1;
-    
+
     /**
      * Priradenie regálu do uličky.
+     *
      * @param rack regál
      */
     private void setRacksToAisle(Rack rack) {
@@ -222,8 +232,10 @@ public class ComponentConfigurator {
         count += 1;
     }
     int shelfID = 0;
+
     /**
      * Priradí regálu poličku.
+     *
      * @param rack regál
      */
     private void setShelfsToRack(Rack rack) {
@@ -231,8 +243,10 @@ public class ComponentConfigurator {
             rack.addComponent(new ProxyShelf(shelfID++, cache));
         }
     }
+
     /**
      * Odstránienie regálu z uličky.
+     *
      * @param rack regál
      * @return identifikátor uličky z ktorého bol regál odstránený
      */
