@@ -99,12 +99,12 @@ public class MasterDataServlet extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
+     * Vráti krátky opis servletu.
      *
-     * @return a String containing servlet description
+     * @return reťazec, ktorý obsahuje opis servletu.
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for adding and removing master data";
     }// </editor-fold>
 }

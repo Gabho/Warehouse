@@ -158,11 +158,11 @@ public class ItemServlet extends HttpServlet {
     }
 
     /**
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
+     * Vracia krátky opis servletu.
+     * @return reťazec s opisom servletu.
      */
     @Override
     public String getServletInfo() {
-        return "Short description";
+        return "Servlet for addinf and removing item functionality";
     }// </editor-fold>
 }
