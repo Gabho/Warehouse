@@ -5,7 +5,7 @@ import javax.ejb.Remote;
 
 /**
  * Vzdialené rozhranie poskytujúce metódy, ktoré sú volané z iných inštancií bežiacich v iných adresných priestoroch.
- * @author Gabo
+ * @author kopytko
  */
 @Remote
 public interface CommunicationRemote {

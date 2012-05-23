@@ -5,7 +5,7 @@ import javax.ejb.Local;
 
 /**
  * Lokálne rozhranie poskytujúce metódy, ktoré su volané lokálne.
- * @author Gabo
+ * @author kopytko
  */
 @Local
 public interface CommunicationLocal {

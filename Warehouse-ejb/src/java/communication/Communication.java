@@ -16,7 +16,7 @@ import topology.activeobject.IProxyLocal;
 
 /**
  * Enterprise Java Bean zabezečujúci komunikáciu medzi skladmi
- * @author Gabo
+ * @author kopytko
  */
 @Singleton
 public class Communication implements CommunicationLocal, CommunicationRemote {

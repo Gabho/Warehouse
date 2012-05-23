@@ -8,7 +8,7 @@ import java.sql.*;
 import persistence.Database;
 
 /**
- *
+ * Trieda slúžiaca na komunikáciu s prihlasovacou .jsp stránkou
  * @author kopytko
  */
 public class UserData {
@@ -50,6 +50,11 @@ public class UserData {
         this.pass = pass;
     }
 
+    /*
+     * V tejto metóde sa realizuje prihlásenie. Údaje vložené na prihlasovacej
+     * stránke sa porovnajú s databázou a ak sa takýto používateľ nachádza
+     * v databáze používateľ sa prihlási a načítajú sa jeho práva.
+     */
     public void check() throws SQLException {
         String url = "jdbc:derby://localhost:1527/warehouse";
         conn = DriverManager.getConnection(url, "admin", "admin");
