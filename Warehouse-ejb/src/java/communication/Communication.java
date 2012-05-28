@@ -1,6 +1,7 @@
 package communication;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -27,6 +28,7 @@ public class Communication implements CommunicationLocal, CommunicationRemote {
     @EJB
     private IProxyLocal proxy;
     private List<String> IPaddress = new ArrayList<String>();
+    private InetAddress addr;
 
     /**
      * Nadviazanie spojenia so skladmi definovanými na daných ip-adresách a
@@ -56,9 +58,12 @@ public class Communication implements CommunicationLocal, CommunicationRemote {
         for (String ip : IPaddress) {
             props.setProperty("org.omg.CORBA.ORBInitialHost", ip);
             try {
-                InitialContext ic = new InitialContext(props);
-                CommunicationRemote communication = (CommunicationRemote) ic.lookup("java:global/Warehouse/Warehouse-ejb/Communication!communication.CommunicationRemote");
-                resultList.addAll(communication.searchRemoteI(string));
+                addr = InetAddress.getByName(ip);
+                if (addr.isReachable(2000) == true) {
+                    InitialContext ic = new InitialContext(props);
+                    CommunicationRemote communication = (CommunicationRemote) ic.lookup("java:global/Warehouse/Warehouse-ejb/Communication!communication.CommunicationRemote");
+                    resultList.addAll(communication.searchRemoteI(string));
+                }
             } catch (NamingException ex) {
                 Logger.getLogger(Communication.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
