@@ -28,7 +28,6 @@ public class Storage implements IObjectManager {
         hashKey = object1.getCode();
         if (hashKey.startsWith("A")) {
             aisleCount++;
-            System.out.println(aisleCount);
         } else if (hashKey.startsWith("R")) {
             rackCount++;
         }
