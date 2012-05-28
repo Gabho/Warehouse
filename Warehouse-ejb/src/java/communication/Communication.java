@@ -16,6 +16,7 @@ import topology.activeobject.IProxyLocal;
 
 /**
  * Enterprise Java Bean zabezečujúci komunikáciu medzi skladmi
+ *
  * @author kopytko
  */
 @Singleton
@@ -28,8 +29,9 @@ public class Communication implements CommunicationLocal, CommunicationRemote {
     private List<String> IPaddress = new ArrayList<String>();
 
     /**
-     * Nadviazanie spojenia so skladmi definovanými na daných ip-adresách a vyhľadanie položiek
-     * na základe reťazca.
+     * Nadviazanie spojenia so skladmi definovanými na daných ip-adresách a
+     * vyhľadanie položiek na základe reťazca.
+     *
      * @param string vyhľadávací reťazec.
      * @return zoznam reťazcov, ktoré predstavujú výsledok vyhľadávania.
      */
@@ -69,7 +71,9 @@ public class Communication implements CommunicationLocal, CommunicationRemote {
     }
 
     /**
-     * Vyhľadávanie na lokálnom sklade, pričom funkcia bola zavolaná zo vzdialeného skladu.
+     * Vyhľadávanie na lokálnom sklade, pričom funkcia bola zavolaná zo
+     * vzdialeného skladu.
+     *
      * @param search vyhľadávací reťazec.
      * @return zoznam reťazcov, ktoré predstavujú výsledok vyhľadávania.
      */
@@ -93,13 +97,13 @@ public class Communication implements CommunicationLocal, CommunicationRemote {
             String filePath = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
 
             //file path calculation when deployed in NetBeans
-            int endindex = filePath.indexOf("dist/gfdeploy");
-            filePath = filePath.substring(6, endindex);
-            filePath = filePath + ("Warehouse-ejb/src/java/communication/IPaddress.txt");
+//            int endindex = filePath.indexOf("dist/gfdeploy");
+//            filePath = filePath.substring(6, endindex);
+//            filePath = filePath + ("Warehouse-ejb/src/java/communication/IPaddress.txt");
 
             //file path calculation when deployed in cmd
-            //            filePath = filePath.substring(6);
-            //            filePath = filePath + ("topology/activeobject/warehouseID.txt");
+            filePath = filePath.substring(6);
+            filePath = filePath + ("communication/IPaddress.txt");
 
             fstream = new FileInputStream(filePath);
             DataInputStream in = new DataInputStream(fstream);

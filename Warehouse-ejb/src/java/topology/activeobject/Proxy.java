@@ -81,13 +81,13 @@ public class Proxy implements IFunctionality, IProxyLocal {
             String filePath = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
 
             //file path calculation when deployed in NetBeans
-            int endindex = filePath.indexOf("dist/gfdeploy");
-            filePath = filePath.substring(6, endindex);
-            filePath = filePath + ("Warehouse-ejb/src/java/topology/activeobject/warehouseID.txt");
+//            int endindex = filePath.indexOf("dist/gfdeploy");
+//            filePath = filePath.substring(6, endindex);
+//            filePath = filePath + ("Warehouse-ejb/src/java/topology/activeobject/warehouseID.txt");
 
             //file path calculation when deployed in cmd
-//            filePath = filePath.substring(6);
-//            filePath = filePath + ("topology/activeobject/warehouseID.txt");
+            filePath = filePath.substring(6);
+            filePath = filePath + ("topology/activeobject/warehouseID.txt");
 
             fstream = new FileInputStream(filePath);
             DataInputStream in = new DataInputStream(fstream);

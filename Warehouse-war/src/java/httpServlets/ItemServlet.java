@@ -20,6 +20,7 @@ import topology.resource.management.Item;
 /**
  * Trieda dediaca od HttpServletu, ktorá slúži na obslúženie vstupu od
  * používateľa pri vkladaní a odstraňovaní položiek.
+ *
  * @author Gabriel Cervenak
  */
 @WebServlet(name = "ItemServlet", urlPatterns = {"/item"})
@@ -46,21 +47,23 @@ public class ItemServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try{
         Boolean result = (Boolean) resultFututre.get();
         if (wasInsert == true) {
             if (result == true) {
                 request.setAttribute("error", "Item succesfully inserted!");
+            } else if (result == false) {
+                request.setAttribute("error", "Insertion of item failed!");
             }
-            else if(result == false)
-                request.setAttribute("error", "Insertion of item failed");
-        }
-        else if(wasInsert == false){
-            if(result = true)
-                request.setAttribute("error", "Item succesfully removed");
-            else if(result = false)
-                request.setAttribute("error", "Removal of item failed");
+        } else if (wasInsert == false) {
+            if (result == true) {
+                request.setAttribute("error", "Item succesfully removed!");
+            } else if (result == false) {
+                request.setAttribute("error", "Removal of item failed!");
+            }
         }
         request.getRequestDispatcher("/item.jsp").forward(request, response);
+        }catch(NullPointerException ex){}
     }
 
     /**
@@ -145,6 +148,7 @@ public class ItemServlet extends HttpServlet {
                 int itemQuantity = Integer.parseInt(quantity);
                 if (itemQuantity > masterData.getQuantity()) {
                     request.setAttribute("nullQuantityRm", ("In stock only " + masterData.getQuantity() + " items"));
+                    request.getRequestDispatcher("/item.jsp").forward(request, response);
                 } else {
                     resultFututre = proxy.removeItem(itemQuantity, masterData);
                     LOGGER.log(Level.INFO, "..............................Input:{0}, {1}....................", new Object[]{masterDataID, itemQuantity});
@@ -159,6 +163,7 @@ public class ItemServlet extends HttpServlet {
 
     /**
      * Vracia krátky opis servletu.
+     *
      * @return reťazec s opisom servletu.
      */
     @Override

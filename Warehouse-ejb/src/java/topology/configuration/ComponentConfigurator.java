@@ -24,7 +24,7 @@ import topology.storage.Rack;
 @Stateless
 public class ComponentConfigurator {
 
-    private static Logger LOGGER = Logger.getLogger(ComponentConfigurator.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ComponentConfigurator.class.getName());
     //konfiguračný súbor
     File config;
     //sprístupnenie EJB Objekt Manažéra
@@ -39,13 +39,12 @@ public class ComponentConfigurator {
      */
     public ComponentConfigurator() {
         String filePath = getClass().getProtectionDomain().getCodeSource().getLocation().toString();
+//        int endindex = filePath.indexOf("dist/gfdeploy");
+//        filePath = filePath.substring(6, endindex);
+//        filePath = filePath + ("Warehouse-ejb/src/java/topology/configuration/load.txt");
         
-        int endindex = filePath.indexOf("dist/gfdeploy");
-        filePath = filePath.substring(6, endindex);
-        filePath = filePath + ("Warehouse-ejb/src/java/topology/configuration/load.txt");
-        
-//        filePath = filePath.substring(6);
-//        filePath = filePath + ("topology/configuration/load.txt");
+        filePath = filePath.substring(6);
+        filePath = filePath + ("topology/configuration/load.txt");
         
         config = new File(filePath);
     }
