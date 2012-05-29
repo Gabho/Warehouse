@@ -23,12 +23,12 @@
         <div id="menucontainer">
             <div id="menunav">
                 <ul>
-                    <li><a href="login.jsp" target="_self" title="Úvod"><span>Login</span></a></li>
-                    <li><a href="search.jsp" target="_self" title="Koberce"><span>Search</span></a></li>
-                    <li><a href="item.jsp" target="_self" title="PVC"><span>Manage items</span></a></li>
-                    <li><a href="masterData.jsp" target="_self" title="Koberce"><span>Manage master data</span></a></li>
-                    <li><a href="config.jsp" target="_self" title="Koberce" class="current"><span>Configure warehouse</span></a></li>
-                    <li><a href="about.jsp" target="_self" title="Koberce"><span>About</span></a></li>
+                   <li><a href="login.jsp" target="_self" title="Login"><span>Login</span></a></li>
+                    <li><a href="search.jsp" target="_self" title="Search"><span>Search</span></a></li>
+                    <li><a href="item.jsp" target="_self" title="Manage items"><span>Manage items</span></a></li>
+                    <li><a href="masterData.jsp" target="_self" title="Manage master data"><span>Manage master data</span></a></li>
+                    <li><a href="config.jsp" target="_self" title="Configure warehouse" class="current"><span>Configure warehouse</span></a></li>
+                    <li><a href="about.jsp" target="_self" title="About"><span>About</span></a></li>
                 </ul>
             </div>
         </div>
