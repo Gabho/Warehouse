@@ -117,6 +117,9 @@ public class Communication implements CommunicationLocal, CommunicationRemote {
             while ((line = br.readLine()) != null) {
                 IPaddress.add(line);
             }
+            fstream.close();
+            in.close();
+            br.close();
         } catch (FileNotFoundException ex) {
             System.out.println("..............................COMMUNICATION - File IPAddress.txt not found");
         } catch (IOException ex) {
