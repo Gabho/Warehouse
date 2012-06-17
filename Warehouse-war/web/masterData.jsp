@@ -20,7 +20,7 @@
     </head>
 
     <body>
-
+        <jsp:useBean class="aplicationcontrol.Authorization" id="mb2" />
         <div id="head">
             <img src="resources/banner.bmp" alt="Banner" />
         </div>
@@ -29,10 +29,39 @@
             <div id="menunav">
                 <ul>
                     <li><a href="login.jsp" target="_self" title="Login"><span>Login</span></a></li>
-                    <li><a href="search.jsp" target="_self" title="Search"><span>Search</span></a></li>
-                    <li><a href="item.jsp" target="_self" title="Manage items"><span>Manage items</span></a></li>
-                    <li><a href="masterData.jsp" target="_self" title="Manage master data" class="current"><span>Manage master data</span></a></li>
-                    <li><a href="config.jsp" target="_self" title="Configure warehouse"><span>Configure warehouse</span></a></li>
+                    <li><a href="search.jsp" target="_self" title="Search" class="current"><span>Search</span></a></li>
+                    <%
+                        Object rights = session.getAttribute("rights");
+                        String helperItem;
+
+                        if (mb2.Authorize(1, rights) == true) {
+                            helperItem = "item.jsp";
+                        } else {
+                            helperItem = "masterData.jsp";
+                        }
+                    %>
+                    <li><a href=<%= helperItem%> target="_self" title="Manage items"><span>Manage items</span></a></li>
+                    <%
+                        rights = session.getAttribute("rights");
+                        String helperMaster;
+                        if (mb2.Authorize(1, rights) == true) {
+                            helperMaster = "masterData.jsp";
+                        } else {
+                            helperMaster = "masterData.jsp";
+                        }
+                    %>
+                    <li><a href=<%= helperMaster%> target="_self" title="Manage master data"><span>Manage master data</span></a></li>
+                    <%
+                        rights = session.getAttribute("rights");
+                        String helperConfig;
+
+                        if (mb2.Authorize(2, rights) == true) {
+                            helperConfig = "config.jsp";
+                        } else {
+                            helperConfig = "search.jsp";
+                        }
+                    %>
+                    <li><a href=<%= helperConfig%> target="_self" title="Configure warehouse"><span>Configure warehouse</span></a></li>
                     <li><a href="about.jsp" target="_self" title="About"><span>About</span></a></li>
                 </ul>
             </div>

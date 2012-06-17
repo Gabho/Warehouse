@@ -59,11 +59,11 @@ public class Communication implements CommunicationLocal, CommunicationRemote {
             props.setProperty("org.omg.CORBA.ORBInitialHost", ip);
             try {
                 addr = InetAddress.getByName(ip);
-                if (addr.isReachable(2000) == true) {
+                //if (addr.isReachable(2000) == true) {
                     InitialContext ic = new InitialContext(props);
                     CommunicationRemote communication = (CommunicationRemote) ic.lookup("java:global/Warehouse/Warehouse-ejb/Communication!communication.CommunicationRemote");
                     resultList.addAll(communication.searchRemoteI(string));
-                }
+                //}
             } catch (NamingException ex) {
                 Logger.getLogger(Communication.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
